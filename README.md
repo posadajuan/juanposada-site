@@ -21,8 +21,9 @@ npm run dev      # local preview at http://localhost:4321
 npm run build    # production build into dist/
 ```
 
-## Cloudflare Pages settings
+## Cloudflare settings (Workers & Pages → juanposada-site)
 
 - Build command: `npm run build`
-- Build output directory: `dist`
-- Environment variable: `NODE_VERSION` = `22`
+- Deploy command: `npx wrangler deploy`
+- Build variable: `NODE_VERSION` = `22`
+- Deployment settings live in `wrangler.jsonc` (serves the built `dist` folder).
