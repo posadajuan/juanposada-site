@@ -1,0 +1,106 @@
+/*
+ * Motion system: quiet, smooth, intentional.
+ *
+ * Everything here only runs when html has [data-motion], which is set
+ * before the page paints and ONLY if the visitor hasn't asked their
+ * device to reduce motion. Without it, content simply appears.
+ */
+
+/* 01 · Hero entrance: words rise in, one after another */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+}
+
+[data-motion] .rise-word {
+  display: inline-block;
+  animation: rise var(--dur-slow) var(--ease) both;
+  animation-delay: calc(var(--i, 0) * 60ms);
+}
+
+/* 02 · Scroll reveal: fade up once as it arrives */
+[data-motion] [data-reveal] {
+  transition:
+    opacity var(--dur-medium) var(--ease),
+    transform var(--dur-medium) var(--ease);
+  transition-delay: calc(var(--reveal-i, 0) * 80ms);
+}
+
+[data-motion] [data-reveal]:not(.is-in) {
+  opacity: 0;
+  transform: translateY(var(--rise));
+}
+
+/* 03 · Parallax: big images drift slower than the page */
+[data-motion] [data-parallax] img {
+  transform: translate3d(0, var(--py, 0px), 0) scale(1.12);
+  transition: none;
+  will-change: transform;
+}
+
+/* 06 · Living gradient: big gradient words shift very slowly (dark mode) */
+@keyframes drift {
+  from {
+    background-position: 0% 50%;
+  }
+  to {
+    background-position: 100% 50%;
+  }
+}
+
+[data-motion][data-theme='dark'] .gradient-text:not(.gradient-text--dark-only),
+[data-motion] [data-theme='dark'] .gradient-text:not(.gradient-text--dark-only) {
+  background-image: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta), var(--neon-cyan), var(--neon-yellow));
+  background-size: 300% 100%;
+  animation: drift 9s ease-in-out infinite alternate;
+}
+
+/* 08 · Smart navigation: hides while reading, returns on scroll up */
+.site-header {
+  transition: transform 350ms var(--ease);
+}
+
+[data-motion][data-nav-hidden] .site-header {
+  transform: translateY(-100%);
+}
+
+[data-motion] .progress {
+  transition: top 350ms var(--ease);
+}
+
+[data-motion][data-nav-hidden] .progress {
+  top: 0;
+}
+
+/* 09 · Page transitions: cross-fade, new page rises 8px */
+@keyframes page-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root) {
+    animation: 180ms ease both page-out;
+  }
+
+  ::view-transition-new(root) {
+    animation: 350ms var(--ease) both page-in;
+  }
+
+  /* The header stays put while the page changes underneath it */
+  ::view-transition-old(site-header),
+  ::view-transition-new(site-header) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+}

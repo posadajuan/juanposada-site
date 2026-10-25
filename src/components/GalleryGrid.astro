@@ -24,7 +24,7 @@ const large = await Promise.all(
 <ul role="list" class:list={['ggrid', `ggrid--${kind}`]}>
   {
     items.map((item, i) => (
-      <li>
+      <li data-reveal>
         <a
           class="ggrid__item"
           href={large[i]?.src}

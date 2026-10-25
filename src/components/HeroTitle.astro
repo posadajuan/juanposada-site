@@ -1,0 +1,34 @@
+---
+/**
+ * The home headline. Each word is its own span so it can rise in,
+ * one after another, on page load. The gradient phrase rises as one.
+ * Screen readers read it as one normal sentence.
+ */
+interface Props {
+  segments: { text: string; gradient?: boolean }[];
+}
+
+const { segments } = Astro.props;
+
+let i = 0;
+const words = segments.flatMap((segment) =>
+  segment.gradient
+    ? [{ text: segment.text.trim(), gradient: true, i: i++ }]
+    : segment.text
+        .split(/\s+/)
+        .filter(Boolean)
+        .map((text) => ({ text, gradient: false, i: i++ })),
+);
+---
+
+<h1 class="hero-title">
+  {
+    words.map((w) => (
+      <>
+        <span class:list={['rise-word', { 'gradient-text': w.gradient }]} style={`--i: ${w.i}`}>
+          {w.text}
+        </span>{' '}
+      </>
+    ))
+  }
+</h1>

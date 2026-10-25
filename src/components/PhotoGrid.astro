@@ -26,7 +26,7 @@ const large = await Promise.all(
 <ul role="list" class:list={['pgrid', { 'pgrid--flip': flip }]}>
   {
     photos.map((photo, i) => (
-      <li class:list={{ 'pgrid__feat': i === featuredIndex }}>
+      <li class:list={{ 'pgrid__feat': i === featuredIndex }} data-reveal>
         <a
           class="pgrid__item"
           href={large[i]?.src}

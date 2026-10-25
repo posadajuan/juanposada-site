@@ -23,7 +23,7 @@ const sizes = '(min-width: 1240px) 572px, (min-width: 761px) 50vw, 100vw';
 
 {
   data.private ? (
-    <article class="card card--private">
+    <article class="card card--private" data-reveal>
       <div class="card__media card__media--private">
         <Frame src={data.cover} alt="" ratio="16 / 11" sizes={sizes} radius="m" class="card__blur" />
         <span class="card__lock" aria-hidden="true">
@@ -46,7 +46,7 @@ const sizes = '(min-width: 1240px) 572px, (min-width: 761px) 50vw, 100vw';
       </p>
     </article>
   ) : (
-    <a class="card" href={href}>
+    <a class="card" href={href} data-reveal>
       <Frame src={data.cover} alt={data.coverAlt} ratio="16 / 11" sizes={sizes} radius="m" priority={priority} />
       <div class="card__meta">
         <span class="label tag">{data.tags.join(' · ')}</span>

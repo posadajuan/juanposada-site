@@ -12,9 +12,12 @@ const { stats, gradient = false, columns = 3 } = Astro.props;
 <dl class="stats" style={`--cols: ${columns}`}>
   {
     stats.map((s) => (
-      <div class="stats__item">
+      <div class="stats__item" data-reveal>
         <dt class="stats__label">{s.label}</dt>
-        <dd class:list={['stats__value', { 'gradient-text gradient-text--dark-only': gradient }]}>{s.value}</dd>
+        <dd class:list={['stats__value', { 'gradient-text gradient-text--dark-only': gradient }]}>
+          <span class="visually-hidden">{s.value}</span>
+          <span aria-hidden="true" data-count={s.value}>{s.value}</span>
+        </dd>
       </div>
     ))
   }

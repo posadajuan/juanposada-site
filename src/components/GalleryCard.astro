@@ -12,7 +12,7 @@ const { data } = gallery;
 const action = data.kind === 'logos' ? 'View collection' : 'View gallery';
 ---
 
-<a class="gcard" href={`/work/${gallery.id}`}>
+<a class="gcard" href={`/work/${gallery.id}`} data-reveal>
   <Frame src={data.cover} alt={data.coverAlt} ratio="4 / 3" sizes="168px" radius="m" class="gcard__media" />
   <div class="gcard__text">
     <h3 class="gcard__title">{data.title}</h3>

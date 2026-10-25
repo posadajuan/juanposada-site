@@ -15,7 +15,7 @@ const { eyebrow, title, link, level = 2, id, size = 'l' } = Astro.props;
 const Heading = `h${level}` as 'h1' | 'h2' | 'h3';
 ---
 
-<div class="section-header">
+<div class="section-header" data-reveal>
   <div class="section-header__text">
     {eyebrow && <p class="label muted">{eyebrow}</p>}
     <Heading id={id} class:list={['section-header__title', `section-header__title--${size}`]}>
