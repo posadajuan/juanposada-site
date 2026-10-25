@@ -170,12 +170,23 @@ const isActive = (href: string) => path === href || path.startsWith(`${href}/`);
       align-items: center;
     }
 
+    /*
+     * The panel hangs from the bottom of the header and fills the rest of
+     * the screen with a solid background. (position: fixed doesn't work
+     * here: the header's blur effect would shrink it to the header's size.)
+     */
     .site-header__menu {
-      position: fixed;
-      inset: var(--nav-height) 0 0 0;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      height: calc(100dvh - var(--nav-height));
+      overflow-y: auto;
+      overscroll-behavior: contain;
       margin: 0;
-      padding: var(--space-l) var(--gutter);
+      padding: var(--space-l) var(--gutter) calc(var(--space-xl) + env(safe-area-inset-bottom));
       background: var(--color-bg);
+      border-top: 1px solid var(--color-border);
       opacity: 0;
       visibility: hidden;
       transform: translateY(-8px);
@@ -194,9 +205,25 @@ const isActive = (href: string) => path === href || path.startsWith(`${href}/`);
         transform 300ms var(--ease);
     }
 
+    /* While the menu is open, the bar turns solid so bar + panel read as one sheet */
+    .site-header:has([data-menu][data-open]) {
+      background: var(--color-bg);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+
     .site-header__links {
       flex-direction: column;
       gap: 4px;
+    }
+
+    .site-header__links li {
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .site-header__link {
+      width: 100%;
+      padding-block: 10px;
     }
 
     .site-header__link {
@@ -223,6 +250,7 @@ const isActive = (href: string) => path === href || path.startsWith(`${href}/`);
     const menu = document.querySelector<HTMLElement>('[data-menu]');
     const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
     menu?.removeAttribute('data-open');
+    document.documentElement.style.overflow = '';
     if (toggle) {
       toggle.setAttribute('aria-expanded', 'false');
       toggle.textContent = 'Menu';
@@ -253,11 +281,15 @@ const isActive = (href: string) => path === href || path.startsWith(`${href}/`);
       menuToggle.setAttribute('aria-expanded', String(open));
       menuToggle.textContent = open ? 'Close' : 'Menu';
       menu?.toggleAttribute('data-open', open);
+      // Stop the page underneath from scrolling while the menu is open.
+      document.documentElement.style.overflow = open ? 'hidden' : '';
       return;
     }
 
     if (target.closest('[data-menu] a')) closeMenu();
   });
+
+  document.addEventListener('astro:before-swap', closeMenu);
 
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') closeMenu();
