@@ -44,7 +44,7 @@ const socials = site.socials.filter((s) => s.href);
     </section>
 
     <section class="contact__form" aria-label="Contact form">
-      <form class="form" method="post" action="/api/contact" novalidate data-contact-form>
+      <form class="form" method="post" action="/api/contact" novalidate data-contact-form data-astro-reload>
         <div class="field">
           <label for="f-name">Name</label>
           <input id="f-name" name="name" type="text" autocomplete="name" required maxlength="120" placeholder="Your name" />
@@ -401,12 +401,18 @@ const socials = site.socials.filter((s) => s.href);
     }
   }
 
-  document.addEventListener('submit', (event) => {
-    const form = (event.target as HTMLElement).closest<HTMLFormElement>('[data-contact-form]');
-    if (!form) return;
-    event.preventDefault();
-    void submit(form);
-  });
+  // Capture phase so this runs before the page-transition router.
+  document.addEventListener(
+    'submit',
+    (event) => {
+      const form = (event.target as HTMLElement).closest<HTMLFormElement>('[data-contact-form]');
+      if (!form) return;
+      event.preventDefault();
+      event.stopPropagation();
+      void submit(form);
+    },
+    true,
+  );
 
   // Clear an error as soon as the field is fixed.
   document.addEventListener('input', (event) => {
