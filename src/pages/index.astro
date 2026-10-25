@@ -1,19 +1,12 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import CtaBlock from '@/components/CtaBlock.astro';
-import { site } from '@/data/site';
+import Availability from '@/components/Availability.astro';
 ---
 
 <BaseLayout>
   <section class="container hero">
-    {
-      site.availability.show && (
-        <p class="status">
-          <span class="status__dot" aria-hidden="true" />
-          {site.availability.text}
-        </p>
-      )
-    }
+    <Availability />
     <h1 class="hero-title">
       Juan Posada — I turn complex ideas into <span class="gradient-text">clear, playful</span> digital
       experiences, from first sketch to launch.
@@ -26,7 +19,7 @@ import { site } from '@/data/site';
 
   <section class="container section">
     <div class="media-placeholder hero__media">
-      <span class="label">Showreel · coming in step 6.4</span>
+      <span class="label">Showreel</span>
     </div>
   </section>
 

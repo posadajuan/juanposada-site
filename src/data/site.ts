@@ -7,12 +7,21 @@ export const site = {
   url: 'https://juanposada.co.uk',
   description:
     'Juan Posada turns complex ideas into clear, playful digital experiences, from first sketch to launch.',
-  location: '[City], UK',
+  location: 'London, UK',
 
-  /** The small status line in the hero, contact page and CTA block. */
+  /**
+   * The small status line in the hero, contact page and CTA block.
+   * mode 'rolling' → always shows a start date `leadDays` ahead, moved
+   *                  to the following Monday ("…from Monday 10 November").
+   *                  Set leadDays to your real lead time.
+   * mode 'fixed'   → shows `fixedText` exactly (use when you're booked up).
+   * mode 'hidden'  → hides the line everywhere.
+   */
   availability: {
-    show: true,
-    text: 'Taking on projects from [Month Year]',
+    mode: 'rolling' as 'rolling' | 'fixed' | 'hidden',
+    prefix: 'Taking on new projects from',
+    leadDays: 14,
+    fixedText: 'Booked until [Month] · happy to chat about later projects',
   },
   replyTime: '2 working days',
 

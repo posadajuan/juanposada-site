@@ -1,0 +1,43 @@
+---
+/**
+ * The availability line. The date is written at build time and then
+ * refreshed in the visitor's browser, so a rolling date is always
+ * correct even if the site hasn't been rebuilt for a while.
+ */
+import { availabilityText } from '@/lib/availability';
+
+interface Props {
+  /** 'status' = dot + text (hero, contact). 'label' = small caps (CTA block). */
+  variant?: 'status' | 'label';
+}
+
+const { variant = 'status' } = Astro.props;
+const text = availabilityText();
+---
+
+{
+  text &&
+    (variant === 'status' ? (
+      <p class="status">
+        <span class="status__dot" aria-hidden="true" />
+        <span data-availability>{text}</span>
+      </p>
+    ) : (
+      <p class="label muted" data-availability>
+        {text}
+      </p>
+    ))
+}
+
+<script>
+  import { availabilityText } from '@/lib/availability';
+
+  function refresh() {
+    const text = availabilityText();
+    document.querySelectorAll<HTMLElement>('[data-availability]').forEach((el) => {
+      if (text) el.textContent = text;
+    });
+  }
+
+  document.addEventListener('astro:page-load', refresh);
+</script>
