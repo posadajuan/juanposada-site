@@ -19,9 +19,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
 
@@ -29,7 +29,16 @@ jobs:
         run: npm install --no-audit --no-fund
 
       - name: Type and template check
-        run: npx astro check
+        run: |
+          set -o pipefail
+          npx astro check 2>&1 | tee astro-check.log
+
+      - name: Show check errors
+        if: failure()
+        run: |
+          grep -E "error|Error" astro-check.log | head -10 | while IFS= read -r line; do
+            echo "::error title=astro check::$line"
+          done
 
       - name: Build
         run: npm run build
@@ -38,11 +47,21 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Accessibility and behaviour tests
-        run: npx playwright test
+        run: |
+          set -o pipefail
+          npx playwright test 2>&1 | tee playwright.log
+
+      - name: Show test failures
+        if: failure()
+        run: |
+          [ -f playwright.log ] || exit 0
+          grep -E "✘|Error:|Expected|Received|violations" playwright.log | head -10 | while IFS= read -r line; do
+            echo "::error title=tests::$line"
+          done
 
       - name: Upload test report
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: playwright-report
           path: playwright-report
