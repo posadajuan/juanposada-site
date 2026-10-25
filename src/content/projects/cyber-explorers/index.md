@@ -7,7 +7,7 @@ order: 1
 featured: true
 
 cover: ./cover.jpg
-coverAlt: "[Describe the cover image, e.g. Cyber Explorers mission screen on a laptop]"
+coverAlt: The Cyber Explorers home page on a laptop, showing a neon cityscape and the welcome message for 11–14 year olds
 
 snapshot:
   role: "[Lead product designer, creative direction]"
@@ -20,9 +20,11 @@ problem:
   headline: "[The problem as a headline your reader can repeat.]"
   text: >
     [2–3 sentences: who had the problem, why it mattered and what
-    constraints you were working with.]
-  image: ./problem.jpg
-  imageAlt: "[What the context image shows]"
+    constraints you were working with. e.g. cyber security is abstract
+    and intimidating for 11–14 year olds, and teachers needed something
+    they could use in class, clubs or at home.]
+  image: ./mission-brief.png
+  imageAlt: Mission brief screen titled "Your mission… if you choose to accept", with the story text, mission details, guide character Rehka, an audio briefing player and Accept or Decline buttons
 
 research:
   headline: "[What you learned that changed the direction.]"
@@ -38,23 +40,27 @@ research:
     by: "[Name, role]"
 
 solution:
-  headline: "[The idea in one sentence.]"
+  headline: "[The idea in one sentence, e.g. turn real cyber skills into missions in a story world.]"
   decisions:
-    - title: "[Decision 1]"
+    - title: "[Decision 1, e.g. Every lesson is a mission]"
       text: "[Why you made it, in two lines.]"
-      image: ./decision-1.jpg
-      imageAlt: "[What key screen 1 shows]"
-    - title: "[Decision 2]"
+      image: ./finding-the-clue.png
+      imageAlt: Level 1 "Finding the clue" page where the student picks the whoami command, sees the result in a command prompt and unlocks the next stage
+    - title: "[Decision 2, e.g. Real commands in a safe sandbox]"
       text: "[Why you made it, in two lines.]"
-      image: ./decision-2.jpg
-      imageAlt: "[What key screen 2 shows]"
-  showcase: ./showcase.jpg
-  showcaseAlt: "[What the showcase image shows]"
+      image: ./command-prompt.png
+      imageAlt: Tablet-style command list and command prompt revealing a hidden message from King Herbert, with a City Hall Fund points bar above
+    - title: "[Decision 3, e.g. Hands-on logic, not memorising]"
+      text: "[Why you made it, in two lines.]"
+      image: ./logic-unit.png
+      imageAlt: Drag-and-drop activity linking control panel sensors such as a thermometer and humidity sensor through a logic unit to actions
+  showcase: ./show-me-the-door.png
+  showcaseAlt: Level 3 "Show me the door" scene with a dragon perched on a glowing doorway in a virtual room, guiding the student to choose the next folder
   details:
-    - image: ./detail-1.jpg
-      imageAlt: "[Detail 1]"
-    - image: ./detail-2.jpg
-      imageAlt: "[Detail 2]"
+    - image: ./vr-folders.png
+      imageAlt: Virtual reality goggles view showing two folders labelled with cd commands and a Go button
+    - image: ./on-a-roll.png
+      imageAlt: Progress message "You're on a roll!" from guide Rehka next to the villain King Herbert, above a lock to unlock the next stage
 
 impact:
   headline: "[What changed.]"
