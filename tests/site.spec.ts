@@ -25,6 +25,8 @@ async function setTheme(page: Page, theme: 'dark' | 'light') {
 for (const path of pages) {
   for (const theme of ['dark', 'light'] as const) {
     test(`${path} has no accessibility problems (${theme} mode)`, async ({ page }) => {
+      // Check the settled page, not elements caught mid-fade.
+      await page.emulateMedia({ reducedMotion: 'reduce' });
       await setTheme(page, theme);
       await page.goto(path);
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme);

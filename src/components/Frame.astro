@@ -18,6 +18,12 @@ interface Props {
   /** Corner size: 'm' (12px), 'l' (16px). */
   radius?: 'm' | 'l';
   class?: string;
+  /** Image drifts slightly slower than the page (big images only). */
+  parallax?: boolean;
+  /** Fade up when scrolled into view. */
+  reveal?: boolean;
+  /** Grows into place as it scrolls up the screen (hero images only). */
+  zoom?: boolean;
 }
 
 const {
@@ -28,13 +34,22 @@ const {
   priority = false,
   radius = 'l',
   class: className,
+  parallax = false,
+  reveal = false,
+  zoom = false,
 } = Astro.props;
 
 const fitting = [640, 1024, 1600, 2200].filter((w) => w <= src.width);
 const widths = fitting.length ? fitting : [src.width];
 ---
 
-<div class:list={['frame', `frame--${radius}`, className]} style={ratio ? `aspect-ratio: ${ratio}` : undefined}>
+<div
+  class:list={['frame', `frame--${radius}`, className]}
+  style={ratio ? `aspect-ratio: ${ratio}` : undefined}
+  data-parallax={parallax ? '' : undefined}
+  data-reveal={reveal ? '' : undefined}
+  data-zoom={zoom ? '' : undefined}
+>
   <Picture
     src={src}
     alt={alt}

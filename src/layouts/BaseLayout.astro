@@ -2,6 +2,7 @@
 import '@fontsource-variable/roboto';
 import '@fontsource-variable/roboto-flex';
 import '@/styles/global.css';
+import '@/styles/motion.css';
 import { ClientRouter } from 'astro:transitions';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
@@ -64,6 +65,10 @@ const ogImage = new URL(image, Astro.site);
         function apply(doc) {
           var theme = pick();
           doc.documentElement.dataset.theme = theme;
+          // Motion only for visitors who haven't asked to reduce it.
+          if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            doc.documentElement.setAttribute('data-motion', '');
+          }
           var meta = doc.querySelector('meta[name="theme-color"]');
           if (meta) meta.setAttribute('content', theme === 'light' ? '#ffffff' : '#0a0a0a');
         }
@@ -84,5 +89,8 @@ const ogImage = new URL(image, Astro.site);
       <slot />
     </main>
     <Footer />
+    <script>
+      import '@/scripts/motion';
+    </script>
   </body>
 </html>

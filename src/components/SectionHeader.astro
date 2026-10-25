@@ -16,7 +16,7 @@ const Heading = `h${level}` as 'h1' | 'h2' | 'h3';
 ---
 
 <div class="section-header">
-  <div class="section-header__text">
+  <div class="section-header__text" data-reveal="stagger">
     {eyebrow && <p class="label muted">{eyebrow}</p>}
     <Heading id={id} class:list={['section-header__title', `section-header__title--${size}`]}>
       {title}
@@ -24,7 +24,7 @@ const Heading = `h${level}` as 'h1' | 'h2' | 'h3';
   </div>
   {
     link && (
-      <a href={link.href} class="link section-header__link">
+      <a href={link.href} class="link section-header__link" data-reveal>
         {link.label}
       </a>
     )

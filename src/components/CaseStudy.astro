@@ -39,7 +39,7 @@ const body = '(min-width: 1240px) 900px, 100vw';
 <div class="progress" aria-hidden="true"><div class="progress__bar" data-progress></div></div>
 
 <article class="cs">
-  <header class="container cs__head">
+  <header class="container cs__head" data-reveal="stagger">
     <a href="/work" class="link back-link">← All work</a>
     <div class="cs__meta">
       <span class="label tag">{data.tags.join(' · ')}</span>
@@ -50,11 +50,11 @@ const body = '(min-width: 1240px) 900px, 100vw';
   </header>
 
   <div class="container">
-    <Frame src={data.cover} alt={data.coverAlt} ratio="16 / 8" priority class="cs__cover" />
+    <Frame src={data.cover} alt={data.coverAlt} ratio="16 / 8" priority parallax zoom class="cs__cover" />
   </div>
 
   <section class="container" aria-label="Project snapshot">
-    <dl class="snapshot">
+    <dl class="snapshot" data-reveal>
       <div><dt class="label muted">Role</dt><dd>{snapshot.role}</dd></div>
       <div><dt class="label muted">Team</dt><dd>{snapshot.team}</dd></div>
       <div><dt class="label muted">Timeline</dt><dd>{snapshot.timeline}</dd></div>
@@ -72,14 +72,14 @@ const body = '(min-width: 1240px) 900px, 100vw';
     </nav>
 
     <div class="cs__sections">
-      <section id="problem" class="cs__section" aria-labelledby="h-problem" data-toc-section>
+      <section id="problem" class="cs__section" aria-labelledby="h-problem" data-toc-section data-reveal="stagger">
         <p class="label tag">01 · Problem</p>
         <h2 id="h-problem" class="cs__h2">{problem.headline}</h2>
         <p class="cs__text">{problem.text}</p>
         {problem.image && <Frame src={problem.image} alt={problem.imageAlt ?? ''} sizes={body} />}
       </section>
 
-      <section id="research" class="cs__section" aria-labelledby="h-research" data-toc-section>
+      <section id="research" class="cs__section" aria-labelledby="h-research" data-toc-section data-reveal="stagger">
         <p class="label tag">02 · Research &amp; insight</p>
         <h2 id="h-research" class="cs__h2">{research.headline}</h2>
         <p class="cs__text">{research.text}</p>
@@ -106,11 +106,11 @@ const body = '(min-width: 1240px) 900px, 100vw';
       </section>
 
       <section id="solution" class="cs__section" aria-labelledby="h-solution" data-toc-section>
-        <p class="label tag">03 · Solution</p>
-        <h2 id="h-solution" class="cs__h2">{solution.headline}</h2>
+        <p class="label tag" data-reveal>03 · Solution</p>
+        <h2 id="h-solution" class="cs__h2" data-reveal>{solution.headline}</h2>
         {
           solution.decisions.map((d, i) => (
-            <div class:list={['decision', { 'decision--flip': i % 2 === 1 }]}>
+            <div class:list={['decision', { 'decision--flip': i % 2 === 1 }]} data-reveal="stagger">
               <Frame src={d.image} alt={d.imageAlt} ratio="4 / 3" sizes={half} radius="m" />
               <div class="decision__text">
                 <h3 class="decision__title">{d.title}</h3>
@@ -119,10 +119,10 @@ const body = '(min-width: 1240px) 900px, 100vw';
             </div>
           ))
         }
-        {solution.showcase && <Frame src={solution.showcase} alt={solution.showcaseAlt ?? ''} sizes={body} />}
+        {solution.showcase && <Frame src={solution.showcase} alt={solution.showcaseAlt ?? ''} sizes={body} reveal parallax />}
         {
           solution.details.length > 0 && (
-            <div class="details">
+            <div class="details" data-reveal>
               {solution.details.map((d) => (
                 <Frame src={d.image} alt={d.imageAlt} ratio="1 / 1" sizes={half} radius="m" />
               ))}
@@ -132,12 +132,12 @@ const body = '(min-width: 1240px) 900px, 100vw';
       </section>
 
       <section id="impact" class="cs__section" aria-labelledby="h-impact" data-toc-section>
-        <p class="label tag">04 · Impact</p>
-        <h2 id="h-impact" class="cs__h2">{impact.headline}</h2>
+        <p class="label tag" data-reveal>04 · Impact</p>
+        <h2 id="h-impact" class="cs__h2" data-reveal>{impact.headline}</h2>
         {impact.stats.length > 0 && <StatGrid stats={impact.stats} gradient />}
       </section>
 
-      <section id="reflection" class="cs__section" aria-labelledby="h-reflection" data-toc-section>
+      <section id="reflection" class="cs__section" aria-labelledby="h-reflection" data-toc-section data-reveal="stagger">
         <p class="label tag">05 · Reflection</p>
         <h2 id="h-reflection" class="cs__h2">What I’d take forward</h2>
         <p class="cs__text">{reflection}</p>
@@ -148,7 +148,7 @@ const body = '(min-width: 1240px) 900px, 100vw';
   <nav class="container next" aria-label="Next project">
     {
       next ? (
-        <a class="next__link" href={`/work/${next.id}`}>
+        <a class="next__link" href={`/work/${next.id}`} data-reveal>
           <span class="next__text">
             <span class="label muted">Next project</span>
             <span class="next__title">
@@ -159,7 +159,7 @@ const body = '(min-width: 1240px) 900px, 100vw';
           <Frame src={next.data.cover} alt="" ratio="16 / 9" sizes={half} class="next__img" />
         </a>
       ) : (
-        <a class="next__link next__link--simple" href="/work">
+        <a class="next__link next__link--simple" href="/work" data-reveal>
           <span class="next__text">
             <span class="label muted">Keep exploring</span>
             <span class="next__title">

@@ -9,7 +9,7 @@ const half = '(min-width: 761px) 50vw, 100vw';
 
 <BaseLayout title="About" description={about.intro}>
   <section class="container intro">
-    <div class="intro__text">
+    <div class="intro__text" data-reveal="stagger">
       <p class="label muted">About</p>
       <h1 class="page-title">Hi, I’m <span class="gradient-text">Juan.</span></h1>
       <p class="hook">{about.hook}</p>
@@ -19,25 +19,25 @@ const half = '(min-width: 761px) 50vw, 100vw';
   </section>
 
   <section class="container section two-col" aria-labelledby="story">
-    <div class="stack">
+    <div class="stack" data-reveal="stagger">
       <p class="label tag">01 · Story</p>
       <h2 id="story" class="h2">{about.story.title}</h2>
     </div>
-    <div class="story">
+    <div class="story" data-reveal="stagger">
       {about.story.paragraphs.map((p) => <p>{p}</p>)}
     </div>
   </section>
 
   <section class="container section" aria-labelledby="principles">
     <div class="band">
-      <div class="stack">
+      <div class="stack" data-reveal="stagger">
         <p class="label tag">02 · Principles</p>
         <h2 id="principles" class="h2">How I like to work</h2>
       </div>
       <ol class="principles" role="list">
         {
           about.principles.map((item, i) => (
-            <li class="principle">
+            <li class="principle" data-reveal>
               <span class="label tag">{String(i + 1).padStart(2, '0')}</span>
               <h3 class="principle__title">{item.title}</h3>
               <p class="muted">{item.text}</p>
@@ -49,14 +49,14 @@ const half = '(min-width: 761px) 50vw, 100vw';
   </section>
 
   <section class="container section stack-l" aria-labelledby="experience">
-    <div class="stack">
+    <div class="stack" data-reveal="stagger">
       <p class="label tag">03 · Experience</p>
       <h2 id="experience" class="h2">Where I’ve worked</h2>
     </div>
     <ul class="jobs" role="list">
       {
         about.experience.map((job) => (
-          <li class="job">
+          <li class="job" data-reveal>
             <span class="job__years muted">{job.years}</span>
             <span class="job__role">{job.role}</span>
             <span>{job.company}</span>
@@ -90,8 +90,8 @@ const half = '(min-width: 761px) 50vw, 100vw';
   </section>
 
   <section class="container section two-col two-col--center" aria-labelledby="off-screen">
-    <Frame src={about.offScreen.image} alt={about.offScreen.alt} ratio="16 / 11" sizes={half} />
-    <div class="stack">
+    <Frame src={about.offScreen.image} alt={about.offScreen.alt} ratio="16 / 11" sizes={half} reveal parallax />
+    <div class="stack" data-reveal="stagger">
       <p class="label tag">04 · Off screen</p>
       <h2 id="off-screen" class="h2 h2--s">{about.offScreen.title}</h2>
       <p class="lead">{about.offScreen.text}</p>

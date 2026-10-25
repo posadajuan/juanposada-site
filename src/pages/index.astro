@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Availability from '@/components/Availability.astro';
+import HeroTitle from '@/components/HeroTitle.astro';
 import SectionHeader from '@/components/SectionHeader.astro';
 import ProjectCard from '@/components/ProjectCard.astro';
 import StatGrid from '@/components/StatGrid.astro';
@@ -17,10 +18,13 @@ const eyebrow = `Selected work · ${String(featured.length).padStart(2, '0')}`;
 <BaseLayout>
   <section class="container hero">
     <Availability />
-    <h1 class="hero-title">
-      Juan Posada — I turn complex ideas into <span class="gradient-text">clear, playful</span> digital
-      experiences, from first sketch to launch.
-    </h1>
+    <HeroTitle
+      segments={[
+        { text: 'Juan Posada — I turn complex ideas into' },
+        { text: 'clear, playful', gradient: true },
+        { text: 'digital experiences, from first sketch to launch.' },
+      ]}
+    />
     <div class="hero__actions">
       <a href="/work" class="btn btn--primary">See my work <span class="arrow" aria-hidden="true">→</span></a>
       <a href="/contact" class="btn btn--secondary">Get in touch</a>
@@ -30,7 +34,7 @@ const eyebrow = `Selected work · ${String(featured.length).padStart(2, '0')}`;
   {
     home.showreel && (
       <section class="container section" aria-label="Showreel">
-        <Frame src={home.showreel.image} alt={home.showreel.alt} ratio="16 / 8" priority class="hero__media" />
+        <Frame src={home.showreel.image} alt={home.showreel.alt} ratio="16 / 8" priority parallax zoom class="hero__media" />
       </section>
     )
   }
@@ -62,7 +66,7 @@ const eyebrow = `Selected work · ${String(featured.length).padStart(2, '0')}`;
     <ol class="steps" role="list">
       {
         home.howIWork.steps.map((step, i) => (
-          <li class="step">
+          <li class="step" data-reveal>
             <span class="label tag">{String(i + 1).padStart(2, '0')}</span>
             <h3 class="step__title">{step.title}</h3>
             <p class="step__text">{step.text}</p>
@@ -74,8 +78,8 @@ const eyebrow = `Selected work · ${String(featured.length).padStart(2, '0')}`;
 
   <section class="container section" aria-labelledby="hello">
     <div class="hello">
-      <Frame src={home.hello.image} alt={home.hello.alt} ratio="4 / 5" sizes="(min-width: 761px) 50vw, 100vw" class="hello__img" />
-      <div class="hello__text">
+      <Frame src={home.hello.image} alt={home.hello.alt} ratio="4 / 5" sizes="(min-width: 761px) 50vw, 100vw" reveal class="hello__img" />
+      <div class="hello__text" data-reveal="stagger">
         <p class="label muted">Hello</p>
         <h2 id="hello" class="hello__title">{home.hello.title}</h2>
         <p class="lead">{home.hello.text}</p>
