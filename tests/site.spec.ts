@@ -1,6 +1,11 @@
 import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
+// Keep tests independent of Cloudflare's live spam-check service.
+test.beforeEach(async ({ page }) => {
+  await page.route('https://challenges.cloudflare.com/**', (route) => route.abort());
+});
+
 // Pages to check. Add each new page here as it's built.
 const pages = [
   '/',

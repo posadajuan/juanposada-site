@@ -9,7 +9,9 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "test": "playwright test"
+    "test": "playwright test",
+    "test:worker": "vitest run",
+    "check:worker": "tsc -p worker"
   },
   "dependencies": {
     "@fontsource-variable/roboto": "^5.0.0",
@@ -20,9 +22,11 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.0",
     "@axe-core/playwright": "^4.10.0",
+    "@cloudflare/workers-types": "^4.20250101.0",
     "@playwright/test": "^1.50.0",
     "@types/node": "^22.0.0",
-    "typescript": "^5.6.0"
+    "typescript": "^5.6.0",
+    "vitest": "^3.0.0"
   },
   "engines": {
     "node": ">=20"

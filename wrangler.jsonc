@@ -1,13 +1,41 @@
 {
   // Cloudflare deployment settings.
-  // The site is static: Cloudflare serves the built files from ./dist.
+  // Pages are static files served from ./dist. Only /api/* runs code
+  // (worker/index.ts): today that's the contact form.
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "juanposada-site",
+  "main": "worker/index.ts",
   "compatibility_date": "2026-06-01",
   "assets": {
     "directory": "./dist",
-    "not_found_handling": "404-page"
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/api/*"]
   },
+
+  // Sends contact form messages through Cloudflare Email Routing.
+  // The receiving address is a secret (CONTACT_TO), not stored here.
+  "send_email": [{ "name": "SEND_EMAIL" }],
+
+  // At most 5 messages a minute from the same visitor.
+  "ratelimits": [
+    {
+      "name": "CONTACT_LIMITER",
+      "namespace_id": "1001",
+      "simple": { "limit": 5, "period": 60 }
+    }
+  ],
+
+  "vars": {
+    "CONTACT_FROM": "website@juanposada.co.uk",
+    "SITE_URL": "https://juanposada.co.uk"
+  },
+  // Secrets (set in Cloudflare, never in this file):
+  //   TURNSTILE_SECRET  – Turnstile secret key
+  //   CONTACT_TO        – inbox that receives messages
+
+  "observability": { "enabled": true },
+
   // Lets every branch / pull request get its own preview link.
   "previews": {}
 }
