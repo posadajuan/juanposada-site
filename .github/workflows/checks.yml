@@ -1,0 +1,68 @@
+name: Checks
+
+# Runs on every pull request and on every change to main.
+# A red cross here means something broke; fix it before merging.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Install
+        run: npm install --no-audit --no-fund
+
+      - name: Type and template check
+        run: |
+          set -o pipefail
+          npx astro check 2>&1 | tee astro-check.log
+
+      - name: Show check errors
+        if: failure()
+        run: |
+          grep -E "error|Error" astro-check.log | head -10 | while IFS= read -r line; do
+            echo "::error title=astro check::$line"
+          done
+
+      - name: Build
+        run: npm run build
+
+      - name: Install test browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Accessibility and behaviour tests
+        run: |
+          set -o pipefail
+          npx playwright test 2>&1 | tee playwright.log
+
+      - name: Show test failures
+        if: failure()
+        run: |
+          [ -f playwright.log ] || exit 0
+          grep -E "✘|Error:|Expected|Received|violations" playwright.log | head -10 | while IFS= read -r line; do
+            echo "::error title=tests::$line"
+          done
+
+      - name: Upload test report
+        if: failure()
+        uses: actions/upload-artifact@v5
+        with:
+          name: playwright-report
+          path: playwright-report
+          retention-days: 7
