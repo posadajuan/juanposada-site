@@ -11,19 +11,44 @@ test.describe('with motion', () => {
     expect(await h1.locator('.rise-word').count()).toBeGreaterThan(5);
   });
 
-  test('sections reveal as you scroll and numbers count up to their value', async ({ page }) => {
+  test('sections wait until they are properly in view, then reveal and stay', async ({ page }) => {
+    await page.goto('/');
+    const cta = page.locator('.cta');
+    await expect(cta).toHaveAttribute('data-reveal', 'stagger');
+
+    // Top of the block just inside the bottom edge: still waiting.
+    await page.evaluate(() => {
+      const el = document.querySelector('.cta')!;
+      window.scrollTo(0, window.scrollY + el.getBoundingClientRect().top - window.innerHeight * 0.9);
+    });
+    await page.waitForTimeout(300);
+    await expect(cta).not.toHaveClass(/is-in/);
+
+    // Top of the block half way up the screen: it arrives.
+    await page.evaluate(() => {
+      const el = document.querySelector('.cta')!;
+      window.scrollTo(0, window.scrollY + el.getBoundingClientRect().top - window.innerHeight * 0.5);
+    });
+    await expect
+      .poll(async () => cta.evaluate((el) => el.classList.contains('is-in') || !el.hasAttribute('data-reveal')))
+      .toBe(true);
+  });
+
+  test('scrolling through the whole page reveals everything', async ({ page }) => {
+    await page.goto('/work/cyber-explorers');
+    for (let i = 0; i < 40; i++) {
+      await page.mouse.wheel(0, 400);
+      await page.waitForTimeout(40);
+    }
+    await expect(page.locator('[data-reveal]:not(.is-in)')).toHaveCount(0);
+  });
+
+  test('numbers count up to their exact value', async ({ page }) => {
     await page.goto('/');
     const firstStat = page.locator('.highlights [data-count]').first();
-    const finalValue = await firstStat.getAttribute('data-count');
-
-    const lastReveal = page.locator('[data-reveal]').last();
-    await expect(lastReveal).not.toHaveClass(/is-in/);
-
+    const finalValue = (await firstStat.getAttribute('data-count')) ?? '';
     await firstStat.scrollIntoViewIfNeeded();
-    await expect(firstStat).toHaveText(finalValue ?? '', { timeout: 4000 });
-
-    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-    await expect(lastReveal).toHaveClass(/is-in/);
+    await expect(firstStat).toHaveText(finalValue, { timeout: 6000 });
   });
 
   test('navigation hides when scrolling down and returns when scrolling up', async ({ page, isMobile }) => {

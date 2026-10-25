@@ -17,7 +17,7 @@ const { before = 'Have a', highlight = 'project', after = 'in mind?' } = Astro.p
 
 <!-- Always dark, in both modes, so the page ends on a strong note -->
 <section class="container cta-wrap" aria-labelledby="cta-title">
-  <div class="cta" data-theme="dark" data-reveal>
+  <div class="cta" data-theme="dark" data-reveal="stagger">
     <Availability variant="label" />
     <h2 id="cta-title" class="cta__title">
       {before} <span class="gradient-text">{highlight}</span> {after}

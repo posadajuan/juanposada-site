@@ -1,39 +1,95 @@
 /*
- * Motion system: quiet, smooth, intentional.
+ * Motion system: calm, clear, intentional (Apple product-page style).
  *
- * Everything here only runs when html has [data-motion], which is set
- * before the page paints and ONLY if the visitor hasn't asked their
- * device to reduce motion. Without it, content simply appears.
+ * - Things move only once they are properly in view (a quarter of the
+ *   way up the screen), never while still at the bottom edge.
+ * - Long, soft timing: about a second, with a curve that starts briskly
+ *   and settles slowly, so the movement is seen but never rushed.
+ * - One thing at a time: inside a block, the label, then the heading,
+ *   then the text, then the image arrive in sequence.
+ * - Big images are tied to the scroll itself: they grow into place and
+ *   drift slightly slower than the page, and reverse when scrolling up.
+ *
+ * Everything only runs when html has [data-motion], which is set before
+ * the page paints and ONLY if the visitor hasn't asked their device to
+ * reduce motion. Without it, content simply appears.
  */
+
+:root {
+  --reveal-ease: cubic-bezier(0.16, 1, 0.3, 1); /* brisk start, long soft landing */
+  --fade-ease: cubic-bezier(0.33, 1, 0.68, 1);
+  --reveal-duration: 1100ms;
+  --fade-duration: 900ms;
+  --reveal-rise: 36px;
+  --reveal-step: 130ms; /* gap between items arriving together */
+}
 
 /* 01 · Hero entrance: words rise in, one after another */
 @keyframes rise {
   from {
     opacity: 0;
-    transform: translateY(22px);
+    transform: translateY(0.45em);
   }
 }
 
 [data-motion] .rise-word {
   display: inline-block;
-  animation: rise var(--dur-slow) var(--ease) both;
-  animation-delay: calc(var(--i, 0) * 60ms);
+  animation:
+    rise var(--reveal-duration) var(--reveal-ease) both,
+    fade-only var(--fade-duration) var(--fade-ease) both;
+  animation-delay: calc(150ms + var(--i, 0) * 75ms);
 }
 
-/* 02 · Scroll reveal: fade up once as it arrives */
+@keyframes fade-only {
+  from {
+    opacity: 0;
+  }
+}
+
+/* 02 · Scroll reveal: a block fades and rises once, when properly in view */
 [data-motion] [data-reveal] {
   transition:
-    opacity var(--dur-medium) var(--ease),
-    transform var(--dur-medium) var(--ease);
-  transition-delay: calc(var(--reveal-i, 0) * 80ms);
+    opacity var(--fade-duration) var(--fade-ease),
+    transform var(--reveal-duration) var(--reveal-ease);
+  transition-delay: calc(var(--reveal-i, 0) * var(--reveal-step));
 }
 
 [data-motion] [data-reveal]:not(.is-in) {
   opacity: 0;
-  transform: translateY(var(--rise));
+  transform: translateY(var(--reveal-rise));
 }
 
-/* 03 · Parallax: big images drift slower than the page */
+/* Staggered blocks: the block stays put, its parts arrive one by one */
+[data-motion] [data-reveal='stagger'],
+[data-motion] [data-reveal='stagger']:not(.is-in) {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+[data-motion] [data-reveal='stagger'] > * {
+  transition:
+    opacity var(--fade-duration) var(--fade-ease),
+    transform var(--reveal-duration) var(--reveal-ease);
+  transition-delay: calc((var(--reveal-i, 0) + var(--child-i, 0)) * var(--reveal-step));
+}
+
+[data-motion] [data-reveal='stagger']:not(.is-in) > * {
+  opacity: 0;
+  transform: translateY(var(--reveal-rise));
+}
+
+/* 03 · Big images: grow into place and drift, tied to the scroll */
+[data-motion] [data-zoom] {
+  transform: scale(var(--zoom, 0.92));
+  transform-origin: 50% 0%;
+  will-change: transform;
+}
+
+[data-motion] [data-zoom]:not([data-zoom-live]) {
+  transition: transform 1000ms var(--reveal-ease);
+}
+
 [data-motion] [data-parallax] img {
   transform: translate3d(0, var(--py, 0px), 0) scale(1.12);
   transition: none;
@@ -54,12 +110,21 @@
 [data-motion] [data-theme='dark'] .gradient-text:not(.gradient-text--dark-only) {
   background-image: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta), var(--neon-cyan), var(--neon-yellow));
   background-size: 300% 100%;
-  animation: drift 9s ease-in-out infinite alternate;
+  animation: drift 10s ease-in-out infinite alternate;
+}
+
+/* The hero's gradient phrase rises AND drifts */
+[data-motion][data-theme='dark'] .rise-word.gradient-text {
+  animation:
+    rise var(--reveal-duration) var(--reveal-ease) both,
+    fade-only var(--fade-duration) var(--fade-ease) both,
+    drift 10s ease-in-out infinite alternate;
+  animation-delay: calc(150ms + var(--i, 0) * 75ms), calc(150ms + var(--i, 0) * 75ms), 0s;
 }
 
 /* 08 · Smart navigation: hides while reading, returns on scroll up */
 .site-header {
-  transition: transform 350ms var(--ease);
+  transition: transform 450ms var(--reveal-ease);
 }
 
 [data-motion][data-nav-hidden] .site-header {
@@ -67,14 +132,14 @@
 }
 
 [data-motion] .progress {
-  transition: top 350ms var(--ease);
+  transition: top 450ms var(--reveal-ease);
 }
 
 [data-motion][data-nav-hidden] .progress {
   top: 0;
 }
 
-/* 09 · Page transitions: cross-fade, new page rises 8px */
+/* 09 · Page transitions: old page fades, new page rises gently */
 @keyframes page-out {
   to {
     opacity: 0;
@@ -84,20 +149,19 @@
 @keyframes page-in {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(12px);
   }
 }
 
 @media (prefers-reduced-motion: no-preference) {
   ::view-transition-old(root) {
-    animation: 180ms ease both page-out;
+    animation: 220ms ease both page-out;
   }
 
   ::view-transition-new(root) {
-    animation: 350ms var(--ease) both page-in;
+    animation: 600ms var(--reveal-ease) 60ms both page-in;
   }
 
-  /* The header stays put while the page changes underneath it */
   ::view-transition-old(site-header),
   ::view-transition-new(site-header) {
     animation: none;

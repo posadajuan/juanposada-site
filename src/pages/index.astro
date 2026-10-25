@@ -34,7 +34,7 @@ const eyebrow = `Selected work · ${String(featured.length).padStart(2, '0')}`;
   {
     home.showreel && (
       <section class="container section" aria-label="Showreel">
-        <Frame src={home.showreel.image} alt={home.showreel.alt} ratio="16 / 8" priority parallax class="hero__media" />
+        <Frame src={home.showreel.image} alt={home.showreel.alt} ratio="16 / 8" priority parallax zoom class="hero__media" />
       </section>
     )
   }
@@ -79,7 +79,7 @@ const eyebrow = `Selected work · ${String(featured.length).padStart(2, '0')}`;
   <section class="container section" aria-labelledby="hello">
     <div class="hello">
       <Frame src={home.hello.image} alt={home.hello.alt} ratio="4 / 5" sizes="(min-width: 761px) 50vw, 100vw" reveal class="hello__img" />
-      <div class="hello__text" data-reveal>
+      <div class="hello__text" data-reveal="stagger">
         <p class="label muted">Hello</p>
         <h2 id="hello" class="hello__title">{home.hello.title}</h2>
         <p class="lead">{home.hello.text}</p>

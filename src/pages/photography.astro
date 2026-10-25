@@ -10,7 +10,7 @@ const photoCount = (n: number) => `${n} ${n === 1 ? 'photo' : 'photos'}`;
 ---
 
 <BaseLayout title="Photography" description="Personal photography by Juan Posada.">
-  <section class="container page-intro">
+  <section class="container page-intro" data-reveal="stagger">
     <p class="label muted">Personal work · {series.length} series</p>
     <h1 class="page-title"><span class="gradient-text">Photo</span>graphy</h1>
     <p class="lead">{photography.intro}</p>

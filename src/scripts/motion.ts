@@ -39,11 +39,11 @@ function countUp(el: HTMLElement) {
   const final = el.dataset.count ?? '';
   const p = parse(final);
   if (!p) return;
-  const start = performance.now();
-  const duration = 1400;
+  const start = performance.now() + 200;
+  const duration = 1800;
   const tick = (now: number) => {
-    const t = Math.min(1, (now - start) / duration);
-    const eased = 1 - Math.pow(1 - t, 3);
+    const t = Math.max(0, Math.min(1, (now - start) / duration));
+    const eased = 1 - Math.pow(1 - t, 4);
     el.textContent = t < 1 ? format(p.value * eased, p) : final;
     if (t < 1) requestAnimationFrame(tick);
   };
@@ -52,14 +52,31 @@ function countUp(el: HTMLElement) {
 
 /* ---------- Scroll reveal ---------- */
 
+const STEP_MS = 130;
+const SETTLE_MS = 1300;
+
+/** Once an element has finished arriving, hand it back to its normal styles. */
+function settle(el: HTMLElement, delay: number) {
+  window.setTimeout(() => {
+    el.removeAttribute('data-reveal');
+    el.classList.remove('is-in');
+    el.style.removeProperty('--reveal-i');
+  }, delay);
+}
+
 function initReveal() {
-  const items = Array.from(document.querySelectorAll<HTMLElement>('[data-reveal]:not(.is-in)'));
+  const items = Array.from(document.querySelectorAll<HTMLElement>('[data-reveal]'));
   const counters = Array.from(document.querySelectorAll<HTMLElement>('[data-count]'));
 
   if (!motionOn() || !('IntersectionObserver' in window)) {
-    items.forEach((el) => el.classList.add('is-in'));
+    items.forEach((el) => el.removeAttribute('data-reveal'));
     return;
   }
+
+  // Parts of a staggered block arrive in order: label, heading, text, image…
+  document.querySelectorAll<HTMLElement>('[data-reveal="stagger"]').forEach((block) => {
+    Array.from(block.children).forEach((child, i) => (child as HTMLElement).style.setProperty('--child-i', String(i)));
+  });
 
   // Numbers start at zero, then count up when they come into view.
   counters.forEach((el) => {
@@ -67,33 +84,52 @@ function initReveal() {
     if (p) el.textContent = format(0, p);
   });
 
+  const reveal = (el: HTMLElement, order: number) => {
+    if (el.classList.contains('is-in')) return;
+    el.style.setProperty('--reveal-i', String(order));
+    el.classList.add('is-in');
+    observer.unobserve(el);
+    const nested = el.matches('[data-count]') ? [el] : Array.from(el.querySelectorAll<HTMLElement>('[data-count]'));
+    nested.forEach(countUp);
+    const parts = el.dataset.reveal === 'stagger' ? el.children.length : 1;
+    settle(el, (order + parts) * STEP_MS + SETTLE_MS);
+  };
+
+  // Fire only once the element's top is a quarter of the way up the screen,
+  // so it animates where you are actually looking.
   const observer = new IntersectionObserver(
     (entries) => {
-      const arriving = entries
+      entries
         .filter((e) => e.isIntersecting)
-        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top || a.boundingClientRect.left - b.boundingClientRect.left);
-
-      arriving.forEach((entry, i) => {
-        const el = entry.target as HTMLElement;
-        el.style.setProperty('--reveal-i', String(Math.min(i, 5)));
-        el.classList.add('is-in');
-        observer.unobserve(el);
-        const nested = el.matches('[data-count]') ? [el] : Array.from(el.querySelectorAll<HTMLElement>('[data-count]'));
-        nested.forEach(countUp);
-      });
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top || a.boundingClientRect.left - b.boundingClientRect.left)
+        .forEach((entry, i) => reveal(entry.target as HTMLElement, Math.min(i, 4)));
     },
-    { rootMargin: '0px 0px -8% 0px', threshold: 0 },
+    { rootMargin: '0px 0px -25% 0px', threshold: 0 },
   );
-
   items.forEach((el) => observer.observe(el));
-  cleanups.push(() => observer.disconnect());
+
+  // At the very bottom of the page, nothing can rise any further: show what's left on screen.
+  const onScroll = () => {
+    const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
+    if (!atBottom) return;
+    let order = 0;
+    document.querySelectorAll<HTMLElement>('[data-reveal]:not(.is-in)').forEach((el) => {
+      if (el.getBoundingClientRect().top < window.innerHeight) reveal(el, Math.min(order++, 4));
+    });
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  cleanups.push(() => {
+    observer.disconnect();
+    window.removeEventListener('scroll', onScroll);
+  });
 }
 
-/* ---------- Parallax ---------- */
+/* ---------- Big images: scroll-linked zoom and parallax ---------- */
 
 function initParallax() {
   if (!motionOn()) return;
-  const frames = Array.from(document.querySelectorAll<HTMLElement>('[data-parallax]'));
+  const frames = Array.from(document.querySelectorAll<HTMLElement>('[data-parallax], [data-zoom]'));
   if (!frames.length) return;
 
   const visible = new Set<HTMLElement>();
@@ -109,10 +145,26 @@ function initParallax() {
     const vh = window.innerHeight;
     visible.forEach((el) => {
       const r = el.getBoundingClientRect();
-      // -1 when the frame enters at the bottom, +1 as it leaves at the top
-      const progress = (vh / 2 - (r.top + r.height / 2)) / (vh / 2 + r.height / 2);
-      const range = Math.min(30, r.height * 0.05);
-      el.style.setProperty('--py', `${(progress * range).toFixed(1)}px`);
+
+      if (el.hasAttribute('data-parallax')) {
+        // -1 when the frame enters at the bottom, +1 as it leaves at the top
+        const progress = (vh / 2 - (r.top + r.height / 2)) / (vh / 2 + r.height / 2);
+        const range = Math.min(30, r.height * 0.05);
+        el.style.setProperty('--py', `${(progress * range).toFixed(1)}px`);
+      }
+
+      if (el.hasAttribute('data-zoom')) {
+        // Grows from 92% to full size as its top travels from the bottom
+        // of the screen to the upper third; reverses when scrolling back.
+        const t = Math.max(0, Math.min(1, (vh - r.top) / (vh * 0.7)));
+        const eased = 1 - Math.pow(1 - t, 3);
+        el.style.setProperty('--zoom', (0.92 + 0.08 * eased).toFixed(4));
+        // First position eases in smoothly; after that it follows the scroll exactly.
+        if (!el.hasAttribute('data-zoom-live') && !el.dataset.zoomPending) {
+          el.dataset.zoomPending = '1';
+          window.setTimeout(() => el.setAttribute('data-zoom-live', ''), 1000);
+        }
+      }
     });
   };
   const schedule = () => {
