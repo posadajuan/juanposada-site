@@ -61,11 +61,17 @@ test('theme toggle switches mode and remembers it', async ({ page, isMobile }) =
 test('mobile menu opens and closes', async ({ page, isMobile }) => {
   test.skip(!isMobile, 'Mobile only');
   await page.goto('/');
-  const button = page.getByRole('button', { name: 'Menu' });
+  const button = page.locator('[data-menu-toggle]');
+  const menuLink = page.locator('[data-menu]').getByRole('link', { name: 'Work', exact: true });
+
+  await expect(menuLink).toBeHidden();
   await button.click();
-  await expect(page.getByRole('link', { name: 'Work' })).toBeVisible();
+  await expect(button).toHaveAttribute('aria-expanded', 'true');
+  await expect(menuLink).toBeVisible();
+
   await page.keyboard.press('Escape');
-  await expect(page.getByRole('button', { name: 'Menu' })).toHaveAttribute('aria-expanded', 'false');
+  await expect(button).toHaveAttribute('aria-expanded', 'false');
+  await expect(menuLink).toBeHidden();
 });
 
 test('email address is not in the page source', async ({ page }) => {
