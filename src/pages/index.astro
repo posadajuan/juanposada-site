@@ -1,7 +1,17 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import CtaBlock from '@/components/CtaBlock.astro';
 import Availability from '@/components/Availability.astro';
+import SectionHeader from '@/components/SectionHeader.astro';
+import ProjectCard from '@/components/ProjectCard.astro';
+import StatGrid from '@/components/StatGrid.astro';
+import Frame from '@/components/Frame.astro';
+import CtaBlock from '@/components/CtaBlock.astro';
+import { getFeaturedProjects, getPublicProjects } from '@/lib/content';
+import { home } from '@/data/pages';
+
+const featured = await getFeaturedProjects(4);
+const totalPublic = (await getPublicProjects()).length;
+const eyebrow = `Selected work · ${String(featured.length).padStart(2, '0')}`;
 ---
 
 <BaseLayout>
@@ -17,9 +27,60 @@ import Availability from '@/components/Availability.astro';
     </div>
   </section>
 
-  <section class="container section">
-    <div class="media-placeholder hero__media">
-      <span class="label">Showreel</span>
+  {
+    home.showreel && (
+      <section class="container section" aria-label="Showreel">
+        <Frame src={home.showreel.image} alt={home.showreel.alt} ratio="16 / 8" priority class="hero__media" />
+      </section>
+    )
+  }
+
+  {
+    featured.length > 0 && (
+      <section class="container section stack-xl" aria-labelledby="selected-work">
+        <SectionHeader
+          id="selected-work"
+          eyebrow={eyebrow}
+          title="Selected work"
+          link={totalPublic > featured.length ? { href: '/work', label: 'All work →' } : undefined}
+        />
+        <div class="grid-2">
+          {featured.map((project) => <ProjectCard project={project} />)}
+        </div>
+      </section>
+    )
+  }
+
+  <section class="highlights" aria-label="Highlights">
+    <div class="container">
+      <StatGrid stats={home.highlights} columns={4} />
+    </div>
+  </section>
+
+  <section class="container section stack-xl how" aria-labelledby="how-i-work">
+    <SectionHeader id="how-i-work" eyebrow="How I work" title={home.howIWork.title} />
+    <ol class="steps" role="list">
+      {
+        home.howIWork.steps.map((step, i) => (
+          <li class="step">
+            <span class="label tag">{String(i + 1).padStart(2, '0')}</span>
+            <h3 class="step__title">{step.title}</h3>
+            <p class="step__text">{step.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="container section" aria-labelledby="hello">
+    <div class="hello">
+      <Frame src={home.hello.image} alt={home.hello.alt} ratio="4 / 5" sizes="(min-width: 761px) 50vw, 100vw" class="hello__img" />
+      <div class="hello__text">
+        <p class="label muted">Hello</p>
+        <h2 id="hello" class="hello__title">{home.hello.title}</h2>
+        <p class="lead">{home.hello.text}</p>
+        <a href="/about" class="link hello__link">More about me →</a>
+      </div>
     </div>
   </section>
 
@@ -45,6 +106,89 @@ import Availability from '@/components/Availability.astro';
   }
 
   .hero__media {
-    height: clamp(280px, 40vw, 560px);
+    max-height: 640px;
+  }
+
+  .stack-xl {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(40px, 2rem + 1.5vw, 56px);
+  }
+
+  .highlights {
+    border-block: 1px solid var(--color-border);
+    padding-block: 72px;
+    margin-block-end: var(--space-section);
+  }
+
+  .highlights :global(.stats__item) {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 40px;
+    margin: 0;
+  }
+
+  .step {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    border-top: 1px solid var(--color-text);
+    padding-top: 24px;
+  }
+
+  .step__title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: var(--weight-semibold);
+    letter-spacing: -0.015em;
+  }
+
+  .step__text {
+    color: var(--color-muted);
+  }
+
+  .hello {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(32px, 2rem + 2vw, 64px);
+    align-items: center;
+  }
+
+  .hello :global(.hello__img) {
+    max-height: 620px;
+  }
+
+  .hello__text {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .hello__title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 1.6rem + 1.6vw, 2.5rem);
+    font-weight: var(--weight-semibold);
+    letter-spacing: -0.025em;
+    line-height: 1.12;
+  }
+
+  .hello__link {
+    font-weight: var(--weight-medium);
+    width: fit-content;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  @media (max-width: 760px) {
+    .steps,
+    .hello {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
 </style>

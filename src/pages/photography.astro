@@ -1,0 +1,98 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PhotoGrid from '@/components/PhotoGrid.astro';
+import CtaBlock from '@/components/CtaBlock.astro';
+import { getPhotoSeries } from '@/lib/content';
+import { photography } from '@/data/pages';
+
+const series = await getPhotoSeries();
+const photoCount = (n: number) => `${n} ${n === 1 ? 'photo' : 'photos'}`;
+---
+
+<BaseLayout title="Photography" description="Personal photography by Juan Posada.">
+  <section class="container page-intro">
+    <p class="label muted">Personal work · {series.length} series</p>
+    <h1 class="page-title"><span class="gradient-text">Photo</span>graphy</h1>
+    <p class="lead">{photography.intro}</p>
+    {
+      series.length > 1 && (
+        <nav class="chips" aria-label="Series">
+          {series.map((s) => (
+            <a class="chip" href={`#${s.id}`}>
+              {s.data.title}
+            </a>
+          ))}
+        </nav>
+      )
+    }
+  </section>
+
+  {
+    series.map((s, i) => (
+      <section id={s.id} class="container section series" aria-labelledby={`h-${s.id}`}>
+        <div class="series__head">
+          <h2 id={`h-${s.id}`} class="series__title">
+            {s.data.title}
+          </h2>
+          <p class="label muted">
+            {s.data.place} · {s.data.year} · {photoCount(s.data.photos.length)}
+          </p>
+        </div>
+        <PhotoGrid series={s} flip={i % 2 === 1} />
+      </section>
+    ))
+  }
+
+  <CtaBlock />
+</BaseLayout>
+
+<style>
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-top: 8px;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 20px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--color-border-strong);
+    font-size: var(--text-small);
+    text-decoration: none;
+    transition: background-color var(--dur-fast) ease, color var(--dur-fast) ease, border-color var(--dur-fast) ease;
+  }
+
+  .chip:hover {
+    background: var(--color-text);
+    color: var(--color-bg);
+    border-color: var(--color-text);
+  }
+
+  .series {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    scroll-margin-top: calc(var(--nav-height) + 24px);
+  }
+
+  .series__head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .series__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 1.5rem + 1vw, 2.25rem);
+    font-weight: var(--weight-semibold);
+    letter-spacing: -0.02em;
+  }
+</style>

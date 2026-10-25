@@ -2,7 +2,17 @@ import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
 // Pages to check. Add each new page here as it's built.
-const pages = ['/', '/styleguide'];
+const pages = [
+  '/',
+  '/work',
+  '/work/cyber-explorers',
+  '/work/logos',
+  '/work/graphic-pieces',
+  '/photography',
+  '/about',
+  '/contact',
+  '/styleguide',
+];
 
 async function setTheme(page: Page, theme: 'dark' | 'light') {
   await page.addInitScript((t) => {

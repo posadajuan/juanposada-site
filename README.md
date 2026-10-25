@@ -7,6 +7,7 @@ Portfolio site of Juan Posada. Built with [Astro](https://astro.build), hosted o
 | To change… | Edit this file |
 |---|---|
 | Projects, logos, graphic pieces, photos | `src/content/…` (see [docs/CONTENT-GUIDE.md](docs/CONTENT-GUIDE.md)) |
+| Words on Home, About, Contact, Work and Photography | `src/data/pages.ts` |
 | Availability line, reply time, email, socials, booking link | `src/data/site.ts` |
 | Colours, type sizes, spacing, motion timings | `src/styles/tokens.css` |
 

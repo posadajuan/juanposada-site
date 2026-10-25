@@ -14,6 +14,22 @@ src/content/
     └── series-one/
 ```
 
+## Where each thing on the site comes from
+
+| On the site | Edit |
+|---|---|
+| Availability line, reply time, email, socials, booking link, location | `src/data/site.ts` |
+| Home: highlights numbers, "How I work", "Hello" intro, showreel image | `src/data/pages.ts` → `home` |
+| Work and Photography intro lines | `src/data/pages.ts` → `work`, `photography` |
+| About: hook, story, principles, experience, recognition, certifications, "Away from the screen", CV link | `src/data/pages.ts` → `about` |
+| Contact headline and topic chips | `src/data/pages.ts` → `contact` |
+| Photos on Home and About (portrait, showreel, off-screen) | replace the files in `src/assets/home/` and `src/assets/about/` (keep the names) |
+| Case studies, logos, graphic pieces, photo series | folders in `src/content/` (below) |
+
+Pages build themselves from these: a new project folder appears on Work, gets its own page and "Next project" link, and shows on Home when `featured: true`. Sections you leave out (a quote, a showcase image…) simply don't appear.
+
+**CV:** put the PDF in the `public/` folder (e.g. `public/juan-posada-cv.pdf`) and set `cv: { file: '/juan-posada-cv.pdf', size: '180 KB' }` in `pages.ts`.
+
 ## Add a case study
 
 1. Copy `projects/_template` and rename the copy, lowercase with dashes (e.g. `museum-app`). That name becomes the web address: `juanposada.co.uk/work/museum-app`.

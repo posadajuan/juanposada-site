@@ -1,0 +1,81 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SectionHeader from '@/components/SectionHeader.astro';
+import ProjectCard from '@/components/ProjectCard.astro';
+import GalleryCard from '@/components/GalleryCard.astro';
+import CtaBlock from '@/components/CtaBlock.astro';
+import { getProjects, getGalleries } from '@/lib/content';
+import { work } from '@/data/pages';
+
+const projects = await getProjects();
+const galleries = await getGalleries();
+const count = (n: number) => String(n).padStart(2, '0');
+
+const eyebrowParts = [`${count(projects.length)} case ${projects.length === 1 ? 'study' : 'studies'}`];
+if (galleries.length) eyebrowParts.push(`${galleries.length} ${galleries.length === 1 ? 'collection' : 'collections'}`);
+---
+
+<BaseLayout title="Work" description="Selected case studies, brand identities and graphic work by Juan Posada.">
+  <section class="container page-intro">
+    <p class="label muted">Work · {eyebrowParts.join(' · ')}</p>
+    <h1 class="page-title">Selected <span class="gradient-text">work</span></h1>
+    <p class="lead">{work.intro}</p>
+  </section>
+
+  <section class="container section block" aria-labelledby="case-studies">
+    <div class="block__head">
+      <SectionHeader id="case-studies" title="Case studies" size="m" />
+      <span class="label muted">{count(projects.length)}</span>
+    </div>
+    <div class="grid-2">
+      {projects.map((project, i) => <ProjectCard project={project} showYear priority={i < 2} />)}
+    </div>
+  </section>
+
+  {
+    galleries.length > 0 && (
+      <section class="container section block" aria-labelledby="more-work">
+        <div class="block__head">
+          <SectionHeader id="more-work" title="More work" size="m" />
+          <span class="label muted">Collections</span>
+        </div>
+        <div class="galleries">
+          {galleries.map((gallery) => (
+            <GalleryCard gallery={gallery} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <CtaBlock />
+</BaseLayout>
+
+<style>
+  .block {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+  }
+
+  .block__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .galleries {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  @media (max-width: 760px) {
+    .galleries {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

@@ -1,0 +1,88 @@
+---
+/** Logo collection (Template B) and graphic pieces (Template C). */
+import Frame from '@/components/Frame.astro';
+import GalleryGrid from '@/components/GalleryGrid.astro';
+import type { Gallery } from '@/lib/content';
+
+interface Props {
+  gallery: Gallery;
+  next?: Gallery;
+}
+
+const { gallery, next } = Astro.props;
+const { data } = gallery;
+const count = data.items.length;
+const eyebrow =
+  data.kind === 'logos'
+    ? `Brand identity · Collection · ${count} ${count === 1 ? 'mark' : 'marks'}`
+    : `Graphic design · ${count} ${count === 1 ? 'piece' : 'pieces'}`;
+---
+
+<section class="container page-intro">
+  <a href="/work" class="link back-link">← All work</a>
+  <p class="label tag">{eyebrow}</p>
+  <h1 class="page-title">{data.title}</h1>
+  <p class="lead">{data.intro}</p>
+</section>
+
+<section class="container section" aria-label={data.title}>
+  <GalleryGrid gallery={gallery} />
+</section>
+
+<nav class="container next" aria-label="Next">
+  <a class="next__link" href={next ? `/work/${next.id}` : '/work'}>
+    <span class="next__text">
+      <span class="label muted">{next ? 'Next' : 'Keep exploring'}</span>
+      <span class="next__title">
+        {next ? next.data.title : 'All work'} <span class="next__arrow" aria-hidden="true">→</span>
+      </span>
+      {next && <span class="muted">{next.data.summary}</span>}
+    </span>
+    {next && <Frame src={next.data.cover} alt="" ratio="16 / 9" sizes="(min-width: 761px) 50vw, 100vw" class="next__img" />}
+  </a>
+</nav>
+
+<style>
+  .next {
+    padding-bottom: 104px;
+  }
+
+  .next__link {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 48px;
+    padding-top: 72px;
+    border-top: 1px solid var(--color-border);
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .next__text {
+    flex: 1 1 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .next__title {
+    font-family: var(--font-display);
+    font-size: clamp(2.25rem, 1.6rem + 2.4vw, 3.25rem);
+    font-weight: var(--weight-semibold);
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+  }
+
+  .next__arrow {
+    display: inline-block;
+    transition: transform 300ms var(--ease);
+  }
+
+  .next__link:hover .next__arrow {
+    transform: translateX(6px);
+  }
+
+  .next__link :global(.next__img) {
+    flex: 1 1 460px;
+  }
+</style>
