@@ -1,0 +1,105 @@
+---
+/**
+ * Internal page showing every building block with real content.
+ * Not linked anywhere and hidden from search engines; used for
+ * reviewing components and by the automated tests.
+ */
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SectionHeader from '@/components/SectionHeader.astro';
+import ProjectCard from '@/components/ProjectCard.astro';
+import GalleryCard from '@/components/GalleryCard.astro';
+import StatGrid from '@/components/StatGrid.astro';
+import GalleryGrid from '@/components/GalleryGrid.astro';
+import PhotoGrid from '@/components/PhotoGrid.astro';
+import { getPublicProjects, getGalleries, getPhotoSeries } from '@/lib/content';
+
+const projects = await getPublicProjects();
+const privateProjects = (await getCollection('projects')).filter((p) => p.data.private);
+const galleries = await getGalleries();
+const logos = galleries.find((g) => g.data.kind === 'logos');
+const series = (await getPhotoSeries())[0];
+---
+
+<BaseLayout title="Building blocks" noindex>
+  <div class="container sg">
+    <SectionHeader eyebrow="Internal · not linked" title="Building blocks" level={1} />
+
+    <section class="sg__block" aria-labelledby="sg-cards">
+      <SectionHeader id="sg-cards" eyebrow="ProjectCard" title="Project cards" link={{ href: '/work', label: 'All work →' }} />
+      <div class="sg__grid2">
+        {projects.map((p, i) => <ProjectCard project={p} priority={i === 0} />)}
+        {privateProjects.map((p) => <ProjectCard project={p} showYear />)}
+      </div>
+    </section>
+
+    <section class="sg__block" aria-labelledby="sg-gcards">
+      <SectionHeader id="sg-gcards" eyebrow="GalleryCard" title="More work cards" size="m" />
+      <div class="sg__grid2 sg__grid2--tight">
+        {galleries.map((g) => <GalleryCard gallery={g} />)}
+      </div>
+    </section>
+
+    <section class="sg__block" aria-labelledby="sg-stats">
+      <SectionHeader id="sg-stats" eyebrow="StatGrid" title="Big numbers" size="m" />
+      <StatGrid
+        gradient
+        stats={[
+          { value: '50K+', label: 'students reached' },
+          { value: '2.5K+', label: 'schools across the UK' },
+          { value: '10+', label: 'years of practice' },
+        ]}
+      />
+    </section>
+
+    {
+      logos && (
+        <section class="sg__block" aria-labelledby="sg-logos">
+          <SectionHeader id="sg-logos" eyebrow="GalleryGrid + Lightbox" title={logos.data.title} size="m" />
+          <GalleryGrid gallery={logos} />
+        </section>
+      )
+    }
+
+    {
+      series && (
+        <section class="sg__block" aria-labelledby="sg-photos">
+          <SectionHeader id="sg-photos" eyebrow="PhotoGrid + Lightbox" title={series.data.title} size="m" />
+          <PhotoGrid series={series} />
+        </section>
+      )
+    }
+  </div>
+</BaseLayout>
+
+<style>
+  .sg {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-section);
+    padding-block: 96px var(--space-section);
+  }
+
+  .sg__block {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+  }
+
+  .sg__grid2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 72px 40px;
+  }
+
+  .sg__grid2--tight {
+    gap: 24px;
+  }
+
+  @media (max-width: 760px) {
+    .sg__grid2 {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 48px;
+    }
+  }
+</style>

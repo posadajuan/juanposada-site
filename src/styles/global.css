@@ -162,6 +162,12 @@ a {
   background-position: 0 92%;
 }
 
+/* Gradient numbers etc.: plain text in light mode */
+[data-theme='light'] .gradient-text--dark-only:not([data-theme='dark'] .gradient-text--dark-only) {
+  background: none;
+  color: inherit;
+}
+
 /* ---------- Links ---------- */
 .link {
   text-decoration: none;

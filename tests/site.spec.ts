@@ -2,7 +2,7 @@ import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
 // Pages to check. Add each new page here as it's built.
-const pages = ['/'];
+const pages = ['/', '/styleguide'];
 
 async function setTheme(page: Page, theme: 'dark' | 'light') {
   await page.addInitScript((t) => {
@@ -78,4 +78,47 @@ test('email address is not in the page source', async ({ page }) => {
   await page.goto('/');
   const html = await page.content();
   expect(html).not.toContain('@juanposada.co.uk');
+});
+
+test('lightbox opens, moves with arrow keys and closes with Esc', async ({ page }) => {
+  await page.goto('/styleguide');
+  const tiles = page.locator('a[data-lightbox^="gallery-"]');
+  const total = await tiles.count();
+  expect(total).toBeGreaterThan(1);
+
+  await tiles.first().click();
+  const dialog = page.locator('dialog[open]');
+  await expect(dialog).toBeVisible();
+  await expect(dialog.locator('[data-lb-counter]')).toHaveText(`1 / ${total}`);
+  await expect(dialog.locator('[data-lb-img]')).toHaveAttribute('src', /.+/);
+
+  await page.keyboard.press('ArrowRight');
+  await expect(dialog.locator('[data-lb-counter]')).toHaveText(`2 / ${total}`);
+
+  await page.keyboard.press('ArrowLeft');
+  await page.keyboard.press('ArrowLeft');
+  await expect(dialog.locator('[data-lb-counter]')).toHaveText(`${total} / ${total}`);
+
+  await page.keyboard.press('Escape');
+  await expect(page.locator('dialog[open]')).toHaveCount(0);
+});
+
+test('lightbox buttons work and the close button returns focus', async ({ page }) => {
+  await page.goto('/styleguide');
+  const first = page.locator('a[data-lightbox^="photos-"]').first();
+  await first.click();
+  const dialog = page.locator('dialog[open]');
+  await dialog.getByRole('button', { name: 'Next image' }).click();
+  await expect(dialog.locator('[data-lb-counter]')).toHaveText(/^2 \//);
+  await dialog.getByRole('button', { name: 'Close viewer' }).click();
+  await expect(page.locator('dialog[open]')).toHaveCount(0);
+  await expect(first).toBeFocused();
+});
+
+test('images are served in modern formats and lazy-loaded below the fold', async ({ page }) => {
+  await page.goto('/styleguide');
+  const sources = page.locator('picture source[type="image/avif"]');
+  expect(await sources.count()).toBeGreaterThan(0);
+  const lazy = page.locator('img[loading="lazy"]');
+  expect(await lazy.count()).toBeGreaterThan(0);
 });

@@ -1,0 +1,344 @@
+---
+/**
+ * Full-screen image viewer. One per gallery/series on a page.
+ * Any link with data-lightbox="<group>" opens it at that image.
+ * Without JavaScript the links simply open the large image.
+ *
+ * Controls: arrows (buttons, ←/→ keys, swipe), Esc or ✕ to close.
+ * Always dark, in both themes.
+ */
+interface Props {
+  group: string;
+  label: string;
+}
+
+const { group, label } = Astro.props;
+---
+
+<dialog class="lightbox" data-lightbox-dialog={group} aria-label={`${label}: image viewer`} data-theme="dark">
+  <div class="lightbox__top">
+    <p class="lightbox__counter" data-lb-counter aria-live="polite"></p>
+    <p class="label muted lightbox__label">{label}</p>
+    <div class="lightbox__top-end">
+      <button type="button" class="lightbox__btn" data-lb-close aria-label="Close viewer">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="lightbox__stage">
+    <button type="button" class="lightbox__btn lightbox__nav" data-lb-prev aria-label="Previous image">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M15 18l-6-6 6-6"></path>
+      </svg>
+    </button>
+    <figure class="lightbox__figure">
+      <img class="lightbox__img" data-lb-img alt="" decoding="async" />
+    </figure>
+    <button type="button" class="lightbox__btn lightbox__nav" data-lb-next aria-label="Next image">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M9 18l6-6-6-6"></path>
+      </svg>
+    </button>
+  </div>
+
+  <div class="lightbox__bottom">
+    <p class="lightbox__title" data-lb-title></p>
+    <p class="lightbox__caption" data-lb-caption></p>
+    <div class="lightbox__dots" data-lb-dots aria-hidden="true"></div>
+  </div>
+</dialog>
+
+<style>
+  .lightbox {
+    width: 100vw;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 20px clamp(12px, 2vw, 32px);
+    border: 0;
+    background: #050505;
+    color: var(--color-text);
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .lightbox[open] {
+    display: flex;
+    animation: lb-in 350ms var(--ease);
+  }
+
+  .lightbox::backdrop {
+    background: rgb(0 0 0 / 0.85);
+  }
+
+  @keyframes lb-in {
+    from {
+      opacity: 0;
+      transform: scale(0.98);
+    }
+  }
+
+  .lightbox__top {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: center;
+    min-height: 56px;
+  }
+
+  .lightbox__counter {
+    font-weight: var(--weight-medium);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .lightbox__label {
+    text-align: center;
+  }
+
+  .lightbox__top-end {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .lightbox__stage {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    gap: clamp(8px, 2vw, 32px);
+    touch-action: pan-y;
+  }
+
+  .lightbox__figure {
+    flex: 1;
+    height: 100%;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lightbox__img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: var(--radius-m);
+    transition: opacity 250ms ease;
+  }
+
+  .lightbox__img[data-loading] {
+    opacity: 0.2;
+  }
+
+  .lightbox__btn {
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid #3a3a3a;
+    background: #121212;
+    color: #f5f5f3;
+    cursor: pointer;
+    transition: border-color var(--dur-fast) ease, background-color var(--dur-fast) ease;
+  }
+
+  .lightbox__btn:hover {
+    border-color: #6b6b6b;
+    background: #1c1c1c;
+  }
+
+  .lightbox__bottom {
+    min-height: 104px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    text-align: center;
+  }
+
+  .lightbox__title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: var(--weight-semibold);
+  }
+
+  .lightbox__caption {
+    font-size: var(--text-small);
+    color: var(--color-muted);
+    max-width: 640px;
+  }
+
+  .lightbox__dots {
+    display: flex;
+    gap: 6px;
+    padding-top: 8px;
+  }
+
+  .lightbox__dots :global(span) {
+    width: 8px;
+    height: 4px;
+    border-radius: 2px;
+    background: #3a3a3a;
+    transition: width 300ms var(--ease), background-color 300ms ease;
+  }
+
+  .lightbox__dots :global(span[data-current]) {
+    width: 24px;
+    background: var(--neon-cyan);
+  }
+
+  @media (max-width: 760px) {
+    /* On phones the arrows sit under the image; swipe also works. */
+    .lightbox__stage {
+      flex-wrap: wrap;
+      justify-content: center;
+      align-content: center;
+    }
+
+    .lightbox__figure {
+      order: -1;
+      flex-basis: 100%;
+      height: auto;
+      max-height: 70dvh;
+    }
+
+    .lightbox__img {
+      max-height: 70dvh;
+    }
+  }
+</style>
+
+<script>
+  type Slide = { src: string; alt: string; title: string; caption: string };
+
+  let state: { dialog: HTMLDialogElement; slides: Slide[]; index: number; trigger: HTMLElement | null } | null = null;
+
+  function slidesFor(group: string): Slide[] {
+    return Array.from(document.querySelectorAll<HTMLAnchorElement>(`a[data-lightbox="${group}"]`)).map((a) => ({
+      src: a.href,
+      alt: a.dataset.alt ?? '',
+      title: a.dataset.title ?? '',
+      caption: a.dataset.caption ?? '',
+    }));
+  }
+
+  function render() {
+    if (!state) return;
+    const { dialog, slides, index } = state;
+    const slide = slides[index];
+    if (!slide) return;
+    const img = dialog.querySelector<HTMLImageElement>('[data-lb-img]')!;
+    img.setAttribute('data-loading', '');
+    img.onload = () => img.removeAttribute('data-loading');
+    img.src = slide.src;
+    img.alt = slide.alt;
+    dialog.querySelector('[data-lb-counter]')!.textContent = `${index + 1} / ${slides.length}`;
+    dialog.querySelector('[data-lb-title]')!.textContent = slide.title;
+    dialog.querySelector('[data-lb-caption]')!.textContent = slide.caption;
+
+    const dots = dialog.querySelector('[data-lb-dots]')!;
+    dots.replaceChildren(
+      ...slides.map((_, i) => {
+        const dot = document.createElement('span');
+        if (i === index) dot.setAttribute('data-current', '');
+        return dot;
+      }),
+    );
+
+    // Warm up the neighbours so arrowing feels instant.
+    for (const n of [index - 1, index + 1]) {
+      const s = slides[(n + slides.length) % slides.length];
+      if (s) new Image().src = s.src;
+    }
+  }
+
+  function go(step: number) {
+    if (!state) return;
+    const total = state.slides.length;
+    state.index = (state.index + step + total) % total;
+    render();
+  }
+
+  function open(link: HTMLAnchorElement) {
+    const group = link.dataset.lightbox!;
+    const dialog = document.querySelector<HTMLDialogElement>(`[data-lightbox-dialog="${group}"]`);
+    if (!dialog) return false;
+    state = { dialog, slides: slidesFor(group), index: Number(link.dataset.index ?? 0), trigger: link };
+    render();
+    dialog.showModal();
+    document.documentElement.style.overflow = 'hidden';
+    return true;
+  }
+
+  function onClosed() {
+    document.documentElement.style.overflow = '';
+    state?.trigger?.focus();
+    state = null;
+  }
+
+  // Capture phase: runs before the page-transition router, which would
+  // otherwise treat the tile as a normal link and navigate to the image.
+  document.addEventListener(
+    'click',
+    (event) => {
+      const link = (event.target as HTMLElement).closest<HTMLAnchorElement>('a[data-lightbox]');
+      if (!link || event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
+      if (open(link)) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    },
+    true,
+  );
+
+  document.addEventListener('click', (event) => {
+    const target = event.target as HTMLElement;
+    if (!state) return;
+    if (target.closest('[data-lb-close]')) state.dialog.close();
+    else if (target.closest('[data-lb-prev]')) go(-1);
+    else if (target.closest('[data-lb-next]')) go(1);
+    else if (target === state.dialog) state.dialog.close(); // click on the dark edge
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (!state) return;
+    if (event.key === 'ArrowLeft') go(-1);
+    if (event.key === 'ArrowRight') go(1);
+  });
+
+  // Swipe on touch screens.
+  let startX: number | null = null;
+  document.addEventListener('pointerdown', (event) => {
+    if (state && event.pointerType !== 'mouse') startX = event.clientX;
+  });
+  document.addEventListener('pointerup', (event) => {
+    if (!state || startX === null) return;
+    const dx = event.clientX - startX;
+    startX = null;
+    if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+  });
+
+  // "close" fires for the ✕ button, the Esc key and the edge click.
+  document.addEventListener(
+    'close',
+    (event) => {
+      if (state && event.target === state.dialog) onClosed();
+    },
+    true,
+  );
+
+  // Leaving the page with the viewer open (back button) resets the scroll lock.
+  document.addEventListener('astro:before-swap', () => {
+    if (state) {
+      state.dialog.close();
+      onClosed();
+    }
+  });
+</script>

@@ -1,0 +1,90 @@
+---
+/** Compact card for the "More work" row: logo collection, graphic pieces. */
+import Frame from '@/components/Frame.astro';
+import type { Gallery } from '@/lib/content';
+
+interface Props {
+  gallery: Gallery;
+}
+
+const { gallery } = Astro.props;
+const { data } = gallery;
+const action = data.kind === 'logos' ? 'View collection' : 'View gallery';
+---
+
+<a class="gcard" href={`/work/${gallery.id}`}>
+  <Frame src={data.cover} alt={data.coverAlt} ratio="4 / 3" sizes="168px" radius="m" class="gcard__media" />
+  <div class="gcard__text">
+    <h3 class="gcard__title">{data.title}</h3>
+    <p class="gcard__summary">{data.summary}</p>
+    <span class="gcard__action">{action} <span class="gcard__arrow" aria-hidden="true">→</span></span>
+  </div>
+</a>
+
+<style>
+  .gcard {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 20px;
+    border-radius: var(--radius-l);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    text-decoration: none;
+    color: inherit;
+    transition: border-color var(--dur-fast) ease;
+  }
+
+  .gcard:hover {
+    border-color: var(--color-border-strong);
+  }
+
+  .gcard :global(.gcard__media) {
+    width: 168px;
+    flex-shrink: 0;
+  }
+
+  .gcard__text {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .gcard__title {
+    font-family: var(--font-display);
+    font-size: 1.375rem;
+    font-weight: var(--weight-semibold);
+    letter-spacing: -0.015em;
+  }
+
+  .gcard__summary {
+    font-size: var(--text-small);
+    color: var(--color-muted);
+  }
+
+  .gcard__action {
+    font-size: var(--text-small);
+    font-weight: var(--weight-medium);
+  }
+
+  .gcard__arrow {
+    display: inline-block;
+    transition: transform 300ms var(--ease);
+  }
+
+  .gcard:hover .gcard__arrow {
+    transform: translateX(4px);
+  }
+
+  @media (max-width: 480px) {
+    .gcard {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .gcard :global(.gcard__media) {
+      width: 100%;
+    }
+  }
+</style>

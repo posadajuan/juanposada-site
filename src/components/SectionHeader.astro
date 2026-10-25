@@ -1,0 +1,72 @@
+---
+interface Props {
+  /** Small uppercase line above the title. */
+  eyebrow?: string;
+  title: string;
+  /** Optional link on the right, e.g. "All work →". */
+  link?: { href: string; label: string };
+  level?: 1 | 2 | 3;
+  /** Used for aria-labelledby on the parent section. */
+  id?: string;
+  size?: 'l' | 'm';
+}
+
+const { eyebrow, title, link, level = 2, id, size = 'l' } = Astro.props;
+const Heading = `h${level}` as 'h1' | 'h2' | 'h3';
+---
+
+<div class="section-header">
+  <div class="section-header__text">
+    {eyebrow && <p class="label muted">{eyebrow}</p>}
+    <Heading id={id} class:list={['section-header__title', `section-header__title--${size}`]}>
+      {title}
+    </Heading>
+  </div>
+  {
+    link && (
+      <a href={link.href} class="link section-header__link">
+        {link.label}
+      </a>
+    )
+  }
+</div>
+
+<style>
+  .section-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: var(--space-m);
+  }
+
+  .section-header__text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-s);
+    max-width: 820px;
+  }
+
+  .section-header__title {
+    font-family: var(--font-display);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-heading);
+    line-height: var(--leading-heading);
+    text-wrap: balance;
+  }
+
+  .section-header__title--l {
+    font-size: var(--text-h2);
+  }
+
+  .section-header__title--m {
+    font-size: var(--text-h3);
+  }
+
+  .section-header__link {
+    font-weight: var(--weight-medium);
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+</style>
