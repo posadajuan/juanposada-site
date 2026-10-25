@@ -11,9 +11,11 @@ interface Props {
   title?: string;
   description?: string;
   image?: string;
+  /** Keep this page out of search engines. */
+  noindex?: boolean;
 }
 
-const { title, description = site.description, image = '/og-default.png' } = Astro.props;
+const { title, description = site.description, image = '/og-default.png', noindex = false } = Astro.props;
 const pageTitle = title ? `${title} · ${site.name}` : `${site.name} — Portfolio`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL(image, Astro.site);
@@ -27,6 +29,7 @@ const ogImage = new URL(image, Astro.site);
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={site.name} />

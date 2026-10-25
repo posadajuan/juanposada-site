@@ -1,0 +1,62 @@
+---
+/** Big numbers with labels. Gradient numbers in dark mode only. */
+interface Props {
+  stats: { value: string; label: string }[];
+  gradient?: boolean;
+  columns?: 3 | 4;
+}
+
+const { stats, gradient = false, columns = 3 } = Astro.props;
+---
+
+<dl class="stats" style={`--cols: ${columns}`}>
+  {
+    stats.map((s) => (
+      <div class="stats__item">
+        <dt class="stats__label">{s.label}</dt>
+        <dd class:list={['stats__value', { 'gradient-text gradient-text--dark-only': gradient }]}>{s.value}</dd>
+      </div>
+    ))
+  }
+</dl>
+
+<style>
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+    gap: var(--space-l);
+    margin: 0;
+  }
+
+  .stats__item {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    gap: 10px;
+    border-top: 1px solid var(--color-text);
+    padding-top: 20px;
+  }
+
+  .stats__value {
+    margin: 0;
+    width: fit-content;
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 1.9rem + 2.4vw, 4rem);
+    font-weight: var(--weight-semibold);
+    letter-spacing: -0.035em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .stats__label {
+    font-size: var(--text-small);
+    line-height: 1.45;
+    color: var(--color-muted);
+  }
+
+  @media (max-width: 760px) {
+    .stats {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

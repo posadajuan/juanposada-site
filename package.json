@@ -14,7 +14,8 @@
   "dependencies": {
     "@fontsource-variable/roboto": "^5.0.0",
     "@fontsource-variable/roboto-flex": "^5.0.0",
-    "astro": "^5.0.0"
+    "astro": "^5.0.0",
+    "sharp": "^0.34.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.0",

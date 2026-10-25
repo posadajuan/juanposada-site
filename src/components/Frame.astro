@@ -1,0 +1,77 @@
+---
+/**
+ * A rounded image frame. Serves modern formats (AVIF/WebP) at the right
+ * size for each screen, and lazy-loads unless `priority` is set.
+ */
+import { Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+  /** CSS aspect ratio, e.g. "16 / 11". Leave empty to use the image's own shape. */
+  ratio?: string;
+  /** How wide the image appears on screen, for picking the right file size. */
+  sizes?: string;
+  /** Load straight away (use for the first image on a page). */
+  priority?: boolean;
+  /** Corner size: 'm' (12px), 'l' (16px). */
+  radius?: 'm' | 'l';
+  class?: string;
+}
+
+const {
+  src,
+  alt,
+  ratio,
+  sizes = '(min-width: 1240px) 1144px, 100vw',
+  priority = false,
+  radius = 'l',
+  class: className,
+} = Astro.props;
+
+const fitting = [640, 1024, 1600, 2200].filter((w) => w <= src.width);
+const widths = fitting.length ? fitting : [src.width];
+---
+
+<div class:list={['frame', `frame--${radius}`, className]} style={ratio ? `aspect-ratio: ${ratio}` : undefined}>
+  <Picture
+    src={src}
+    alt={alt}
+    widths={widths}
+    sizes={sizes}
+    formats={['avif', 'webp']}
+    loading={priority ? 'eager' : 'lazy'}
+    fetchpriority={priority ? 'high' : 'auto'}
+    decoding="async"
+  />
+</div>
+
+<style>
+  .frame {
+    position: relative;
+    overflow: hidden;
+    background: var(--color-media);
+    border: 1px solid var(--color-border);
+  }
+
+  .frame--m {
+    border-radius: var(--radius-m);
+  }
+
+  .frame--l {
+    border-radius: var(--radius-l);
+  }
+
+  .frame :global(picture),
+  .frame :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .frame :global(img) {
+    object-fit: cover;
+    transition: transform 600ms var(--ease);
+  }
+</style>

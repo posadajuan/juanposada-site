@@ -1,0 +1,117 @@
+---
+/**
+ * A photo series: one large featured photo plus a tidy grid.
+ * Every photo opens the lightbox.
+ */
+import { getImage, Picture } from 'astro:assets';
+import Lightbox from '@/components/Lightbox.astro';
+import type { PhotoSeries } from '@/lib/content';
+
+interface Props {
+  series: PhotoSeries;
+  /** Put the featured photo on the right instead of the left. */
+  flip?: boolean;
+}
+
+const { series, flip = false } = Astro.props;
+const { photos, title, featured } = series.data;
+const group = `photos-${series.id}`;
+const featuredIndex = Math.min(featured, photos.length) - 1;
+
+const large = await Promise.all(
+  photos.map((p) => getImage({ src: p.image, width: Math.min(2400, p.image.width), format: 'webp' })),
+);
+---
+
+<ul role="list" class:list={['pgrid', { 'pgrid--flip': flip }]}>
+  {
+    photos.map((photo, i) => (
+      <li class:list={{ 'pgrid__feat': i === featuredIndex }}>
+        <a
+          class="pgrid__item"
+          href={large[i]?.src}
+          data-lightbox={group}
+          data-index={i}
+          data-alt={photo.alt}
+          data-title={title}
+          data-caption={photo.caption ?? ''}
+        >
+          <Picture
+            src={photo.image}
+            alt={photo.alt}
+            widths={(i === featuredIndex ? [800, 1400] : [480, 800]).filter((w) => w <= photo.image.width)}
+            sizes={i === featuredIndex ? '(min-width: 1240px) 760px, 66vw' : '(min-width: 1240px) 380px, 33vw'}
+            formats={['avif', 'webp']}
+            loading="lazy"
+            decoding="async"
+          />
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<Lightbox group={group} label={title} />
+
+<style>
+  .pgrid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-auto-flow: dense;
+    gap: 14px;
+    margin: 0;
+  }
+
+  .pgrid li {
+    aspect-ratio: 3 / 2;
+  }
+
+  .pgrid .pgrid__feat {
+    grid-column: 1 / span 2;
+    grid-row: span 2;
+    aspect-ratio: auto;
+  }
+
+  .pgrid--flip .pgrid__feat {
+    grid-column: 2 / span 2;
+  }
+
+  .pgrid__item {
+    display: block;
+    height: 100%;
+    overflow: hidden;
+    border-radius: var(--radius-m);
+    background: var(--color-media);
+    border: 1px solid var(--color-border);
+  }
+
+  .pgrid__item :global(picture),
+  .pgrid__item :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .pgrid__item :global(img) {
+    object-fit: cover;
+    transition: transform 600ms var(--ease);
+  }
+
+  .pgrid__item:hover :global(img) {
+    transform: scale(1.03);
+  }
+
+  @media (max-width: 760px) {
+    .pgrid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .pgrid .pgrid__feat,
+    .pgrid--flip .pgrid__feat {
+      grid-column: 1 / -1;
+      grid-row: auto;
+      aspect-ratio: 3 / 2;
+    }
+  }
+</style>

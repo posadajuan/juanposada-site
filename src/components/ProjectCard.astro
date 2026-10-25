@@ -1,0 +1,138 @@
+---
+/**
+ * Project card for Home and Work. Private (NDA) projects get a blurred,
+ * locked preview with an "Ask for access" link instead of a case study.
+ */
+import Frame from '@/components/Frame.astro';
+import type { Project } from '@/lib/content';
+
+interface Props {
+  project: Project;
+  /** Heading level for the title, to keep the page outline correct. */
+  level?: 2 | 3;
+  priority?: boolean;
+  showYear?: boolean;
+}
+
+const { project, level = 3, priority = false, showYear = false } = Astro.props;
+const { data } = project;
+const Heading = `h${level}` as 'h2' | 'h3';
+const href = `/work/${project.id}`;
+const sizes = '(min-width: 1240px) 572px, (min-width: 761px) 50vw, 100vw';
+---
+
+{
+  data.private ? (
+    <article class="card card--private">
+      <div class="card__media card__media--private">
+        <Frame src={data.cover} alt="" ratio="16 / 11" sizes={sizes} radius="m" class="card__blur" />
+        <span class="card__lock" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+            <rect x="5" y="11" width="14" height="10" rx="2" />
+            <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+          </svg>
+        </span>
+      </div>
+      <div class="card__meta">
+        <span class="label muted">Private · NDA</span>
+        {showYear && <span class="label muted">{data.year}</span>}
+      </div>
+      <Heading class="card__title">{data.title}</Heading>
+      <p class="card__text">
+        Shared on request.{' '}
+        <a class="link card__access" href="/contact">
+          Ask for access →
+        </a>
+      </p>
+    </article>
+  ) : (
+    <a class="card" href={href}>
+      <Frame src={data.cover} alt={data.coverAlt} ratio="16 / 11" sizes={sizes} radius="m" priority={priority} />
+      <div class="card__meta">
+        <span class="label tag">{data.tags.join(' · ')}</span>
+        {showYear ? (
+          <span class="label muted">{data.year}</span>
+        ) : (
+          <span class="card__arrow" aria-hidden="true">
+            ↗
+          </span>
+        )}
+      </div>
+      <Heading class="card__title">{data.title}</Heading>
+      <p class="card__text">{data.outcome}</p>
+    </a>
+  )
+}
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .card__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .card__title {
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    font-weight: var(--weight-semibold);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .card__text {
+    max-width: 520px;
+    color: var(--color-muted);
+    font-size: 1.0625rem;
+    line-height: 1.55;
+  }
+
+  .card__arrow {
+    font-size: 1.125rem;
+    transition: transform 300ms var(--ease);
+  }
+
+  a.card:hover :global(.frame img) {
+    transform: scale(1.04);
+  }
+
+  a.card:hover .card__arrow {
+    transform: translate(3px, -3px);
+  }
+
+  a.card:focus-visible {
+    outline-offset: 8px;
+  }
+
+  /* Private */
+  .card__media--private {
+    position: relative;
+  }
+
+  .card__media--private :global(img) {
+    filter: blur(18px) saturate(0.6);
+    transform: scale(1.15);
+  }
+
+  .card__lock {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text);
+  }
+
+  .card__access {
+    color: var(--color-text);
+    font-weight: var(--weight-medium);
+  }
+</style>
