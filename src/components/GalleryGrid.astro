@@ -29,6 +29,7 @@ const large = await Promise.all(
           class="ggrid__item"
           href={large[i]?.src}
           data-lightbox={group}
+          data-astro-prefetch="false"
           data-index={i}
           data-alt={item.alt}
           data-title={[item.title, item.year].filter(Boolean).join(' · ')}

@@ -283,15 +283,23 @@ const { group, label } = Astro.props;
     state = null;
   }
 
+  // Capture phase: runs before the page-transition router, which would
+  // otherwise treat the tile as a normal link and navigate to the image.
+  document.addEventListener(
+    'click',
+    (event) => {
+      const link = (event.target as HTMLElement).closest<HTMLAnchorElement>('a[data-lightbox]');
+      if (!link || event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
+      if (open(link)) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    },
+    true,
+  );
+
   document.addEventListener('click', (event) => {
     const target = event.target as HTMLElement;
-
-    const link = target.closest<HTMLAnchorElement>('a[data-lightbox]');
-    if (link && !event.metaKey && !event.ctrlKey && !event.shiftKey) {
-      if (open(link)) event.preventDefault();
-      return;
-    }
-
     if (!state) return;
     if (target.closest('[data-lb-close]')) state.dialog.close();
     else if (target.closest('[data-lb-prev]')) go(-1);
