@@ -1,0 +1,41 @@
+---
+import { site } from '@/data/site';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = 'btn btn--secondary' } = Astro.props;
+
+// The address is stored reversed and encoded so simple scrapers
+// reading the HTML don't pick it up. It is decoded only on click.
+const encoded = btoa(site.email.split('').reverse().join(''));
+---
+
+<button type="button" class={className} data-copy-email={encoded}>
+  <span data-copy-label>Copy email</span>
+</button>
+
+<script>
+  document.addEventListener('click', async (event) => {
+    const btn = (event.target as HTMLElement).closest<HTMLButtonElement>('[data-copy-email]');
+    if (!btn) return;
+
+    const encoded = btn.dataset.copyEmail ?? '';
+    const email = atob(encoded).split('').reverse().join('');
+    const label = btn.querySelector<HTMLElement>('[data-copy-label]');
+
+    try {
+      await navigator.clipboard.writeText(email);
+      if (label) label.textContent = 'Copied ✓';
+    } catch {
+      // Clipboard blocked: fall back to opening the mail app.
+      window.location.href = `mailto:${email}`;
+      return;
+    }
+
+    window.setTimeout(() => {
+      if (label) label.textContent = 'Copy email';
+    }, 2000);
+  });
+</script>
