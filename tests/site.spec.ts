@@ -149,16 +149,17 @@ test('mobile menu is a solid full-screen panel that hides the page behind it', a
     const panel = page.locator('[data-menu]');
     await expect(panel).toBeVisible();
 
-    const { bg, opacity, top, bottom, viewport } = await panel.evaluate((el) => {
-      const s = getComputedStyle(el);
-      const r = el.getBoundingClientRect();
-      return { bg: s.backgroundColor, opacity: s.opacity, top: r.top, bottom: r.bottom, viewport: window.innerHeight };
-    });
+    // Let the slide-in finish before measuring.
     await expect.poll(() => panel.evaluate((el) => getComputedStyle(el).opacity)).toBe('1');
+    await page.waitForTimeout(400);
+
+    const { bg, top, bottom, viewport } = await panel.evaluate((el) => {
+      const r = el.getBoundingClientRect();
+      return { bg: getComputedStyle(el).backgroundColor, top: r.top, bottom: r.bottom, viewport: window.innerHeight };
+    });
     expect(bg, `${theme}: panel background must be solid`).toMatch(/^rgb\(/);
     expect(top).toBeLessThanOrEqual(90);
     expect(bottom).toBeGreaterThanOrEqual(viewport - 1);
-    expect(opacity).toBeDefined();
 
     // Page underneath doesn't scroll while the menu is open
     expect(await page.evaluate(() => document.documentElement.style.overflow)).toBe('hidden');

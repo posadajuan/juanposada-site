@@ -283,6 +283,7 @@ const isActive = (href: string) => path === href || path.startsWith(`${href}/`);
       menu?.toggleAttribute('data-open', open);
       // Stop the page underneath from scrolling while the menu is open.
       document.documentElement.style.overflow = open ? 'hidden' : '';
+      if (open) document.documentElement.removeAttribute('data-nav-hidden');
       return;
     }
 
