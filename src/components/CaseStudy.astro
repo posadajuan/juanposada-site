@@ -1,0 +1,521 @@
+---
+/**
+ * Case study page (Template A). Built entirely from one project's
+ * index.md. Optional parts (problem image, quote, showcase, details)
+ * simply don't render when they're left out.
+ */
+import Frame from '@/components/Frame.astro';
+import StatGrid from '@/components/StatGrid.astro';
+import { readingTime, type Project } from '@/lib/content';
+
+interface Props {
+  project: Project;
+  next?: Project;
+}
+
+const { project, next } = Astro.props;
+const { data } = project;
+// Private projects never reach this component; the schema guarantees these
+// sections exist for public ones.
+const snapshot = data.snapshot!;
+const problem = data.problem!;
+const research = data.research!;
+const solution = data.solution!;
+const impact = data.impact!;
+const reflection = data.reflection!;
+
+const sections = [
+  { id: 'problem', label: 'Problem' },
+  { id: 'research', label: 'Research' },
+  { id: 'solution', label: 'Solution' },
+  { id: 'impact', label: 'Impact' },
+  { id: 'reflection', label: 'Reflection' },
+];
+const minutes = readingTime(project);
+const half = '(min-width: 1240px) 470px, (min-width: 761px) 45vw, 100vw';
+const body = '(min-width: 1240px) 900px, 100vw';
+---
+
+<div class="progress" aria-hidden="true"><div class="progress__bar" data-progress></div></div>
+
+<article class="cs">
+  <header class="container cs__head">
+    <a href="/work" class="link back-link">← All work</a>
+    <div class="cs__meta">
+      <span class="label tag">{data.tags.join(' · ')}</span>
+      <span class="label muted">{minutes} min read</span>
+    </div>
+    <h1 class="cs__title">{data.title}</h1>
+    <p class="lead cs__outcome">{data.outcome}</p>
+  </header>
+
+  <div class="container">
+    <Frame src={data.cover} alt={data.coverAlt} ratio="16 / 8" priority class="cs__cover" />
+  </div>
+
+  <section class="container" aria-label="Project snapshot">
+    <dl class="snapshot">
+      <div><dt class="label muted">Role</dt><dd>{snapshot.role}</dd></div>
+      <div><dt class="label muted">Team</dt><dd>{snapshot.team}</dd></div>
+      <div><dt class="label muted">Timeline</dt><dd>{snapshot.timeline}</dd></div>
+      {snapshot.tools.length > 0 && <div><dt class="label muted">Tools</dt><dd>{snapshot.tools.join(', ')}</dd></div>}
+      <div><dt class="label muted">Impact</dt><dd class="snapshot__impact">{snapshot.impact}</dd></div>
+    </dl>
+  </section>
+
+  <div class="container cs__body">
+    <nav class="toc" aria-label="On this page">
+      <p class="label muted toc__title">On this page</p>
+      <ul role="list">
+        {sections.map((s) => <li><a href={`#${s.id}`} data-toc-link={s.id}>{s.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <div class="cs__sections">
+      <section id="problem" class="cs__section" aria-labelledby="h-problem" data-toc-section>
+        <p class="label tag">01 · Problem</p>
+        <h2 id="h-problem" class="cs__h2">{problem.headline}</h2>
+        <p class="cs__text">{problem.text}</p>
+        {problem.image && <Frame src={problem.image} alt={problem.imageAlt ?? ''} sizes={body} />}
+      </section>
+
+      <section id="research" class="cs__section" aria-labelledby="h-research" data-toc-section>
+        <p class="label tag">02 · Research &amp; insight</p>
+        <h2 id="h-research" class="cs__h2">{research.headline}</h2>
+        <p class="cs__text">{research.text}</p>
+        {
+          research.insights.length > 0 && (
+            <ul class="insights" role="list">
+              {research.insights.map((insight, i) => (
+                <li class="insight">
+                  <span class="label muted">Insight {String(i + 1).padStart(2, '0')}</span>
+                  <span class="insight__text">{insight}</span>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+        {
+          research.quote && (
+            <figure class="quote">
+              <blockquote>“{research.quote.text}”</blockquote>
+              <figcaption class="muted">{research.quote.by}</figcaption>
+            </figure>
+          )
+        }
+      </section>
+
+      <section id="solution" class="cs__section" aria-labelledby="h-solution" data-toc-section>
+        <p class="label tag">03 · Solution</p>
+        <h2 id="h-solution" class="cs__h2">{solution.headline}</h2>
+        {
+          solution.decisions.map((d, i) => (
+            <div class:list={['decision', { 'decision--flip': i % 2 === 1 }]}>
+              <Frame src={d.image} alt={d.imageAlt} ratio="4 / 3" sizes={half} radius="m" />
+              <div class="decision__text">
+                <h3 class="decision__title">{d.title}</h3>
+                <p>{d.text}</p>
+              </div>
+            </div>
+          ))
+        }
+        {solution.showcase && <Frame src={solution.showcase} alt={solution.showcaseAlt ?? ''} sizes={body} />}
+        {
+          solution.details.length > 0 && (
+            <div class="details">
+              {solution.details.map((d) => (
+                <Frame src={d.image} alt={d.imageAlt} ratio="1 / 1" sizes={half} radius="m" />
+              ))}
+            </div>
+          )
+        }
+      </section>
+
+      <section id="impact" class="cs__section" aria-labelledby="h-impact" data-toc-section>
+        <p class="label tag">04 · Impact</p>
+        <h2 id="h-impact" class="cs__h2">{impact.headline}</h2>
+        {impact.stats.length > 0 && <StatGrid stats={impact.stats} gradient />}
+      </section>
+
+      <section id="reflection" class="cs__section" aria-labelledby="h-reflection" data-toc-section>
+        <p class="label tag">05 · Reflection</p>
+        <h2 id="h-reflection" class="cs__h2">What I’d take forward</h2>
+        <p class="cs__text">{reflection}</p>
+      </section>
+    </div>
+  </div>
+
+  <nav class="container next" aria-label="Next project">
+    {
+      next ? (
+        <a class="next__link" href={`/work/${next.id}`}>
+          <span class="next__text">
+            <span class="label muted">Next project</span>
+            <span class="next__title">
+              {next.data.title} <span class="next__arrow" aria-hidden="true">→</span>
+            </span>
+            <span class="muted">{next.data.outcome}</span>
+          </span>
+          <Frame src={next.data.cover} alt="" ratio="16 / 9" sizes={half} class="next__img" />
+        </a>
+      ) : (
+        <a class="next__link next__link--simple" href="/work">
+          <span class="next__text">
+            <span class="label muted">Keep exploring</span>
+            <span class="next__title">
+              All work <span class="next__arrow" aria-hidden="true">→</span>
+            </span>
+          </span>
+        </a>
+      )
+    }
+  </nav>
+</article>
+
+<style>
+  .progress {
+    position: fixed;
+    top: var(--nav-height);
+    left: 0;
+    right: 0;
+    height: 2px;
+    z-index: 49;
+    pointer-events: none;
+  }
+
+  .progress__bar {
+    height: 100%;
+    background: var(--color-accent-line);
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  .cs__head {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-block: 48px 56px;
+  }
+
+  .cs__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .cs__title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 1.6rem + 3.6vw, 4.5rem);
+    font-weight: var(--weight-semibold);
+    letter-spacing: -0.04em;
+    line-height: 1.02;
+    text-wrap: balance;
+  }
+
+  .cs__outcome {
+    max-width: 720px;
+  }
+
+  .cs__cover {
+    max-height: 660px;
+  }
+
+  .snapshot {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 28px;
+    margin: 32px 0 0;
+    padding: 32px;
+    border-radius: var(--radius-l);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+  }
+
+  .snapshot div {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .snapshot dd {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.45;
+  }
+
+  .snapshot__impact {
+    font-weight: var(--weight-medium);
+  }
+
+  .cs__body {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 72px;
+    padding-block: clamp(72px, 3rem + 3vw, 104px) clamp(72px, 3rem + 4vw, 120px);
+  }
+
+  .toc {
+    flex: 1 1 180px;
+    max-width: 200px;
+    align-self: flex-start;
+    position: sticky;
+    top: calc(var(--nav-height) + 32px);
+  }
+
+  .toc__title {
+    padding-bottom: 12px;
+  }
+
+  .toc ul {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .toc a {
+    display: block;
+    padding: 10px 0 10px 16px;
+    border-left: 2px solid var(--color-border);
+    color: var(--color-muted);
+    font-size: var(--text-small);
+    text-decoration: none;
+    transition: color var(--dur-fast) ease, border-color var(--dur-fast) ease;
+  }
+
+  .toc a:hover {
+    color: var(--color-text);
+  }
+
+  .toc a[aria-current='true'] {
+    color: var(--color-text);
+    font-weight: var(--weight-medium);
+    border-left-color: var(--color-accent-line);
+  }
+
+  .cs__sections {
+    flex: 999 1 560px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(80px, 3rem + 4vw, 120px);
+  }
+
+  .cs__section {
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+    scroll-margin-top: calc(var(--nav-height) + 32px);
+  }
+
+  .cs__h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 1.45rem + 1.2vw, 2.375rem);
+    font-weight: var(--weight-semibold);
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    max-width: 760px;
+    text-wrap: balance;
+  }
+
+  .cs__text {
+    color: var(--color-body);
+    max-width: 680px;
+    line-height: 1.65;
+  }
+
+  .insights {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin: 0;
+  }
+
+  .insight {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 28px;
+    border-radius: 14px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+  }
+
+  .insight__text {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: var(--weight-semibold);
+    line-height: 1.35;
+  }
+
+  .quote {
+    margin-top: 16px;
+    padding-left: 28px;
+    border-left: 2px solid var(--color-accent-line);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .quote blockquote {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+    font-weight: var(--weight-medium);
+    letter-spacing: -0.015em;
+    line-height: 1.25;
+    max-width: 760px;
+  }
+
+  .decision {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 40px;
+    align-items: center;
+  }
+
+  .decision--flip > :global(.frame) {
+    order: 2;
+  }
+
+  .decision__text {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--color-body);
+  }
+
+  .decision__title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: var(--weight-semibold);
+    letter-spacing: -0.015em;
+    color: var(--color-text);
+  }
+
+  .details {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  .next {
+    padding-bottom: 104px;
+  }
+
+  .next__link {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 48px;
+    padding-top: 72px;
+    border-top: 1px solid var(--color-border);
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .next__text {
+    flex: 1 1 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .next__title {
+    font-family: var(--font-display);
+    font-size: clamp(2.25rem, 1.6rem + 2.4vw, 3.25rem);
+    font-weight: var(--weight-semibold);
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+  }
+
+  .next__arrow {
+    display: inline-block;
+    transition: transform 300ms var(--ease);
+  }
+
+  .next__link:hover .next__arrow {
+    transform: translateX(6px);
+  }
+
+  .next__link :global(.next__img) {
+    flex: 1 1 460px;
+  }
+
+  .next__link:hover :global(.next__img img) {
+    transform: scale(1.03);
+  }
+
+  @media (max-width: 900px) {
+    .toc {
+      display: none;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .decision,
+    .details {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 20px;
+    }
+
+    .decision--flip > :global(.frame) {
+      order: 0;
+    }
+
+    .snapshot {
+      padding: 24px;
+    }
+  }
+</style>
+
+<script>
+  let cleanup: (() => void) | null = null;
+
+  function setup() {
+    cleanup?.();
+    cleanup = null;
+
+    const bar = document.querySelector<HTMLElement>('[data-progress]');
+    const sections = Array.from(document.querySelectorAll<HTMLElement>('[data-toc-section]'));
+    if (!bar && !sections.length) return;
+
+    // Reading progress
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      if (!bar) return;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.transform = `scaleX(${max > 0 ? Math.min(1, window.scrollY / max) : 0})`;
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    update();
+
+    // Highlight the section being read in the side menu
+    const links = new Map(
+      Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]')).map((a) => [a.dataset.tocLink!, a]),
+    );
+    const setActive = (id: string) => {
+      links.forEach((a, key) => (key === id ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current')));
+    };
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (visible[0]) setActive(visible[0].target.id);
+      },
+      { rootMargin: '-30% 0px -60% 0px' },
+    );
+    sections.forEach((s) => observer.observe(s));
+    if (sections[0]) setActive(sections[0].id);
+
+    cleanup = () => {
+      window.removeEventListener('scroll', onScroll);
+      observer.disconnect();
+    };
+  }
+
+  document.addEventListener('astro:page-load', setup);
+</script>

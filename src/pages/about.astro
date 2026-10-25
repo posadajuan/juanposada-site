@@ -1,0 +1,315 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Frame from '@/components/Frame.astro';
+import CtaBlock from '@/components/CtaBlock.astro';
+import { about } from '@/data/pages';
+
+const half = '(min-width: 761px) 50vw, 100vw';
+---
+
+<BaseLayout title="About" description={about.intro}>
+  <section class="container intro">
+    <div class="intro__text">
+      <p class="label muted">About</p>
+      <h1 class="page-title">Hi, I’m <span class="gradient-text">Juan.</span></h1>
+      <p class="hook">{about.hook}</p>
+      <p class="lead">{about.intro}</p>
+    </div>
+    <Frame src={about.portrait} alt={about.portraitAlt} ratio="4 / 5" sizes={half} priority class="intro__img" />
+  </section>
+
+  <section class="container section two-col" aria-labelledby="story">
+    <div class="stack">
+      <p class="label tag">01 · Story</p>
+      <h2 id="story" class="h2">{about.story.title}</h2>
+    </div>
+    <div class="story">
+      {about.story.paragraphs.map((p) => <p>{p}</p>)}
+    </div>
+  </section>
+
+  <section class="container section" aria-labelledby="principles">
+    <div class="band">
+      <div class="stack">
+        <p class="label tag">02 · Principles</p>
+        <h2 id="principles" class="h2">How I like to work</h2>
+      </div>
+      <ol class="principles" role="list">
+        {
+          about.principles.map((item, i) => (
+            <li class="principle">
+              <span class="label tag">{String(i + 1).padStart(2, '0')}</span>
+              <h3 class="principle__title">{item.title}</h3>
+              <p class="muted">{item.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="container section stack-l" aria-labelledby="experience">
+    <div class="stack">
+      <p class="label tag">03 · Experience</p>
+      <h2 id="experience" class="h2">Where I’ve worked</h2>
+    </div>
+    <ul class="jobs" role="list">
+      {
+        about.experience.map((job) => (
+          <li class="job">
+            <span class="job__years muted">{job.years}</span>
+            <span class="job__role">{job.role}</span>
+            <span>{job.company}</span>
+            <span class="label muted">{job.sector}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="container section two-col" aria-label="Recognition and certifications">
+    <div class="stack-s">
+      <h2 class="h3">Recognition</h2>
+      <ul class="list" role="list">
+        {
+          about.recognition.map((r) => (
+            <li>
+              <span>{r.title}</span>
+              <span class="muted">{r.detail}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <div class="stack-s">
+      <h2 class="h3">Certifications</h2>
+      <ul class="list" role="list">
+        {about.certifications.map((c) => <li>{c}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="container section two-col two-col--center" aria-labelledby="off-screen">
+    <Frame src={about.offScreen.image} alt={about.offScreen.alt} ratio="16 / 11" sizes={half} />
+    <div class="stack">
+      <p class="label tag">04 · Off screen</p>
+      <h2 id="off-screen" class="h2 h2--s">{about.offScreen.title}</h2>
+      <p class="lead">{about.offScreen.text}</p>
+      <a href="/photography" class="link more">See my photography →</a>
+    </div>
+  </section>
+
+  {
+    about.cv.file && (
+      <section class="container cv">
+        <p class="muted">
+          Prefer a one-pager?{' '}
+          <a class="cv__link" href={about.cv.file} download>
+            Download CV (PDF{about.cv.size ? `, ${about.cv.size}` : ''})
+          </a>
+        </p>
+      </section>
+    )
+  }
+
+  <CtaBlock />
+</BaseLayout>
+
+<style>
+  .intro {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(40px, 2rem + 3vw, 64px);
+    align-items: center;
+    padding-block: clamp(64px, 3rem + 4vw, 112px) var(--space-section);
+  }
+
+  .intro__text {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .intro :global(.intro__img) {
+    max-height: 660px;
+  }
+
+  .hook {
+    font-family: var(--font-display);
+    font-size: clamp(1.375rem, 1.2rem + 0.7vw, 1.75rem);
+    font-weight: var(--weight-medium);
+    letter-spacing: -0.015em;
+    line-height: 1.3;
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(36px, 2rem + 2vw, 64px);
+  }
+
+  .two-col--center {
+    align-items: center;
+  }
+
+  .stack {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .stack-s {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .stack-l {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 1.6rem + 1.6vw, 2.75rem);
+    font-weight: var(--weight-semibold);
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    text-wrap: balance;
+  }
+
+  .h2--s {
+    font-size: clamp(1.75rem, 1.5rem + 1vw, 2.25rem);
+  }
+
+  .h3 {
+    font-family: var(--font-display);
+    font-size: 1.625rem;
+    font-weight: var(--weight-semibold);
+    letter-spacing: -0.015em;
+  }
+
+  .story {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    color: var(--color-body);
+    line-height: 1.7;
+  }
+
+  .band {
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+    padding: clamp(48px, 2rem + 4vw, 80px) clamp(24px, 1rem + 4vw, 64px);
+    border-radius: var(--radius-xl);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+  }
+
+  .principles {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 40px;
+    margin: 0;
+  }
+
+  .principle {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    border-top: 1px solid var(--color-text);
+    padding-top: 24px;
+  }
+
+  .principle__title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: var(--weight-semibold);
+    letter-spacing: -0.015em;
+  }
+
+  .jobs {
+    margin: 0;
+    border-top: 1px solid var(--color-text);
+  }
+
+  .job {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+    align-items: baseline;
+    padding-block: 26px;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .job__years {
+    font-size: var(--text-small);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .job__role {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: var(--weight-semibold);
+    letter-spacing: -0.01em;
+  }
+
+  .list {
+    margin: 0;
+  }
+
+  .list li {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding-block: 16px;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .list li:last-child {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .more {
+    font-weight: var(--weight-medium);
+    width: fit-content;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .cv {
+    padding-bottom: 64px;
+    font-size: 0.875rem;
+  }
+
+  .cv p {
+    border-top: 1px solid var(--color-border);
+    padding-top: 22px;
+  }
+
+  .cv__link {
+    color: var(--color-muted);
+    text-underline-offset: 4px;
+  }
+
+  @media (max-width: 760px) {
+    .intro,
+    .two-col,
+    .principles {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .intro :global(.intro__img) {
+      order: -1;
+      max-height: 420px;
+    }
+
+    .job {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 6px;
+    }
+  }
+</style>

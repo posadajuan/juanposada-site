@@ -1,0 +1,432 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Availability from '@/components/Availability.astro';
+import CopyEmailButton from '@/components/CopyEmailButton.astro';
+import { site } from '@/data/site';
+import { contact } from '@/data/pages';
+
+const socials = site.socials.filter((s) => s.href);
+---
+
+<BaseLayout title="Contact" description="Tell Juan about your project, team or role.">
+  <div class="container contact">
+    <section class="contact__intro" aria-labelledby="contact-title">
+      <Availability />
+      <h1 id="contact-title" class="page-title contact__title">
+        {contact.title} <span class="gradient-text">{contact.highlight}</span>
+      </h1>
+      <p class="lead">{contact.text} I reply within {site.replyTime}.</p>
+
+      <div class="other">
+        <p class="label muted">Other ways</p>
+        <CopyEmailButton />
+        {
+          site.bookingUrl && (
+            <a class="link other__link" href={site.bookingUrl} target="_blank" rel="noopener">
+              Prefer to talk? Book a 20-min intro call →
+            </a>
+          )
+        }
+        {
+          socials.length > 0 && (
+            <ul class="other__socials" role="list">
+              {socials.map((s) => (
+                <li>
+                  <a class="link" href={s.href} target="_blank" rel="me noopener">
+                    {s.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+      </div>
+    </section>
+
+    <section class="contact__form" aria-label="Contact form">
+      <form class="form" method="post" action="/api/contact" novalidate data-contact-form>
+        <div class="field">
+          <label for="f-name">Name</label>
+          <input id="f-name" name="name" type="text" autocomplete="name" required maxlength="120" placeholder="Your name" />
+          <p class="field__error" id="f-name-error" hidden>Please add your name.</p>
+        </div>
+
+        <div class="field">
+          <label for="f-email">Email</label>
+          <input id="f-email" name="email" type="email" autocomplete="email" required maxlength="200" placeholder="you@company.com" />
+          <p class="field__error" id="f-email-error" hidden>Please add a valid email so I can reply.</p>
+        </div>
+
+        <fieldset class="topics">
+          <legend>What do you need help with? <span class="muted">(optional)</span></legend>
+          <div class="topics__list">
+            {
+              contact.topics.map((topic) => (
+                <label class="topic">
+                  <input type="checkbox" name="topics" value={topic} />
+                  <span>{topic}</span>
+                </label>
+              ))
+            }
+          </div>
+        </fieldset>
+
+        <div class="field">
+          <label for="f-message">Message</label>
+          <textarea id="f-message" name="message" rows="6" required maxlength="5000" placeholder="A few lines about the project, timeline or role"></textarea>
+          <p class="field__error" id="f-message-error" hidden>Please add a short message.</p>
+        </div>
+
+        <!-- Spam trap: hidden from people, bots fill it in. -->
+        <div class="trap" aria-hidden="true">
+          <label for="f-website">Website</label>
+          <input id="f-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <div class="turnstile" data-turnstile></div>
+
+        <button type="submit" class="btn btn--primary form__submit" data-submit>Send message</button>
+        <p class="form__status" role="status" aria-live="polite" data-status></p>
+        <p class="form__note muted">Your details are only used to reply to you.</p>
+      </form>
+
+      <div class="thanks" data-thanks hidden tabindex="-1">
+        <div class="thanks__icon" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"></path></svg>
+        </div>
+        <h2 class="thanks__title">Thanks, <span class="gradient-text">message sent.</span></h2>
+        <p class="lead">I’ll get back to you within {site.replyTime}. In the meantime, have a look at more work.</p>
+        <div class="thanks__actions">
+          <a href="/work" class="btn btn--primary">See my work</a>
+          <button type="button" class="btn btn--secondary" data-reset>Send another</button>
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(48px, 2rem + 4vw, 80px);
+    padding-block: clamp(64px, 3rem + 4vw, 112px) var(--space-section);
+  }
+
+  .contact__intro {
+    flex: 1 1 360px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .contact__title {
+    font-size: clamp(2.75rem, 1.8rem + 3.6vw, 4.5rem);
+    letter-spacing: -0.04em;
+    line-height: 1.02;
+  }
+
+  .other {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding-top: 28px;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .other__link {
+    font-weight: var(--weight-medium);
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .other__socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin: 0;
+    color: var(--color-muted);
+    font-size: var(--text-small);
+  }
+
+  .other__socials a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .contact__form {
+    flex: 1.25 1 460px;
+    min-width: 0;
+  }
+
+  .form,
+  .thanks {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: clamp(24px, 1rem + 2vw, 40px);
+    border-radius: var(--radius-xl);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .field label,
+  .topics legend {
+    font-size: 0.875rem;
+    font-weight: var(--weight-medium);
+  }
+
+  .field input,
+  .field textarea {
+    width: 100%;
+    padding: 15px 16px;
+    border-radius: var(--radius-m);
+    border: 1px solid var(--color-border-strong);
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-size: 1rem;
+    transition: border-color var(--dur-fast) ease, box-shadow var(--dur-fast) ease;
+  }
+
+  .field textarea {
+    resize: vertical;
+    min-height: 150px;
+  }
+
+  .field input::placeholder,
+  .field textarea::placeholder {
+    color: var(--color-muted);
+    opacity: 0.85;
+  }
+
+  .field input:focus-visible,
+  .field textarea:focus-visible {
+    outline: none;
+    border-color: var(--color-focus);
+    box-shadow: 0 0 0 2px var(--color-focus);
+  }
+
+  .field [aria-invalid='true'] {
+    border-color: #ff6b6b;
+  }
+
+  :global([data-theme='light']) .field [aria-invalid='true'] {
+    border-color: #c62828;
+  }
+
+  .field__error {
+    font-size: 0.875rem;
+    color: #ff8a8a;
+  }
+
+  :global([data-theme='light']) .field__error {
+    color: #b71c1c;
+  }
+
+  .topics {
+    border: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  .topics legend {
+    padding: 0 0 12px;
+  }
+
+  .topics__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .topic {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .topic input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+
+  .topic span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 20px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--color-border-strong);
+    font-size: var(--text-small);
+    font-weight: var(--weight-medium);
+    transition: background-color var(--dur-fast) ease, color var(--dur-fast) ease, border-color var(--dur-fast) ease;
+  }
+
+  .topic input:checked + span {
+    background: var(--color-btn-bg);
+    color: var(--color-btn-text);
+    border-color: var(--color-btn-bg);
+  }
+
+  .topic input:focus-visible + span {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 3px;
+  }
+
+  .trap {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .turnstile:empty {
+    display: none;
+  }
+
+  .form__submit {
+    width: 100%;
+    min-height: 56px;
+  }
+
+  .form__submit[disabled] {
+    opacity: 0.6;
+    cursor: progress;
+  }
+
+  .form__status:empty {
+    display: none;
+  }
+
+  .form__status {
+    font-size: var(--text-small);
+  }
+
+  .form__note {
+    font-size: 0.8125rem;
+  }
+
+  .thanks {
+    padding-block: 56px;
+  }
+
+  .thanks:focus {
+    outline: none;
+  }
+
+  .thanks__icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-btn-bg);
+    color: var(--color-btn-text);
+  }
+
+  .thanks__title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 1.6rem + 1.6vw, 2.75rem);
+    font-weight: var(--weight-semibold);
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+  }
+
+  .thanks__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+</style>
+
+<script>
+  const FIELDS = ['name', 'email', 'message'] as const;
+
+  function validate(form: HTMLFormElement): boolean {
+    let firstInvalid: HTMLElement | null = null;
+    for (const name of FIELDS) {
+      const input = form.elements.namedItem(name) as HTMLInputElement | HTMLTextAreaElement;
+      const error = form.querySelector<HTMLElement>(`#${input.id}-error`);
+      const ok = input.value.trim().length > 0 && input.checkValidity();
+      input.setAttribute('aria-invalid', String(!ok));
+      if (error) {
+        error.hidden = ok;
+        if (ok) input.removeAttribute('aria-describedby');
+        else input.setAttribute('aria-describedby', error.id);
+      }
+      if (!ok && !firstInvalid) firstInvalid = input;
+    }
+    firstInvalid?.focus();
+    return !firstInvalid;
+  }
+
+  async function submit(form: HTMLFormElement) {
+    const status = form.querySelector<HTMLElement>('[data-status]')!;
+    const button = form.querySelector<HTMLButtonElement>('[data-submit]')!;
+    status.textContent = '';
+    if (!validate(form)) return;
+
+    button.disabled = true;
+    button.textContent = 'Sending…';
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { Accept: 'application/json' },
+      });
+      if (!response.ok) throw new Error(String(response.status));
+      const thanks = document.querySelector<HTMLElement>('[data-thanks]')!;
+      form.hidden = true;
+      thanks.hidden = false;
+      thanks.focus();
+    } catch {
+      status.textContent =
+        'Sorry, the message couldn’t be sent just now. Please try again in a moment, or use “Copy email” to write to me directly.';
+    } finally {
+      button.disabled = false;
+      button.textContent = 'Send message';
+    }
+  }
+
+  document.addEventListener('submit', (event) => {
+    const form = (event.target as HTMLElement).closest<HTMLFormElement>('[data-contact-form]');
+    if (!form) return;
+    event.preventDefault();
+    void submit(form);
+  });
+
+  // Clear an error as soon as the field is fixed.
+  document.addEventListener('input', (event) => {
+    const input = event.target as HTMLInputElement;
+    if (input.getAttribute('aria-invalid') !== 'true') return;
+    if (input.value.trim() && input.checkValidity()) {
+      input.setAttribute('aria-invalid', 'false');
+      const error = document.getElementById(`${input.id}-error`);
+      if (error) error.hidden = true;
+    }
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!(event.target as HTMLElement).closest('[data-reset]')) return;
+    const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+    const thanks = document.querySelector<HTMLElement>('[data-thanks]');
+    if (!form || !thanks) return;
+    form.reset();
+    thanks.hidden = true;
+    form.hidden = false;
+    form.querySelector<HTMLInputElement>('#f-name')?.focus();
+  });
+</script>

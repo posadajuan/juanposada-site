@@ -1,0 +1,71 @@
+---
+/**
+ * One route for everything under /work/…:
+ * every public case study and every gallery (logos, graphic pieces).
+ * Adding a folder in src/content creates its page automatically.
+ */
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import CaseStudy from '@/components/CaseStudy.astro';
+import GalleryPage from '@/components/GalleryPage.astro';
+import CtaBlock from '@/components/CtaBlock.astro';
+import { getGalleries, getPublicProjects, nextProject, type Gallery, type Project } from '@/lib/content';
+
+export const getStaticPaths = (async () => {
+  const projects = await getPublicProjects();
+  const galleries = await getGalleries();
+
+  const slugs = new Set<string>();
+  const claim = (slug: string) => {
+    if (slugs.has(slug)) {
+      throw new Error(`Two items use the folder name "${slug}". Rename one of them in src/content.`);
+    }
+    slugs.add(slug);
+  };
+
+  return [
+    ...projects.map((project) => {
+      claim(project.id);
+      return {
+        params: { slug: project.id },
+        props: { kind: 'project' as const, project, next: nextProject(projects, project) },
+      };
+    }),
+    ...galleries.map((gallery, i) => {
+      claim(gallery.id);
+      const next = galleries.length > 1 ? galleries[(i + 1) % galleries.length] : undefined;
+      return {
+        params: { slug: gallery.id },
+        props: { kind: 'gallery' as const, gallery, next },
+      };
+    }),
+  ];
+}) satisfies GetStaticPaths;
+
+type Props =
+  | { kind: 'project'; project: Project; next?: Project }
+  | { kind: 'gallery'; gallery: Gallery; next?: Gallery };
+
+const props = Astro.props as Props;
+
+const meta =
+  props.kind === 'project'
+    ? { title: props.project.data.title, description: props.project.data.outcome, image: props.project.data.cover.src }
+    : { title: props.gallery.data.title, description: props.gallery.data.summary, image: props.gallery.data.cover.src };
+
+const cta =
+  props.kind === 'gallery' && props.gallery.data.kind === 'logos'
+    ? { before: 'Need a mark that works', highlight: 'everywhere?', after: '' }
+    : {};
+---
+
+<BaseLayout title={meta.title} description={meta.description} image={meta.image}>
+  {
+    props.kind === 'project' ? (
+      <CaseStudy project={props.project} next={props.next} />
+    ) : (
+      <GalleryPage gallery={props.gallery} next={props.next} />
+    )
+  }
+  <CtaBlock {...cta} />
+</BaseLayout>
