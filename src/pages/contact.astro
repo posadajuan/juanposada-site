@@ -6,6 +6,11 @@ import { site } from '@/data/site';
 import { contact } from '@/data/pages';
 
 const socials = site.socials.filter((s) => s.href);
+
+// Public Turnstile site key, set as a build variable in Cloudflare.
+// Falls back to Cloudflare's official always-pass test key for previews
+// and local development (the server still checks with the real secret).
+const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000AA';
 ---
 
 <BaseLayout title="Contact" description="Tell Juan about your project, team or role.">
@@ -83,7 +88,7 @@ const socials = site.socials.filter((s) => s.href);
           <input id="f-website" name="website" type="text" tabindex="-1" autocomplete="off" />
         </div>
 
-        <div class="turnstile" data-turnstile></div>
+        <div class="turnstile" data-turnstile data-sitekey={turnstileKey}></div>
 
         <button type="submit" class="btn btn--primary form__submit" data-submit>Send message</button>
         <p class="form__status" role="status" aria-live="polite" data-status></p>
@@ -296,6 +301,10 @@ const socials = site.socials.filter((s) => s.href);
     display: none;
   }
 
+  .turnstile {
+    min-height: 0;
+  }
+
   .form__submit {
     width: 100%;
     min-height: 56px;
@@ -353,7 +362,55 @@ const socials = site.socials.filter((s) => s.href);
 </style>
 
 <script>
+  type Turnstile = {
+    render: (el: HTMLElement, options: Record<string, unknown>) => string;
+    reset: (id?: string) => void;
+    remove: (id: string) => void;
+  };
+  const w = window as typeof window & { turnstile?: Turnstile; onTurnstileReady?: () => void };
+
   const FIELDS = ['name', 'email', 'message'] as const;
+  let widgetId: string | null = null;
+
+  /* ---------- Turnstile (spam protection), loaded only on this page ---------- */
+
+  function renderTurnstile() {
+    const box = document.querySelector<HTMLElement>('[data-turnstile]');
+    if (!box || !w.turnstile || widgetId) return;
+    widgetId = w.turnstile.render(box, {
+      sitekey: box.dataset.sitekey,
+      theme: document.documentElement.dataset.theme === 'light' ? 'light' : 'dark',
+      appearance: 'interaction-only', // invisible unless Cloudflare needs a click
+      action: 'contact',
+    });
+  }
+
+  function loadTurnstile() {
+    if (!document.querySelector('[data-turnstile]')) return;
+    if (w.turnstile) return renderTurnstile();
+    if (document.getElementById('turnstile-api')) return;
+    w.onTurnstileReady = renderTurnstile;
+    const script = document.createElement('script');
+    script.id = 'turnstile-api';
+    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileReady';
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+  }
+
+  document.addEventListener('astro:page-load', loadTurnstile);
+  document.addEventListener('astro:before-swap', () => {
+    if (widgetId && w.turnstile) w.turnstile.remove(widgetId);
+    widgetId = null;
+  });
+
+  const MESSAGES: Record<number, string> = {
+    400: 'Something in the form needs another look. Please check the fields and try again.',
+    403: 'I couldn’t confirm you’re not a bot. Please refresh the page and try again.',
+    429: 'That’s a lot of messages in a short time. Please wait a minute and try again.',
+  };
+  const FALLBACK =
+    'Sorry, the message couldn’t be sent just now. Please try again in a moment, or use “Copy email” to write to me directly.';
 
   function validate(form: HTMLFormElement): boolean {
     let firstInvalid: HTMLElement | null = null;
@@ -387,14 +444,17 @@ const socials = site.socials.filter((s) => s.href);
         body: new FormData(form),
         headers: { Accept: 'application/json' },
       });
-      if (!response.ok) throw new Error(String(response.status));
+      if (!response.ok) {
+        status.textContent = MESSAGES[response.status] ?? FALLBACK;
+        if (widgetId && w.turnstile) w.turnstile.reset(widgetId);
+        return;
+      }
       const thanks = document.querySelector<HTMLElement>('[data-thanks]')!;
       form.hidden = true;
       thanks.hidden = false;
       thanks.focus();
     } catch {
-      status.textContent =
-        'Sorry, the message couldn’t be sent just now. Please try again in a moment, or use “Copy email” to write to me directly.';
+      status.textContent = FALLBACK;
     } finally {
       button.disabled = false;
       button.textContent = 'Send message';
@@ -431,6 +491,7 @@ const socials = site.socials.filter((s) => s.href);
     const thanks = document.querySelector<HTMLElement>('[data-thanks]');
     if (!form || !thanks) return;
     form.reset();
+    if (widgetId && w.turnstile) w.turnstile.reset(widgetId);
     thanks.hidden = true;
     form.hidden = false;
     form.querySelector<HTMLInputElement>('#f-name')?.focus();

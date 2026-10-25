@@ -40,6 +40,11 @@ jobs:
             echo "::error title=astro check::$line"
           done
 
+      - name: Contact form backend (types and unit tests)
+        run: |
+          npx tsc -p worker
+          npx vitest run
+
       - name: Build
         run: npm run build
 
