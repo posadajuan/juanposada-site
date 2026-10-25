@@ -1,103 +1,95 @@
 ---
 title: Cyber Explorers
-outcome: A mission-based cyber security adventure for 11–14 year olds, used by 50,000+ students in 2,500+ UK schools.
+outcome: A free cyber security learning platform for 11–14 year olds, rolled out to schools across the UK.
 tags: [UI & UX, Game design, Digital learning]
 year: 2022
 order: 1
 featured: true
 
 cover: ./cover.jpg
-coverAlt: The Cyber Explorers home page on a laptop, showing a neon cityscape and the welcome message for 11–14 year olds
+coverAlt: The Cyber Explorers home page on a laptop, with the welcome message for 11–14 year olds over an illustrated city skyline
 
 snapshot:
-  role: Digital graphics designer, leading UI, UX and game concepts
-  team: Learning designers, developers, animation and video
+  role: Digital graphics designer, responsible for the UI, UX and game concepts
+  team: Learning designers and developers
   timeline: "[Start date] – national launch, February 2022"
   tools: ["[Figma]", "[Adobe Illustrator]"]
   impact: 50,000+ students · 2,500+ schools · [Award]
 
 problem:
-  headline: Make cyber security feel like an adventure, not a warning.
+  headline: An engaging way for young people to learn real cyber security skills.
   text: >
-    Cyber security is one of the UK's fastest-growing careers, but to an
-    11-year-old it sounds abstract, technical and a little scary. The
-    Department for Digital, Culture, Media and Sport wanted a free
-    platform schools could use in lessons, clubs or at home: something
-    that would spark interest before students choose their GCSEs, and
-    reach young people who don't usually picture themselves in tech.
-    My job was to turn real cyber skills into something kids actually
-    wanted to play.
+    Cyber Explorers was commissioned by the Department for Digital,
+    Culture, Media and Sport as a free online platform for 11–14 year
+    olds, to be used in lessons, after-school clubs and at home. The
+    product had to be in tune with its audience: engaging enough for
+    young people to want to use it, while helping them build genuine
+    cyber security skills ahead of choosing their GCSE options. It was
+    launched to schools across the country, so it also had to work for a
+    wide range of students and classroom setups.
   image: ./mission-brief.png
   imageAlt: Mission brief screen titled "Your mission… if you choose to accept", with the story text, mission details, guide character Rehka, an audio briefing player and Accept or Decline buttons
 
 research:
-  headline: Kids don't want a lesson. They want a reason to keep going.
+  headline: Designing around the learner and the learning goals.
   text: >
-    Working side by side with the learning designers, I tested every
-    idea against how 11–14 year olds really use screens: short bursts of
-    attention, instant feedback, and characters they can see themselves
-    in. The independent evaluation of the pilot later confirmed what we'd
-    designed for: interactive activities and a diverse cast were what
-    learners enjoyed most.
+    I worked closely with the learning designers, who defined what each
+    activity needed to teach, and with the developers, who defined what
+    could be built in the time available. My role was to turn those two
+    sets of requirements into an experience that made sense to an
+    11–14 year old.
   insights:
-    - A story gives every skill a purpose. A mission beats an instruction.
-    - Diverse characters make cyber feel open to everyone, not just "hackers".
-    - Small, frequent wins keep momentum. Unlock, reward, move on.
-  quote:
-    text: Helping the characters solve their problems made cyber security less intimidating and boring and more fun.
-    by: Student, Cyber Explorers pilot evaluation
+    - The audience is 11–14, with very different levels of digital confidence.
+    - It had to work in a classroom, an after-school club or at home.
+    - It needed to feel open to everyone, including young people who don't see themselves in tech.
 
 solution:
-  headline: Real cyber skills, hidden inside missions in a neon Cyber City.
+  headline: A simple, good-looking interface wrapped around game-based learning.
   decisions:
-    - title: Every skill is a mission
+    - title: Simple enough for the audience
       text: >
-        Lessons became missions, each with a brief, a guide and a villain
-        to stop. Every level ends with a clear "unlock the next stage"
-        moment, so progress always feels earned.
+        I designed the site map, the interface and the interactions, keeping
+        every screen clear and easy to follow so learners could focus on the
+        activity rather than on working out the interface.
       image: ./finding-the-clue.png
       imageAlt: Level 1 "Finding the clue" page where the student picks the whoami command, sees the result in a command prompt and unlocks the next stage
-    - title: Real commands, zero risk
+    - title: Ideas for the game and its mechanics
       text: >
-        Students use genuine command-line tools like whoami, dir and cd,
-        picked from a guided list inside a safe sandbox. Real enough to
-        feel like hacking, simple enough for a first attempt.
+        I came up with creative concepts for the game and its mechanics,
+        shaping how learners progress through missions and practise skills
+        such as using the command line.
       image: ./command-prompt.png
       imageAlt: Tablet-style command list and command prompt revealing a hidden message from King Herbert, with a City Hall Fund points bar above
-    - title: Make the invisible visible
+    - title: Designed within development limits
       text: >
-        Folders, files and hidden data are hard to picture, so we turned
-        them into places: VR goggles, glowing doors and virtual rooms that
-        students move through, one choice at a time.
+        Working day to day with the developers, I balanced the creative
+        ambition with technical limitations and the delivery timeline, so
+        the interactions could be built and shipped on time.
       image: ./vr-folders.png
       imageAlt: Virtual reality goggles view showing two folders labelled with cd commands and a Go button
-    - title: A system, not one-off screens
+    - title: Producing assets at scale
       text: >
-        I built one kit of panels, neon icons, character frames and
-        controls that reads clearly on any classroom screen. It let the
-        team produce dozens of activities quickly and gave developers
-        patterns they could build within tight timelines.
+        I created all the UI and produced the visual content, setting up the
+        assets so production could scale across the team and stay consistent
+        across every activity.
       image: ./logic-unit.png
       imageAlt: Drag-and-drop activity linking control panel sensors such as a thermometer and humidity sensor through a logic unit to actions
   showcase: ./show-me-the-door.png
   showcaseAlt: Level 3 "Show me the door" scene with a dragon perched on a glowing doorway in a virtual room, guiding the student to choose the next folder
 
 impact:
-  headline: Launched in schools across the UK, and reaching the students it was made for.
+  headline: Launched nationally in February 2022 and used by schools across the UK.
   stats:
     - value: 50,000+
       label: students reached
     - value: 2,500+
       label: schools across the UK
     - value: 49%
-      label: of pilot learners were girls, almost double the 25% target
+      label: of learners in the pilot were girls, against a 25% target
 
 reflection: >
-  Designing for 11–14 year olds taught me that clarity is the real game
-  mechanic: if a screen needs explaining, it has already lost them.
-  Balancing big creative ideas with developer timelines pushed me to
-  think in systems from day one, and that kit is what made the scale
-  possible. If I did it again, I'd push for progress tracking and rewards
-  from the very start. It's exactly what learners and teachers asked for
-  more of.
+  [Your own words: what you learned from designing for young learners,
+  balancing a simple, attractive experience with development limits and
+  timelines, and scaling production across the team, and anything you'd
+  do differently.]
 ---
