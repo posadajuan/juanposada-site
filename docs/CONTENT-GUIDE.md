@@ -19,11 +19,11 @@ src/content/
 | On the site | Edit |
 |---|---|
 | Availability line, reply time, email, socials, booking link, location | `src/data/site.ts` |
-| Home: highlights numbers, "How I work", "Hello" intro, showreel image | `src/data/pages.ts` → `home` |
+| Home: highlights numbers, "How I work", "Hello" intro | `src/data/pages.ts` → `home` |
 | Work and Photography intro lines | `src/data/pages.ts` → `work`, `photography` |
 | About: hook, story, principles, experience, recognition, certifications, "Away from the screen", CV link | `src/data/pages.ts` → `about` |
 | Contact headline and topic chips | `src/data/pages.ts` → `contact` |
-| Photos on Home and About (portrait, showreel, off-screen) | replace the files in `src/assets/home/` and `src/assets/about/` (keep the names) |
+| Photos on Home and About (portrait, off-screen) | replace the files in `src/assets/home/` and `src/assets/about/` (keep the names) |
 | Case studies, logos, graphic pieces, photo series | folders in `src/content/` (below) |
 
 Pages build themselves from these: a new project folder appears on Work, gets its own page and "Next project" link, and shows on Home when `featured: true`. Sections you leave out (a quote, a showcase image…) simply don't appear.
@@ -51,7 +51,7 @@ Drop the image in the right folder and add one block under `items:` (galleries) 
 | Graphic pieces | 4:5 tiles; the viewer shows the full piece |
 | Photos | 3:2 tiles, one featured large; the viewer shows the full photo |
 | Portraits | 4:5 |
-| Home showreel | 2:1 |
+| Home animation, final screen (`src/assets/home/sketch-final.jpg`) | 1440 × 911 screenshot |
 
 Send images as large as you have; they're automatically resized and compressed for each screen.
 

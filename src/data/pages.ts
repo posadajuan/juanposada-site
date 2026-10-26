@@ -5,20 +5,13 @@
  * Text in [brackets] is a placeholder waiting for your copy.
  * To swap a photo, replace the image file in src/assets/ (same name).
  */
-import type { ImageMetadata } from 'astro';
-import showreel from '@/assets/home/showreel.jpg';
 import homePortrait from '@/assets/home/portrait.jpg';
 import aboutPortrait from '@/assets/about/portrait.jpg';
 import offScreen from '@/assets/about/off-screen.jpg';
 
 /* ---------------- Home ---------------- */
 export const home = {
-  /** Big image under the hero. Set to null to hide it. */
-  showreel: {
-    image: showreel,
-    alt: '[Describe the showreel image]',
-  } as { image: ImageMetadata; alt: string } | null,
-
+  /* The animation under the hero lives in src/components/SketchToLaunch.astro. */
   highlights: [
     { value: '50,000+', label: 'students reached with Cyber Explorers' },
     { value: '2,500+', label: 'schools across the UK' },
