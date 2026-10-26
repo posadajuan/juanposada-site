@@ -215,7 +215,6 @@ const stages = ['Sketch', 'Type', 'Colour', 'Interaction', 'Launch'];
     column-gap: 12px;
     row-gap: 8px;
     align-items: baseline;
-    opacity: 0.38;
   }
 
   .s2l__num {
@@ -248,10 +247,8 @@ const stages = ['Sketch', 'Type', 'Colour', 'Interaction', 'Launch'];
     transform-origin: left;
   }
 
-  /* Still state (reduced motion): finished screen, Launch highlighted */
-  .s2l__stage--5 {
-    opacity: 1;
-  }
+  /* Still state (reduced motion): finished screen, every stage readable,
+     Launch underlined. While animating, the stage being acted out lights up. */
   .s2l__stage--5 .s2l__bar::after {
     transform: none;
   }
