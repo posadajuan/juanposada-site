@@ -50,7 +50,7 @@ const body = '(min-width: 1240px) 900px, 100vw';
   </header>
 
   <div class="container">
-    <Frame src={data.cover} alt={data.coverAlt} ratio="16 / 10" priority parallax zoom class="cs__cover" />
+    <Frame src={data.cover} alt={data.coverAlt} priority zoom class="cs__cover" />
   </div>
 
   <section class="container" aria-label="Project snapshot">
@@ -119,7 +119,7 @@ const body = '(min-width: 1240px) 900px, 100vw';
             </div>
           ))
         }
-        {solution.showcase && <Frame src={solution.showcase} alt={solution.showcaseAlt ?? ''} sizes={body} reveal parallax />}
+        {solution.showcase && <Frame src={solution.showcase} alt={solution.showcaseAlt ?? ''} sizes={body} reveal />}
         {
           solution.details.length > 0 && (
             <div class="details" data-reveal>
@@ -216,9 +216,6 @@ const body = '(min-width: 1240px) 900px, 100vw';
     max-width: 720px;
   }
 
-  .cs__cover {
-    max-height: 760px;
-  }
 
   .snapshot {
     display: grid;

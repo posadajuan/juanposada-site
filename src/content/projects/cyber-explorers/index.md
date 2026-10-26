@@ -51,21 +51,21 @@ solution:
         I designed the site map, the interface and the interactions, keeping
         every screen clear and easy to follow so learners could focus on the
         activity rather than on working out the interface.
-      image: ./finding-the-clue.png
+      image: ./finding-the-clue.jpg
       imageAlt: Level 1 "Finding the clue" page where the student picks the whoami command, sees the result in a command prompt and unlocks the next stage
     - title: Ideas for the game and its mechanics
       text: >
         I came up with creative concepts for the game and its mechanics,
         shaping how learners progress through missions and practise skills
         such as using the command line.
-      image: ./command-prompt.png
+      image: ./command-prompt.jpg
       imageAlt: Tablet-style command list and command prompt revealing a hidden message from King Herbert, with a City Hall Fund points bar above
     - title: Designed within development limits
       text: >
         Working day to day with the developers, I balanced the creative
         ambition with technical limitations and the delivery timeline, so
         the interactions could be built and shipped on time.
-      image: ./vr-folders.png
+      image: ./vr-folders.jpg
       imageAlt: Virtual reality goggles view showing two folders labelled with cd commands and a Go button
     - title: Producing assets at scale
       text: >
