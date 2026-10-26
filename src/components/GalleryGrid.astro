@@ -106,10 +106,7 @@ const large = await Promise.all(
     transition: transform 600ms var(--ease);
   }
 
-  .ggrid--logos .ggrid__tile :global(img) {
-    object-fit: contain;
-    padding: 18%;
-  }
+  /* Logos are square images with their own background: they fill the tile. */
 
   .ggrid__item:hover .ggrid__tile {
     border-color: var(--color-border-strong);
