@@ -74,8 +74,8 @@ solution:
         across every activity.
       image: ./page-layouts.png
       imageAlt: Four full-length Cyber Explorers activity pages side by side, built from the same set of panels, command prompts, characters and navigation
-  showcase: ./show-me-the-door.png
-  showcaseAlt: Level 3 "Show me the door" scene with a dragon perched on a glowing doorway in a virtual room, guiding the student to choose the next folder
+  showcase: ./on-a-roll.png
+  showcaseAlt: "\"You're on a roll!\" screen: guide character Rehka encourages the learner to find the PowerShell script, beside the villain King Herbert, with a padlock to unlock the next stage"
 
 impact:
   headline: Launched nationally in February 2022 and used by schools across the UK.
