@@ -6,6 +6,7 @@ import SectionHeader from '@/components/SectionHeader.astro';
 import ProjectCard from '@/components/ProjectCard.astro';
 import StatGrid from '@/components/StatGrid.astro';
 import Frame from '@/components/Frame.astro';
+import WorkWall from '@/components/WorkWall.astro';
 import CtaBlock from '@/components/CtaBlock.astro';
 import { getFeaturedProjects, getPublicProjects } from '@/lib/content';
 import { home } from '@/data/pages';
@@ -31,13 +32,9 @@ const eyebrow = `Selected work · ${String(featured.length).padStart(2, '0')}`;
     </div>
   </section>
 
-  {
-    home.showreel && (
-      <section class="container section" aria-label="Showreel">
-        <Frame src={home.showreel.image} alt={home.showreel.alt} ratio="16 / 8" priority parallax zoom class="hero__media" />
-      </section>
-    )
-  }
+  <section class="container section" aria-label="A wall of my work">
+    <WorkWall />
+  </section>
 
   {
     featured.length > 0 && (
@@ -107,10 +104,6 @@ const eyebrow = `Selected work · ${String(featured.length).padStart(2, '0')}`;
     display: flex;
     flex-wrap: wrap;
     gap: 14px;
-  }
-
-  .hero__media {
-    max-height: 640px;
   }
 
   .stack-xl {

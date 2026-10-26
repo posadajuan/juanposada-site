@@ -1,0 +1,581 @@
+---
+/**
+ * "Sketch to launch": the Home page showreel.
+ * A 12-second loop that acts out the hero line: a wireframe draws
+ * itself, type drops in, colour floods, the interface comes alive,
+ * then it lands on a real finished screen (Cyber Explorers).
+ *
+ * Everything is code (SVG + CSS), so it's tiny and sharp at any size.
+ * It only plays while on screen, and people who prefer less motion
+ * see the finished screen, still.
+ *
+ * To change the final screen, replace src/assets/home/sketch-final.jpg
+ * with a 1440 × 911 screenshot (the wireframe is drawn to that layout).
+ */
+import { getImage } from 'astro:assets';
+import finalScreen from '@/assets/home/sketch-final.jpg';
+
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+
+const final = await getImage({ src: finalScreen, width: 1440, format: 'webp' });
+
+const stages = ['Sketch', 'Type', 'Colour', 'Interaction', 'Launch'];
+---
+
+<div
+  class:list={['s2l', className]}
+  data-s2l
+  data-zoom
+  role="img"
+  aria-label="Animation of how I work: a screen goes from a wireframe sketch, to type, to colour, to interaction, and lands on the finished Cyber Explorers screen."
+>
+  <ol class="s2l__stages" aria-hidden="true">
+    {
+      stages.map((s, i) => (
+        <li class={`s2l__stage s2l__stage--${i + 1}`}>
+          <span class="s2l__num">{String(i + 1).padStart(2, '0')}</span>
+          <span class="s2l__name">{s}</span>
+          <span class="s2l__bar" />
+        </li>
+      ))
+    }
+  </ol>
+
+  <svg class="s2l__svg" viewBox="0 0 1440 971" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="s2l-flood" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#1b1446" />
+        <stop offset="0.55" stop-color="#3b2f97" />
+        <stop offset="1" stop-color="#5a4bd6" />
+      </linearGradient>
+      <clipPath id="s2l-screen"><rect x="0" y="60" width="1440" height="911" /></clipPath>
+    </defs>
+
+    <!-- Window chrome (always there) -->
+    <rect class="s2l__window" x="1" y="1" width="1438" height="969" rx="22" />
+    <line class="s2l__chrome-line" x1="1" y1="60" x2="1439" y2="60" />
+    <circle class="s2l__dot" cx="36" cy="30" r="8" />
+    <circle class="s2l__dot" cx="62" cy="30" r="8" />
+    <circle class="s2l__dot" cx="88" cy="30" r="8" />
+
+    <g class="s2l__content" clip-path="url(#s2l-screen)">
+      <g transform="translate(0 60)">
+        <!-- 03 · Colour -->
+        <rect class="s2l__flood" x="0" y="110" width="1440" height="801" fill="url(#s2l-flood)" />
+        <g class="s2l__fills">
+          <rect x="0" y="0" width="1440" height="110" fill="#f2f2f2" />
+          <circle cx="305" cy="48" r="32" fill="#0a0a0a" />
+          <circle cx="305" cy="48" r="23" fill="none" stroke="#f2f2f2" stroke-width="2" />
+          <rect x="275" y="323" width="551" height="256" fill="#0a0a0a" />
+          <rect x="272" y="798" width="321" height="57" fill="#e8e8e8" />
+          <rect x="620" y="798" width="584" height="57" fill="#e8e8e8" />
+          <rect x="955" y="345" width="170" height="105" rx="6" fill="#111" />
+          <ellipse cx="1040" cy="565" rx="105" ry="24" fill="#00e5ff" opacity="0.35" />
+        </g>
+
+        <!-- 01 · Sketch -->
+        <g class="s2l__wire">
+          <g class="s2l__draw s2l__draw--1">
+            <line pathLength="1" x1="0" y1="110" x2="1440" y2="110" />
+            <circle pathLength="1" cx="305" cy="48" r="32" />
+          </g>
+          <g class="s2l__draw s2l__draw--2">
+            <rect pathLength="1" x="275" y="323" width="551" height="256" />
+            <circle pathLength="1" cx="272" cy="447" r="58" />
+            <path pathLength="1" d="M955 345h170v105H955zM935 465h210l-20 16H955z" />
+            <path pathLength="1" d="M1022 285c0-28 50-28 50 0 0 18-25 18-25 38" />
+            <ellipse pathLength="1" cx="1040" cy="565" rx="105" ry="24" />
+          </g>
+          <g class="s2l__draw s2l__draw--3">
+            <rect pathLength="1" x="272" y="798" width="321" height="57" />
+            <rect pathLength="1" x="620" y="798" width="584" height="57" />
+            <rect pathLength="1" x="272" y="870" width="321" height="60" />
+            <rect pathLength="1" x="620" y="870" width="584" height="60" />
+          </g>
+          <!-- Text placeholders: give way to real type -->
+          <g class="s2l__draw s2l__draw--2 s2l__placeholders">
+            <line pathLength="1" x1="412" y1="51" x2="520" y2="51" />
+            <line pathLength="1" x1="567" y1="51" x2="776" y2="51" />
+            <line pathLength="1" x1="830" y1="51" x2="1052" y2="51" />
+            <line pathLength="1" class="s2l__thick" x1="272" y1="240" x2="628" y2="240" />
+            <line pathLength="1" x1="356" y1="374" x2="532" y2="374" />
+            <line pathLength="1" x1="356" y1="413" x2="776" y2="413" />
+            <line pathLength="1" x1="356" y1="432" x2="768" y2="432" />
+            <line pathLength="1" x1="356" y1="490" x2="778" y2="490" />
+            <line pathLength="1" x1="356" y1="509" x2="760" y2="509" />
+            <line pathLength="1" x1="271" y1="682" x2="870" y2="682" />
+            <line pathLength="1" x1="271" y1="721" x2="908" y2="721" />
+            <line pathLength="1" x1="271" y1="740" x2="910" y2="740" />
+          </g>
+        </g>
+
+        <!-- 02 · Type -->
+        <g class="s2l__type s2l__type--1">
+          <text class="s2l__t-nav" x="412" y="57">Mission Control</text>
+          <text class="s2l__t-nav" x="567" y="57">Mission 1: Capture my dragon</text>
+          <text class="s2l__t-nav" x="830" y="57">Level 1: Cyber squad bootcamp</text>
+          <text class="s2l__t-title s2l__t-light" x="271" y="258">Finding the clue</text>
+        </g>
+        <g class="s2l__type s2l__type--2">
+          <text class="s2l__t-head s2l__t-light" x="356" y="381">Great job Explorer!</text>
+          <text class="s2l__t-body s2l__t-light" x="356" y="420">You've worked your way around the Help command,</text>
+          <text class="s2l__t-body s2l__t-light" x="356" y="440">a really useful thing to know.</text>
+          <text class="s2l__t-body s2l__t-light" x="356" y="497">Now let's start the investigation. Your first</text>
+          <text class="s2l__t-body s2l__t-light" x="356" y="517">challenge is to find out whose computer this is.</text>
+          <text class="s2l__t-body s2l__t-light" x="271" y="688">Look at these six commands. Which one do you think tells us who uses this computer?</text>
+          <text class="s2l__t-head s2l__t-dark" x="292" y="834">Command list</text>
+          <text class="s2l__t-head s2l__t-dark" x="641" y="834">Command prompt</text>
+        </g>
+
+        <!-- 04 · Interaction -->
+        <g class="s2l__ui">
+          <g class="s2l__pop s2l__pop--avatar">
+            <circle cx="272" cy="447" r="58" fill="#0a0a0a" stroke="#00e5ff" stroke-width="2" />
+            <circle cx="272" cy="440" r="30" fill="#9b5a2a" />
+            <path d="M236 432c4-34 68-34 72 0-8-14-64-14-72 0z" fill="#56d6a0" />
+            <path d="M232 505c10-28 70-28 80 0z" fill="#56d6a0" />
+          </g>
+          <g class="s2l__pop s2l__pop--btn1">
+            <rect class="s2l__btn1" x="291" y="882" width="125" height="36" rx="2" />
+            <text class="s2l__t-btn" x="353" y="906" text-anchor="middle">whoami</text>
+          </g>
+          <g class="s2l__pop s2l__pop--btn2">
+            <rect x="446" y="882" width="125" height="36" rx="2" fill="#e8e8e8" />
+            <text class="s2l__t-btn" x="508" y="906" text-anchor="middle">cd</text>
+          </g>
+          <g class="s2l__pop s2l__pop--q">
+            <path d="M1022 285c0-28 50-28 50 0 0 18-25 18-25 38" fill="none" stroke="#00e5ff" stroke-width="16" stroke-linecap="round" />
+            <circle cx="1047" cy="345" r="1" fill="none" />
+          </g>
+          <rect class="s2l__progress" x="275" y="590" width="551" height="6" rx="3" />
+          <circle class="s2l__ripple" cx="353" cy="900" r="40" />
+          <path class="s2l__cursor" d="M0 0v38l10-9 8 18 7-3-8-18h13z" />
+        </g>
+
+        <!-- 05 · Launch -->
+        <image class="s2l__final" href={final.src} x="0" y="0" width="1440" height="911" preserveAspectRatio="xMidYMid slice" />
+      </g>
+    </g>
+  </svg>
+</div>
+
+<script>
+  // Play only while the animation is properly on screen.
+  function initSketchToLaunch() {
+    document.querySelectorAll<HTMLElement>('[data-s2l]').forEach((el) => {
+      if (el.dataset.s2lReady) return;
+      el.dataset.s2lReady = '1';
+      const io = new IntersectionObserver(
+        ([entry]) => el.toggleAttribute('data-play', !!entry && entry.intersectionRatio >= 0.3),
+        { threshold: [0, 0.3, 0.6] },
+      );
+      io.observe(el);
+    });
+  }
+  document.addEventListener('astro:page-load', initSketchToLaunch);
+</script>
+
+<style>
+  .s2l {
+    --s2l-line: var(--neon-cyan);
+    --s2l-ink: var(--color-text);
+    --s2l-paper: var(--color-surface);
+    --s2l-dur: 12s;
+    display: grid;
+    grid-template-columns: minmax(150px, 0.28fr) 1fr;
+    align-items: center;
+    gap: clamp(24px, 4vw, 64px);
+    padding: clamp(20px, 4vw, 56px);
+    border-radius: var(--radius-l);
+    border: 1px solid var(--color-border);
+    background: var(--s2l-paper);
+    overflow: hidden;
+  }
+
+  :global(html[data-theme='light']) .s2l {
+    --s2l-line: #0a0a0a;
+  }
+
+  /* ---------- Stage list ---------- */
+  .s2l__stages {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(14px, 2vw, 26px);
+  }
+
+  .s2l__stage {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 12px;
+    row-gap: 8px;
+    align-items: baseline;
+  }
+
+  .s2l__num {
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-label);
+    color: var(--color-muted);
+  }
+
+  .s2l__name {
+    font-size: clamp(1rem, 0.9rem + 0.5vw, 1.375rem);
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tracking-heading);
+    color: var(--color-text);
+  }
+
+  .s2l__bar {
+    grid-column: 1 / -1;
+    height: 2px;
+    background: var(--color-border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .s2l__bar::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--s2l-line);
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  /* Still state (reduced motion): finished screen, every stage readable,
+     Launch underlined. While animating, the stage being acted out lights up. */
+  .s2l__stage--5 .s2l__bar::after {
+    transform: none;
+  }
+
+  /* ---------- Drawing ---------- */
+  .s2l__svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .s2l__window {
+    fill: var(--color-bg);
+    stroke: var(--color-border-strong);
+    stroke-width: 2;
+  }
+  .s2l__chrome-line {
+    stroke: var(--color-border-strong);
+    stroke-width: 2;
+  }
+  .s2l__dot {
+    fill: var(--color-border-strong);
+  }
+
+  .s2l__wire {
+    fill: none;
+    stroke: var(--s2l-line);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .s2l__thick {
+    stroke-width: 14;
+  }
+
+  .s2l__draw > * {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+
+  .s2l__flood {
+    transform-box: fill-box;
+    transform-origin: left center;
+    transform: scaleX(0);
+  }
+  .s2l__fills,
+  .s2l__type,
+  .s2l__ui > *,
+  .s2l__progress {
+    opacity: 0;
+  }
+
+  .s2l__type text {
+    font-family: var(--font-sans);
+    fill: var(--s2l-ink);
+  }
+  .s2l__t-nav {
+    font-size: 17px;
+  }
+  .s2l__t-title {
+    font-size: 50px;
+    font-weight: 700;
+  }
+  .s2l__t-head {
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .s2l__t-body {
+    font-size: 16px;
+  }
+  .s2l__t-btn {
+    font-family: var(--font-sans);
+    font-size: 18px;
+    font-weight: 700;
+    fill: #0a0a0a;
+  }
+  .s2l__btn1 {
+    fill: #e8e8e8;
+  }
+  .s2l__progress {
+    fill: #00e5ff;
+    transform-box: fill-box;
+    transform-origin: left center;
+  }
+  .s2l__ripple {
+    fill: none;
+    stroke: #00e5ff;
+    stroke-width: 3;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .s2l__cursor {
+    fill: #fff;
+    stroke: #0a0a0a;
+    stroke-width: 2;
+  }
+  .s2l__pop {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  .s2l__final {
+    opacity: 1;
+  }
+
+  /* ---------- Motion (only when the visitor hasn't asked for less) ---------- */
+  :global([data-motion]) .s2l__stage,
+  :global([data-motion]) .s2l__bar::after,
+  :global([data-motion]) .s2l__content,
+  :global([data-motion]) .s2l__draw > *,
+  :global([data-motion]) .s2l__placeholders,
+  :global([data-motion]) .s2l__wire,
+  :global([data-motion]) .s2l__flood,
+  :global([data-motion]) .s2l__fills,
+  :global([data-motion]) .s2l__type,
+  :global([data-motion]) .s2l__type text,
+  :global([data-motion]) .s2l__ui > *,
+  :global([data-motion]) .s2l__btn1,
+  :global([data-motion]) .s2l__final {
+    animation-duration: var(--s2l-dur);
+    animation-iteration-count: infinite;
+    animation-fill-mode: both;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .s2l:not([data-play]) *,
+  .s2l:not([data-play]) *::after {
+    animation-play-state: paused !important;
+  }
+
+  :global([data-motion]) .s2l__stage--1 { animation-name: s2l-stage-1; }
+  :global([data-motion]) .s2l__stage--2 { animation-name: s2l-stage-2; }
+  :global([data-motion]) .s2l__stage--3 { animation-name: s2l-stage-3; }
+  :global([data-motion]) .s2l__stage--4 { animation-name: s2l-stage-4; }
+  :global([data-motion]) .s2l__stage--5 { animation-name: s2l-stage-5; }
+  :global([data-motion]) .s2l__stage--1 .s2l__bar::after { animation-name: s2l-bar-1; animation-timing-function: linear; }
+  :global([data-motion]) .s2l__stage--2 .s2l__bar::after { animation-name: s2l-bar-2; animation-timing-function: linear; }
+  :global([data-motion]) .s2l__stage--3 .s2l__bar::after { animation-name: s2l-bar-3; animation-timing-function: linear; }
+  :global([data-motion]) .s2l__stage--4 .s2l__bar::after { animation-name: s2l-bar-4; animation-timing-function: linear; }
+  :global([data-motion]) .s2l__stage--5 .s2l__bar::after { animation-name: s2l-bar-5; animation-timing-function: linear; }
+
+  :global([data-motion]) .s2l__content { animation-name: s2l-content; }
+  :global([data-motion]) .s2l__draw--1 > * { animation-name: s2l-draw-1; }
+  :global([data-motion]) .s2l__draw--2 > * { animation-name: s2l-draw-2; }
+  :global([data-motion]) .s2l__draw--3 > * { animation-name: s2l-draw-3; }
+  :global([data-motion]) .s2l__placeholders { animation-name: s2l-placeholders; }
+  :global([data-motion]) .s2l__wire { animation-name: s2l-wire; }
+  :global([data-motion]) .s2l__flood { animation-name: s2l-flood; }
+  :global([data-motion]) .s2l__fills { animation-name: s2l-fills; }
+  :global([data-motion]) .s2l__type--1 { animation-name: s2l-type-1; }
+  :global([data-motion]) .s2l__type--2 { animation-name: s2l-type-2; }
+  :global([data-motion]) .s2l__type .s2l__t-light { animation-name: s2l-ink; }
+  :global([data-motion]) .s2l__type .s2l__t-dark,
+  :global([data-motion]) .s2l__type .s2l__t-nav { animation-name: s2l-ink-dark; }
+  :global([data-motion]) .s2l__pop--avatar { animation-name: s2l-pop-1; }
+  :global([data-motion]) .s2l__pop--btn1 { animation-name: s2l-pop-2; }
+  :global([data-motion]) .s2l__pop--btn2 { animation-name: s2l-pop-3; }
+  :global([data-motion]) .s2l__pop--q { animation-name: s2l-pop-1; }
+  :global([data-motion]) .s2l__btn1 { animation-name: s2l-select; }
+  :global([data-motion]) .s2l__progress { animation-name: s2l-progress; }
+  :global([data-motion]) .s2l__cursor { animation-name: s2l-cursor; animation-timing-function: ease-in-out; }
+  :global([data-motion]) .s2l__ripple { animation-name: s2l-ripple; animation-timing-function: ease-out; }
+  :global([data-motion]) .s2l__final { animation-name: s2l-final; }
+
+  /* Timeline (12s): 0–22% sketch · 22–34% type · 34–48% colour ·
+     48–62% interaction · 62–92% launch · 92–100% reset */
+  @keyframes s2l-content {
+    0%, 92% { opacity: 1; }
+    97%, 100% { opacity: 0; }
+  }
+  @keyframes s2l-draw-1 {
+    0%, 2% { stroke-dashoffset: 1; }
+    10%, 100% { stroke-dashoffset: 0; }
+  }
+  @keyframes s2l-draw-2 {
+    0%, 6% { stroke-dashoffset: 1; }
+    16%, 100% { stroke-dashoffset: 0; }
+  }
+  @keyframes s2l-draw-3 {
+    0%, 11% { stroke-dashoffset: 1; }
+    21%, 100% { stroke-dashoffset: 0; }
+  }
+  @keyframes s2l-placeholders {
+    0%, 23% { opacity: 1; }
+    29%, 100% { opacity: 0; }
+  }
+  @keyframes s2l-wire {
+    0%, 38% { opacity: 1; }
+    48%, 100% { opacity: 0; }
+  }
+  @keyframes s2l-flood {
+    0%, 34% { transform: scaleX(0); }
+    44%, 100% { transform: scaleX(1); }
+  }
+  @keyframes s2l-fills {
+    0%, 38% { opacity: 0; }
+    46%, 100% { opacity: 1; }
+  }
+  @keyframes s2l-type-1 {
+    0%, 22% { opacity: 0; transform: translateY(14px); }
+    28%, 100% { opacity: 1; transform: none; }
+  }
+  @keyframes s2l-type-2 {
+    0%, 25% { opacity: 0; transform: translateY(14px); }
+    31%, 100% { opacity: 1; transform: none; }
+  }
+  @keyframes s2l-ink {
+    0%, 36% { fill: var(--s2l-ink); }
+    44%, 100% { fill: #ffffff; }
+  }
+  @keyframes s2l-ink-dark {
+    0%, 38% { fill: var(--s2l-ink); }
+    46%, 100% { fill: #0a0a0a; }
+  }
+  @keyframes s2l-pop-1 {
+    0%, 48% { opacity: 0; transform: scale(0.6); }
+    51% { opacity: 1; transform: scale(1.08); }
+    53%, 100% { opacity: 1; transform: scale(1); }
+  }
+  @keyframes s2l-pop-2 {
+    0%, 50% { opacity: 0; transform: scale(0.6); }
+    53% { opacity: 1; transform: scale(1.08); }
+    55%, 100% { opacity: 1; transform: scale(1); }
+  }
+  @keyframes s2l-pop-3 {
+    0%, 51.5% { opacity: 0; transform: scale(0.6); }
+    54.5% { opacity: 1; transform: scale(1.08); }
+    56.5%, 100% { opacity: 1; transform: scale(1); }
+  }
+  @keyframes s2l-select {
+    0%, 58% { fill: #e8e8e8; }
+    59%, 100% { fill: #00e5ff; }
+  }
+  @keyframes s2l-progress {
+    0%, 52% { opacity: 0; transform: scaleX(0); }
+    53% { opacity: 1; transform: scaleX(0); }
+    61%, 100% { opacity: 1; transform: scaleX(1); }
+  }
+  @keyframes s2l-cursor {
+    0%, 49% { opacity: 0; transform: translate(1180px, 760px); }
+    51% { opacity: 1; transform: translate(1180px, 760px); }
+    57% { opacity: 1; transform: translate(362px, 898px) scale(1); }
+    58% { transform: translate(362px, 898px) scale(0.85); }
+    59%, 62% { opacity: 1; transform: translate(362px, 898px) scale(1); }
+    64%, 100% { opacity: 0; transform: translate(362px, 898px); }
+  }
+  @keyframes s2l-ripple {
+    0%, 58% { opacity: 0; transform: scale(0.2); }
+    58.5% { opacity: 1; transform: scale(0.2); }
+    63%, 100% { opacity: 0; transform: scale(1.6); }
+  }
+  @keyframes s2l-final {
+    0%, 62% { opacity: 0; }
+    69%, 100% { opacity: 1; }
+  }
+
+  @keyframes s2l-stage-1 {
+    0%, 21% { opacity: 1; }
+    23%, 96% { opacity: 0.38; }
+    99%, 100% { opacity: 1; }
+  }
+  @keyframes s2l-stage-2 {
+    0%, 21% { opacity: 0.38; }
+    23%, 33% { opacity: 1; }
+    35%, 100% { opacity: 0.38; }
+  }
+  @keyframes s2l-stage-3 {
+    0%, 33% { opacity: 0.38; }
+    35%, 47% { opacity: 1; }
+    49%, 100% { opacity: 0.38; }
+  }
+  @keyframes s2l-stage-4 {
+    0%, 47% { opacity: 0.38; }
+    49%, 61% { opacity: 1; }
+    63%, 100% { opacity: 0.38; }
+  }
+  @keyframes s2l-stage-5 {
+    0%, 61% { opacity: 0.38; }
+    63%, 94% { opacity: 1; }
+    97%, 100% { opacity: 0.38; }
+  }
+  @keyframes s2l-bar-1 {
+    0% { transform: scaleX(0); }
+    22% { transform: scaleX(1); }
+    23%, 100% { transform: scaleX(0); }
+  }
+  @keyframes s2l-bar-2 {
+    0%, 22% { transform: scaleX(0); }
+    34% { transform: scaleX(1); }
+    35%, 100% { transform: scaleX(0); }
+  }
+  @keyframes s2l-bar-3 {
+    0%, 34% { transform: scaleX(0); }
+    48% { transform: scaleX(1); }
+    49%, 100% { transform: scaleX(0); }
+  }
+  @keyframes s2l-bar-4 {
+    0%, 48% { transform: scaleX(0); }
+    62% { transform: scaleX(1); }
+    63%, 100% { transform: scaleX(0); }
+  }
+  @keyframes s2l-bar-5 {
+    0%, 62% { transform: scaleX(0); }
+    92% { transform: scaleX(1); }
+    96%, 100% { transform: scaleX(0); }
+  }
+
+  /* ---------- Phones: stages become a row under the screen ---------- */
+  @media (max-width: 760px) {
+    .s2l {
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+    .s2l__stages {
+      order: 2;
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .s2l__stage {
+      flex: 1;
+      grid-template-columns: 1fr;
+      row-gap: 4px;
+    }
+    .s2l__name {
+      font-size: 0.75rem;
+      letter-spacing: 0;
+    }
+  }
+</style>
