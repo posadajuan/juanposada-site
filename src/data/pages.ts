@@ -34,7 +34,7 @@ export const home = {
     title: '[A short, human intro in two lines.]',
     text: '[Where you’re based, what you care about, and the kind of teams you love working with.]',
     image: homePortrait,
-    alt: 'Portrait of Juan Posada',
+    alt: 'Juan Posada standing in front of a wall covered in colourful street art and posters',
   },
 };
 
@@ -54,7 +54,7 @@ export const about = {
   intro:
     'I’m a product-minded designer with 10+ years across digital learning, agencies, film/TV and corporate teams. [One more line on what drives you.]',
   portrait: aboutPortrait,
-  portraitAlt: 'Portrait of Juan Posada',
+  portraitAlt: 'Juan Posada standing in front of a wall covered in colourful street art and posters',
 
   story: {
     title: 'From graphic design to products people use every day.',
@@ -89,7 +89,7 @@ export const about = {
     title: 'Away from the screen',
     text: '[Drums, photography, mountain biking, art and music: a couple of lines that make you memorable.]',
     image: offScreen,
-    alt: '[Describe the photo]',
+    alt: 'Juan mountain biking in a red checked shirt along a forest track, his dog running alongside',
   },
 
   /**
