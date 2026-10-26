@@ -11,7 +11,9 @@ import offScreen from '@/assets/about/off-screen.jpg';
 
 /* ---------------- Home ---------------- */
 export const home = {
-  /* The animation under the hero lives in src/components/SketchToLaunch.astro. */
+  /* The wall of work under the hero builds itself from your projects and logos
+     (src/components/WorkWall.astro). The 'Sketch to launch' animation is kept in
+     src/components/SketchToLaunch.astro if you want to swap it back in. */
   highlights: [
     { value: '50,000+', label: 'students reached with Cyber Explorers' },
     { value: '2,500+', label: 'schools across the UK' },
