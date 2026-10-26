@@ -66,3 +66,5 @@ Send images as large as you have; they're automatically resized and compressed f
 ## If something's wrong
 
 The site checks every file when it builds. If a field is missing or misspelt, the build stops and the error names the file and field, e.g. `projects → museum-app → snapshot.role: Required`. Fix it and push again; the live site stays on the last good version in the meantime.
+
+If a deploy gets stuck or skipped in Cloudflare, merging any small change (or pressing Retry build on the latest build) starts a fresh one.
