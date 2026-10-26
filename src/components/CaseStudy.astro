@@ -50,7 +50,7 @@ const body = '(min-width: 1240px) 900px, 100vw';
   </header>
 
   <div class="container">
-    <Frame src={data.cover} alt={data.coverAlt} ratio="16 / 8" priority parallax zoom class="cs__cover" />
+    <Frame src={data.cover} alt={data.coverAlt} priority zoom class="cs__cover" />
   </div>
 
   <section class="container" aria-label="Project snapshot">
@@ -111,7 +111,7 @@ const body = '(min-width: 1240px) 900px, 100vw';
         {
           solution.decisions.map((d, i) => (
             <div class:list={['decision', { 'decision--flip': i % 2 === 1 }]} data-reveal="stagger">
-              <Frame src={d.image} alt={d.imageAlt} ratio="4 / 3" sizes={half} radius="m" />
+              <Frame src={d.image} alt={d.imageAlt} sizes={half} radius="m" />
               <div class="decision__text">
                 <h3 class="decision__title">{d.title}</h3>
                 <p>{d.text}</p>
@@ -119,12 +119,12 @@ const body = '(min-width: 1240px) 900px, 100vw';
             </div>
           ))
         }
-        {solution.showcase && <Frame src={solution.showcase} alt={solution.showcaseAlt ?? ''} sizes={body} reveal parallax />}
+        {solution.showcase && <Frame src={solution.showcase} alt={solution.showcaseAlt ?? ''} sizes={body} reveal />}
         {
           solution.details.length > 0 && (
             <div class="details" data-reveal>
               {solution.details.map((d) => (
-                <Frame src={d.image} alt={d.imageAlt} ratio="1 / 1" sizes={half} radius="m" />
+                <Frame src={d.image} alt={d.imageAlt} sizes={half} radius="m" />
               ))}
             </div>
           )
@@ -216,9 +216,6 @@ const body = '(min-width: 1240px) 900px, 100vw';
     max-width: 720px;
   }
 
-  .cs__cover {
-    max-height: 660px;
-  }
 
   .snapshot {
     display: grid;
@@ -397,6 +394,7 @@ const body = '(min-width: 1240px) 900px, 100vw';
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 24px;
+    align-items: start;
   }
 
   .next {

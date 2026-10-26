@@ -41,6 +41,20 @@ Pages build themselves from these: a new project folder appears on Work, gets it
 
 Drop the image in the right folder and add one block under `items:` (galleries) or `photos:` (photography), copying the block above it.
 
+## Image shapes
+
+| Image | Shape on the site |
+|---|---|
+| Project cover | 16:11 on cards, 16:10 at the top of the case study: keep the subject centred |
+| Key screens, showcase, problem image, details | Their own shape (never cropped) |
+| Logos | Centred on a square tile (SVG or transparent PNG) |
+| Graphic pieces | 4:5 tiles; the viewer shows the full piece |
+| Photos | 3:2 tiles, one featured large; the viewer shows the full photo |
+| Portraits | 4:5 |
+| Home showreel | 2:1 |
+
+Send images as large as you have; they're automatically resized and compressed for each screen.
+
 ## Rules of thumb
 
 - **Images:** JPG for photos and screens, PNG for logos. Around 2000px on the long side is plenty; the site resizes and compresses them automatically.

@@ -1,72 +1,95 @@
 ---
 title: Cyber Explorers
-outcome: Award-winning cyber-skills platform used by 50,000+ students in 2,500+ schools.
-tags: [Product, Digital learning]
-year: "[Year]"
+outcome: A free cyber security learning platform for 11–14 year olds, rolled out to schools across the UK.
+tags: [UI & UX, Game design, Digital learning]
+year: 2022
 order: 1
 featured: true
 
 cover: ./cover.jpg
-coverAlt: "[Describe the cover image, e.g. Cyber Explorers mission screen on a laptop]"
+coverAlt: The Cyber Explorers home page on a laptop, with the welcome message for 11–14 year olds over an illustrated city skyline
 
 snapshot:
-  role: "[Lead product designer, creative direction]"
-  team: "[Product, animation, video, engineering]"
-  timeline: "[Month YYYY – Month YYYY]"
-  tools: ["[Figma]", "[Tool]"]
+  role: Digital graphics designer, responsible for the UI, UX and game concepts
+  team: Learning designers and developers
+  timeline: "[Start date] – national launch, February 2022"
+  tools: ["[Figma]", "[Adobe Illustrator]"]
   impact: 50,000+ students · 2,500+ schools · [Award]
 
 problem:
-  headline: "[The problem as a headline your reader can repeat.]"
+  headline: An engaging way for young people to learn real cyber security skills.
   text: >
-    [2–3 sentences: who had the problem, why it mattered and what
-    constraints you were working with.]
-  image: ./problem.jpg
-  imageAlt: "[What the context image shows]"
+    Cyber Explorers was commissioned by the Department for Digital,
+    Culture, Media and Sport as a free online platform for 11–14 year
+    olds, to be used in lessons, after-school clubs and at home. The
+    product had to be in tune with its audience: engaging enough for
+    young people to want to use it, while helping them build genuine
+    cyber security skills ahead of choosing their GCSE options. It was
+    launched to schools across the country, so it also had to work for a
+    wide range of students and classroom setups.
+  image: ./mission-brief.png
+  imageAlt: Mission brief screen titled "Your mission… if you choose to accept", with the story text, mission details, guide character Rehka, an audio briefing player and Accept or Decline buttons
 
 research:
-  headline: "[What you learned that changed the direction.]"
+  headline: Designing around the learner and the learning goals.
   text: >
-    [One short paragraph on methods: interviews, workshops, testing with
-    students and teachers.]
+    I worked closely with the learning designers, who defined what each
+    activity needed to teach, and with the developers, who defined what
+    could be built in the time available. My role was to turn those two
+    sets of requirements into an experience that made sense to an
+    11–14 year old.
   insights:
-    - "[Short finding 1]"
-    - "[Short finding 2]"
-    - "[Short finding 3]"
-  quote:
-    text: "[A real quote from a student or teacher that captures the insight.]"
-    by: "[Name, role]"
+    - The audience is 11–14, with very different levels of digital confidence.
+    - It had to work in a classroom, an after-school club or at home.
+    - It needed to feel open to everyone, including young people who don't see themselves in tech.
 
 solution:
-  headline: "[The idea in one sentence.]"
+  headline: A simple, good-looking interface wrapped around game-based learning.
   decisions:
-    - title: "[Decision 1]"
-      text: "[Why you made it, in two lines.]"
-      image: ./decision-1.jpg
-      imageAlt: "[What key screen 1 shows]"
-    - title: "[Decision 2]"
-      text: "[Why you made it, in two lines.]"
-      image: ./decision-2.jpg
-      imageAlt: "[What key screen 2 shows]"
-  showcase: ./showcase.jpg
-  showcaseAlt: "[What the showcase image shows]"
-  details:
-    - image: ./detail-1.jpg
-      imageAlt: "[Detail 1]"
-    - image: ./detail-2.jpg
-      imageAlt: "[Detail 2]"
+    - title: Simple enough for the audience
+      text: >
+        I designed the site map, the interface and the interactions, keeping
+        every screen clear and easy to follow so learners could focus on the
+        activity rather than on working out the interface.
+      image: ./finding-the-clue.jpg
+      imageAlt: Level 1 "Finding the clue" page where the student picks the whoami command, sees the result in a command prompt and unlocks the next stage
+    - title: Ideas for the game and its mechanics
+      text: >
+        I came up with creative concepts for the game and its mechanics,
+        shaping how learners progress through missions and practise skills
+        such as using the command line.
+      image: ./command-prompt.jpg
+      imageAlt: Tablet-style command list and command prompt revealing a hidden message from King Herbert, with a City Hall Fund points bar above
+    - title: Designed within development limits
+      text: >
+        Working day to day with the developers, I balanced the creative
+        ambition with technical limitations and the delivery timeline, so
+        the interactions could be built and shipped on time.
+      image: ./vr-folders.jpg
+      imageAlt: Virtual reality goggles view showing two folders labelled with cd commands and a Go button
+    - title: Producing assets at scale
+      text: >
+        I created all the UI and produced the visual content, setting up the
+        assets so production could scale across the team and stay consistent
+        across every activity.
+      image: ./page-layouts.png
+      imageAlt: Four full-length Cyber Explorers activity pages side by side, built from the same set of panels, command prompts, characters and navigation
+  showcase: ./on-a-roll.png
+  showcaseAlt: "\"You're on a roll!\" screen: guide character Rehka encourages the learner to find the PowerShell script, beside the villain King Herbert, with a padlock to unlock the next stage"
 
 impact:
-  headline: "[What changed.]"
+  headline: Launched nationally in February 2022 and used by schools across the UK.
   stats:
-    - value: 50K+
+    - value: 50,000+
       label: students reached
-    - value: 2.5K+
+    - value: 2,500+
       label: schools across the UK
-    - value: "[Award]"
-      label: "[Award name, year]"
+    - value: 49%
+      label: of learners in the pilot were girls, against a 25% target
 
 reflection: >
-  [One honest paragraph: what you learned, what you'd do differently and
-  what you're proud of.]
+  [Your own words: what you learned from designing for young learners,
+  balancing a simple, attractive experience with development limits and
+  timelines, and scaling production across the team, and anything you'd
+  do differently.]
 ---

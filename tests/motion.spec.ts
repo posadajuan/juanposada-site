@@ -62,7 +62,7 @@ test.describe('with motion', () => {
   });
 
   test('big images get a parallax offset while scrolling', async ({ page }) => {
-    await page.goto('/work/cyber-explorers');
+    await page.goto('/');
     const cover = page.locator('[data-parallax]').first();
     await page.mouse.wheel(0, 400);
     await expect
