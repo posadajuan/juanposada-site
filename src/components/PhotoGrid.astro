@@ -16,6 +16,7 @@ interface Props {
 const { series, flip = false } = Astro.props;
 const { photos, title, featured } = series.data;
 const group = `photos-${series.id}`;
+// WebP only: with dozens of photos, AVIF makes builds slow enough to fail on Cloudflare.
 const featuredIndex = Math.min(featured, photos.length) - 1;
 
 const large = await Promise.all(
@@ -42,7 +43,7 @@ const large = await Promise.all(
             alt={photo.alt}
             widths={(i === featuredIndex ? [800, 1400] : [480, 800]).filter((w) => w <= photo.image.width)}
             sizes={i === featuredIndex ? '(min-width: 1240px) 760px, 66vw' : '(min-width: 1240px) 380px, 33vw'}
-            formats={['avif', 'webp']}
+            formats={['webp']}
             loading="lazy"
             decoding="async"
           />
