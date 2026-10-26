@@ -7,6 +7,7 @@
  * project and it joins the wall automatically. Galleries still holding
  * placeholder text (alt starting with "[") are left out.
  *
+ * Tiles are small WebP files only (no AVIF) to keep builds quick.
  * Hovering slows it down; it pauses when off screen; visitors who prefer
  * less motion see a still, tilted mosaic.
  */
@@ -70,9 +71,9 @@ mixed.forEach((tile, i) => rows[i % ROWS]!.push(tile));
                   <Picture
                     src={tile.src}
                     alt=""
-                    widths={[360, 640].filter((w) => w <= tile.src.width)}
+                    widths={[320, 560].filter((w) => w <= tile.src.width)}
                     sizes="(min-width: 761px) 320px, 200px"
-                    formats={['avif', 'webp']}
+                    formats={['webp']}
                     loading={r < 2 && copy === 0 ? 'eager' : 'lazy'}
                     decoding="async"
                   />
