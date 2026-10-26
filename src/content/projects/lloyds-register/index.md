@@ -7,7 +7,7 @@ order: 2
 featured: true
 
 cover: ./cover.jpg
-coverAlt: Course title screen "Shipping activity sectors and vessel types" over an aerial view of a container port, with the Lloyd's Register logo
+coverAlt: Laptop showing the course title screen "Shipping activity sectors and vessel types" over an aerial view of a container port, with the course menu and the challenges and opportunities screen floating beside it on a deep navy background
 
 snapshot:
   role: Digital designer, responsible for the visual design, UI, graphics and animation style
