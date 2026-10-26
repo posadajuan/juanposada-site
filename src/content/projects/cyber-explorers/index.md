@@ -72,8 +72,8 @@ solution:
         I created all the UI and produced the visual content, setting up the
         assets so production could scale across the team and stay consistent
         across every activity.
-      image: ./logic-unit.png
-      imageAlt: Drag-and-drop activity linking control panel sensors such as a thermometer and humidity sensor through a logic unit to actions
+      image: ./page-layouts.png
+      imageAlt: Four full-length Cyber Explorers activity pages side by side, built from the same set of panels, command prompts, characters and navigation
   showcase: ./show-me-the-door.png
   showcaseAlt: Level 3 "Show me the door" scene with a dragon perched on a glowing doorway in a virtual room, guiding the student to choose the next folder
 
