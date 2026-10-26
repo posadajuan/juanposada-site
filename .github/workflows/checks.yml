@@ -36,7 +36,7 @@ jobs:
       - name: Show check errors
         if: failure()
         run: |
-          grep -E "error|Error" astro-check.log | head -10 | while IFS= read -r line; do
+          sed "s/\x1b\[[0-9;]*m//g" astro-check.log | grep -E -A4 "error|Error" | head -20 | while IFS= read -r line; do
             echo "::error title=astro check::$line"
           done
 
