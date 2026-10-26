@@ -35,7 +35,7 @@ research:
     works for interactive learning rather than marketing.
   insights:
     - The brand guidelines set the colours, type, imagery and tone.
-    - Learning needs more than branding: clear structure and interactions.
+    - "Learning needs more than branding: clear structure and interactions."
     - The style had to guide every asset produced for the solution.
 
 solution:
