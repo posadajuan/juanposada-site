@@ -1,55 +1,32 @@
 ---
 /**
- * Minimal line icons for the "More work" cards.
- * - logos: a symbol: a diamond breaking out of a circle.
- * - design: the golden ratio: golden rectangle, its squares and the spiral.
- * Dark mode: a subtle slice of the neon gradient. Light mode: black.
+ * Icons for the "More work" cards, drawn by Juan.
+ * - logos: Logos.svg   - design: graphics_design.svg
+ * Dark mode: each icon's own neon gradient. Light mode: solid black.
  */
 interface Props {
   name: 'logos' | 'design';
   class?: string;
 }
 const { name, class: className } = Astro.props;
-const id = `wi-${name}`;
-// A partial section of each brand gradient, not the full spectrum.
-const stops = name === 'logos' ? ['#00ffff', '#6f9bff'] : ['#00ffff', '#7dffb0'];
 
-// Golden ratio construction (φ ≈ 1.618) inside a 100 × 61.8 rectangle.
-const phi = (1 + Math.sqrt(5)) / 2;
-const W = 100;
-const H = W / phi;
+const icons = {
+  logos: { viewBox: '0 0 74 84', d: 'M38.145,49.981c-2.001,3.858 -5.482,8.416 -11.49,11.885c-8.527,4.923 -16.583,5.606 -24.126,2.381c-2.114,-0.904 -3.097,-3.355 -2.193,-5.469c0.904,-2.114 3.355,-3.097 5.469,-2.193c5.225,2.234 10.776,1.475 16.683,-1.936c3.834,-2.213 6.225,-5.035 7.705,-7.524c-4.342,0.196 -10.029,-0.539 -16.038,-4.009c-8.527,-4.923 -13.145,-11.555 -14.124,-19.703c-0.275,-2.283 1.356,-4.36 3.639,-4.634c2.283,-0.275 4.36,1.356 4.634,3.639c0.679,5.645 4.11,10.07 10.017,13.481c3.834,2.213 7.473,2.874 10.368,2.911c-2.34,-3.662 -4.548,-8.956 -4.548,-15.894c0,-9.845 3.438,-17.16 10,-22.083c1.84,-1.38 4.453,-1.007 5.833,0.833c1.38,1.84 1.007,4.453 -0.833,5.833c-4.547,3.411 -6.667,8.595 -6.667,15.417c0,4.428 1.248,7.911 2.665,10.437c2.002,-3.858 5.482,-8.417 11.489,-11.887c8.527,-4.923 16.584,-5.606 24.126,-2.381c2.114,0.904 3.097,3.355 2.193,5.469c-0.904,2.114 -3.355,3.097 -5.469,2.193c-5.225,-2.234 -10.775,-1.475 -16.682,1.935c-3.832,2.214 -6.224,5.035 -7.704,7.525c4.343,-0.196 10.03,0.539 16.037,4.009c8.526,4.923 13.139,11.553 14.124,19.7c0.276,2.283 -1.354,4.361 -3.637,4.636c-2.283,0.276 -4.361,-1.354 -4.636,-3.637c-0.682,-5.645 -4.11,-10.072 -10.018,-13.483c-3.833,-2.214 -7.472,-2.874 -10.368,-2.911c2.34,3.662 4.548,8.956 4.548,15.894c0,9.845 -3.438,17.16 -10,22.083c-1.84,1.38 -4.453,1.007 -5.833,-0.833c-1.38,-1.84 -1.007,-4.453 0.833,-5.833c4.547,-3.411 6.667,-8.595 6.667,-15.417c0,-4.427 -1.248,-7.909 -2.664,-10.435Z', stops: ['#ffe900', '#00ffe8'], transform: 'matrix(73.284556,0,0,83.332303,0,41.666151)' },
+  design: { viewBox: '0 0 76 84', d: 'M18.11,61.663c-7.475,-4.08 -13.683,-10.413 -17.645,-18.084c-1.055,-2.043 -0.253,-4.559 1.79,-5.614c2.043,-1.055 4.559,-0.253 5.614,1.79c2.962,5.736 7.479,10.559 12.926,13.853l7.959,-23.878c-2.312,-2.274 -3.754,-5.43 -3.754,-8.896c0,-5.399 3.498,-10.046 8.333,-11.777l0,-4.889c-0,-2.3 1.867,-4.167 4.167,-4.167c2.3,-0 4.167,1.867 4.167,4.167l0,4.889c4.835,1.732 8.333,6.378 8.333,11.777c0,3.466 -1.442,6.622 -3.754,8.896l5.54,16.615c0.727,2.182 -0.453,4.543 -2.635,5.271c-2.182,0.727 -4.543,-0.453 -5.271,-2.635l-5.234,-15.7c-0.378,0.035 -0.76,0.053 -1.146,0.053c-0.386,0 -0.768,-0.018 -1.146,-0.053l-7.908,23.725c2.894,0.863 5.934,1.327 9.054,1.327c12.642,0 23.971,-7.637 29.632,-18.581c1.057,-2.043 3.573,-2.843 5.615,-1.786c2.043,1.057 2.843,3.573 1.786,5.615c-3.963,7.662 -10.172,13.993 -17.644,18.075l5.397,16.193c0.727,2.182 -0.454,4.543 -2.636,5.27c-2.182,0.727 -4.543,-0.454 -5.27,-2.636l-5.191,-15.577c-3.732,1.144 -7.659,1.76 -11.689,1.76c-4.031,0 -7.958,-0.614 -11.689,-1.757l-5.191,15.574c-0.727,2.182 -3.089,3.362 -5.27,2.635c-2.182,-0.727 -3.362,-3.089 -2.635,-5.27l5.395,-16.186Zm19.391,-44.996c-2.286,0 -4.167,1.881 -4.167,4.167c0,2.286 1.881,4.167 4.167,4.167c2.286,0 4.167,-1.881 4.167,-4.167c0,-2.286 -1.881,-4.167 -4.167,-4.167Z', stops: ['#00fdff', '#7500ff'], transform: 'matrix(75.000597,0,0,83.334136,0,41.667068)' },
+} as const;
+const icon = icons[name];
+const id = `wi-${name}`;
 ---
 
 <div class:list={['wicon', className]} aria-hidden="true">
-  <svg viewBox="0 0 160 120" width="100%" height="100%" fill="none">
+  <svg viewBox={icon.viewBox} fill-rule="evenodd" clip-rule="evenodd">
     <defs>
-      <linearGradient id={id} gradientUnits="userSpaceOnUse" x1="20" y1="10" x2="140" y2="110">
-        <stop offset="0" stop-color={stops[0]} />
-        <stop offset="1" stop-color={stops[1]} />
+      <linearGradient id={id} x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform={icon.transform}>
+        <stop offset="0" stop-color={icon.stops[0]} />
+        <stop offset="1" stop-color={icon.stops[1]} />
       </linearGradient>
     </defs>
-    {
-      name === 'logos' ? (
-        <g class="wicon__stroke" style={`--g: url(#${id})`} stroke-width="2.5" stroke-linejoin="miter">
-          <circle cx="80" cy="60" r="30" />
-          <path d="M80 18 L114 60 L80 102 L46 60 Z" />
-          <path d="M80 18 L80 102" stroke-width="1.5" opacity="0.6" />
-          <path d="M98 40 L122 16" />
-          <rect x="119" y="13" width="6" height="6" class="wicon__fill" />
-        </g>
-      ) : (
-        <g class="wicon__stroke" style={`--g: url(#${id})`} stroke-width="1.6" transform={`translate(${80 - W / 2} ${60 - H / 2})`}>
-          <rect x="0" y="0" width={W} height={H} />
-          <path d={`M${H} 0 V${H}`} opacity="0.55" />
-          <path d={`M${H} ${W - H} H${W}`} opacity="0.55" />
-          <path d={`M${W - (2 * H - W)} ${W - H} V${H}`} opacity="0.55" />
-          <path
-            stroke-width="2.6"
-            d={`M0 ${H} A${H} ${H} 0 0 1 ${H} 0 A${W - H} ${W - H} 0 0 1 ${W} ${W - H} A${2 * H - W} ${2 * H - W} 0 0 1 ${W - (2 * H - W)} ${H} A${2 * W - 3 * H} ${2 * W - 3 * H} 0 0 1 ${H} ${H - (2 * W - 3 * H)}`}
-          />
-        </g>
-      )
-    }
+    <path class="wicon__shape" d={icon.d} style={`--g: url(#${id})`} />
   </svg>
 </div>
 
@@ -61,43 +38,30 @@ const H = W / phi;
     border-radius: var(--radius-m);
     border: 1px solid var(--color-border);
     background:
-      radial-gradient(120% 90% at 70% 20%, color-mix(in srgb, var(--neon-cyan) 9%, transparent), transparent 60%),
+      radial-gradient(120% 90% at 70% 20%, color-mix(in srgb, var(--neon-cyan) 8%, transparent), transparent 60%),
       var(--color-media);
     overflow: hidden;
   }
 
   .wicon svg {
-    width: 78%;
-    height: auto;
+    height: 52%;
+    width: auto;
+    transition: transform 600ms var(--ease);
   }
 
-  .wicon__stroke {
-    stroke: var(--g);
-  }
-
-  .wicon__fill {
+  .wicon__shape {
     fill: var(--g);
-    stroke: none;
   }
 
   :global(html[data-theme='light']) .wicon {
     background: var(--color-media);
   }
 
-  :global(html[data-theme='light']) .wicon__stroke {
-    stroke: #0a0a0a;
-  }
-
-  :global(html[data-theme='light']) .wicon__fill {
+  :global(html[data-theme='light']) .wicon__shape {
     fill: #0a0a0a;
   }
 
-  .gcard:hover .wicon svg,
   :global(a:hover) > .wicon svg {
-    transform: rotate(-4deg) scale(1.03);
-  }
-
-  .wicon svg {
-    transition: transform 600ms var(--ease);
+    transform: rotate(-6deg) scale(1.04);
   }
 </style>

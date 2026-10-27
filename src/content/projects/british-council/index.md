@@ -7,7 +7,7 @@ order: 5
 featured: false
 
 cover: ./cover.jpg
-coverAlt: Animation frames on a timeline, showing a classroom of colourful shape characters sitting at desks and two watercolour scenes of a tall teacher character with glasses
+coverAlt: Laptop on a British Council purple background, showing a classroom of colourful shape characters sitting at desks
 
 snapshot:
   role: Character and animation style designer, working directly with the client
@@ -24,8 +24,8 @@ problem:
     in different regions of the world. They had to be engaging and
     interesting for very young children, and work across a wide variety
     of classrooms and cultural backgrounds.
-  image: ./expressions.jpg
-  imageAlt: Shape characters in cyan, lilac and mint on purple, each showing a different feeling, from happy and excited to sleepy and sad
+  image: ./faces-grid.jpg
+  imageAlt: Grid of 24 coloured squares in green, yellow, blue, purple and mint, each with a simple face showing a different expression
 
 research:
   headline: Looking at classrooms around the world.
