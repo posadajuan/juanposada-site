@@ -144,6 +144,7 @@ test('contact form sends the fields, topics and spam-check token to the backend'
   await page.getByLabel('Message').fill('Hello from the test');
   await page.getByRole('button', { name: 'Send message' }).click();
   await expect(page.getByRole('heading', { name: /message sent/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Send message' })).toBeHidden();
 
   expect(sent).toContain('Ada Lovelace');
   expect(sent).toContain('ada@example.com');
@@ -161,6 +162,8 @@ test('contact form explains a failed spam check and rate limiting', async ({ pag
   await page.getByLabel('Message').fill('Hi');
   await page.getByRole('button', { name: 'Send message' }).click();
   await expect(page.getByRole('status').filter({ hasText: 'not a bot' })).toBeVisible();
+  // The thank-you box must stay hidden when sending fails.
+  await expect(page.getByRole('heading', { name: /message sent/ })).toBeHidden();
 
   status = 429;
   await page.getByRole('button', { name: 'Send message' }).click();

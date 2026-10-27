@@ -323,6 +323,12 @@ const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000
     font-size: var(--text-small);
   }
 
+  /* display:flex above would otherwise override the hidden attribute */
+  .form[hidden],
+  .thanks[hidden] {
+    display: none;
+  }
+
   .form__note {
     font-size: 0.8125rem;
   }
