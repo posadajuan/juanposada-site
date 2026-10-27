@@ -10,9 +10,14 @@ interface Props {
   highlight?: string;
   /** Text after the gradient word */
   after?: string;
+  /** Line under the heading. "{reply}" becomes the reply time. */
+  text?: string;
 }
 
-const { before = 'Have a', highlight = 'project', after = 'in mind?' } = Astro.props;
+import { ctas } from '@/data/pages';
+
+const { before, highlight, after, text } = { ...ctas.home, ...Astro.props };
+const line = text.replace('{reply}', site.replyTime);
 ---
 
 <!-- Always dark, in both modes, so the page ends on a strong note -->
@@ -22,7 +27,7 @@ const { before = 'Have a', highlight = 'project', after = 'in mind?' } = Astro.p
     <h2 id="cta-title" class="cta__title">
       {before} <span class="gradient-text">{highlight}</span> {after}
     </h2>
-    <p class="cta__text">Tell me a little about it. I reply within {site.replyTime}.</p>
+    <p class="cta__text">{line}</p>
     <div class="cta__actions">
       <a href="/contact" class="btn btn--primary">Start a conversation</a>
       <CopyEmailButton />

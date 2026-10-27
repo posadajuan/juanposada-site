@@ -33,8 +33,8 @@ export const site = {
 
   /** Leave an href empty to hide that link. */
   socials: [
-    { label: 'LinkedIn', href: '' },
-    { label: 'Behance', href: '' },
+    { label: 'LinkedIn', href: 'https://www.linkedin.com/in/posadajuan/' },
+    { label: 'Behance', href: 'https://www.behance.net/posadajuan' },
     { label: 'Instagram', href: '' },
   ],
 

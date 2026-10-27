@@ -9,6 +9,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import CaseStudy from '@/components/CaseStudy.astro';
 import GalleryPage from '@/components/GalleryPage.astro';
 import CtaBlock from '@/components/CtaBlock.astro';
+import { ctas } from '@/data/pages';
 import { getGalleries, getPublicProjects, nextProject, type Gallery, type Project } from '@/lib/content';
 
 export const getStaticPaths = (async () => {
@@ -53,10 +54,14 @@ const meta =
     ? { title: props.project.data.title, description: props.project.data.outcome, image: props.project.data.cover.src }
     : { title: props.gallery.data.title, description: props.gallery.data.summary, image: props.gallery.data.cover.src };
 
-const cta =
-  props.kind === 'gallery' && props.gallery.data.kind === 'logos'
-    ? { before: 'Need a mark that works', highlight: 'everywhere?', after: '' }
-    : {};
+// End each page with a call to action that fits what the visitor just saw.
+const cta = (() => {
+  if (props.kind === 'gallery') return props.gallery.data.kind === 'logos' ? ctas.logos : ctas.graphicDesign;
+  const tags = props.project.data.tags;
+  if (tags.includes('Digital learning')) return ctas.learning;
+  if (tags.includes('Character design')) return ctas.characters;
+  return ctas.brand;
+})();
 ---
 
 <BaseLayout title={meta.title} description={meta.description} image={meta.image}>

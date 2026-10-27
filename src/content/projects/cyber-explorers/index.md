@@ -12,9 +12,9 @@ coverAlt: The Cyber Explorers home page on a laptop, with the welcome message fo
 snapshot:
   role: Digital graphics designer, responsible for the UI, UX and game concepts
   team: Learning designers and developers
-  timeline: "[Start date] – national launch, February 2022"
-  tools: ["[Figma]", "[Adobe Illustrator]"]
-  impact: 50,000+ students · 2,500+ schools · [Award]
+  timeline: National launch, February 2022
+  tools: [Illustrator, Figma, Adobe XD]
+  impact: 60,000+ students · 2,500 schools
 
 problem:
   headline: An engaging way for young people to learn real cyber security skills.
@@ -80,16 +80,18 @@ solution:
 impact:
   headline: Launched nationally in February 2022 and used by schools across the UK.
   stats:
-    - value: 50,000+
-      label: students reached
-    - value: 2,500+
+    - value: 60,000+
+      label: students signed up
+    - value: 2,500
       label: schools across the UK
     - value: 49%
       label: of learners in the pilot were girls, against a 25% target
 
 reflection: >
-  [Your own words: what you learned from designing for young learners,
-  balancing a simple, attractive experience with development limits and
-  timelines, and scaling production across the team, and anything you'd
-  do differently.]
+  Cyber Explorers taught me how to work with many different
+  stakeholders, learning designers, developers and the client, to meet
+  the client’s expectations without losing sight of the learner. Just as
+  important was building a visual system that other graphic designers
+  could pick up and use to create new assets, so the product could keep
+  growing beyond my own hands.
 ---

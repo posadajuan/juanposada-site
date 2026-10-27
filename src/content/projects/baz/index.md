@@ -13,7 +13,7 @@ snapshot:
   role: Brand designer, responsible for the identity and its applications
   team: "[Who you worked with]"
   timeline: "[Dates]"
-  tools: ["[Illustrator]", "[Photoshop]"]
+  tools: [Illustrator, Photoshop]
   impact: One identity across collateral, signage, web and presentations
 
 problem:
@@ -82,6 +82,8 @@ impact:
   stats: []
 
 reflection: >
-  [Your own words: what you learned from branding a technical,
-  international firm, and anything you'd do differently.]
+  Designing for a technical, international audience taught me the value
+  of restraint. Every element had to earn its place, and a quiet,
+  precise identity ended up saying more about the firm’s expertise than
+  anything louder could.
 ---

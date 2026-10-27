@@ -15,24 +15,42 @@ export const home = {
      (src/components/WorkWall.astro). The 'Sketch to launch' animation is kept in
      src/components/SketchToLaunch.astro if you want to swap it back in. */
   highlights: [
-    { value: '50,000+', label: 'students reached with Cyber Explorers' },
-    { value: '2,500+', label: 'schools across the UK' },
-    { value: '10+', label: 'years across learning, agencies, film/TV and corporate' },
-    { value: '[Award]', label: '[Award name and year]' },
+    { value: '60,000+', label: 'students signed up to Cyber Explorers' },
+    { value: '2,500', label: 'schools across the UK using it' },
+    { value: '20+', label: 'digital learning products designed at QA' },
+    { value: '10+', label: 'years across digital learning, agencies, film/TV and corporate' },
   ],
 
   howIWork: {
-    title: 'From first idea to launch, with the whole team in the room.',
+    title: 'From first idea to launch, side by side with product, animation and engineering.',
+    /** icon: understand · concept · design · launch (see src/components/StepIcon.astro) */
     steps: [
-      { title: 'Concept', text: '[How you frame the problem and find the idea worth building.]' },
-      { title: 'UX & UI', text: '[How you research, prototype and test until it feels obvious.]' },
-      { title: 'Creative direction', text: '[How you lead animation, video and engineering to a shipped result.]' },
+      {
+        icon: 'understand' as const,
+        title: 'Understand',
+        text: 'I start with the people and the goal: who it’s for, what they need to learn or do, and what success looks like for the business.',
+      },
+      {
+        icon: 'concept' as const,
+        title: 'Concept',
+        text: 'I turn that into an idea worth building, with sketches, site maps and early concepts the whole team can react to before anything is built.',
+      },
+      {
+        icon: 'design' as const,
+        title: 'Design',
+        text: 'UX flows, UI and visual systems, prototyped and refined with learning designers, developers and stakeholders until it feels obvious.',
+      },
+      {
+        icon: 'launch' as const,
+        title: 'Launch & scale',
+        text: 'I stay through build and launch, directing animation and assets, and leave a system the team can keep producing with.',
+      },
     ],
   },
 
   hello: {
-    title: '[A short, human intro in two lines.]',
-    text: '[Where you’re based, what you care about, and the kind of teams you love working with.]',
+    title: 'I design things people enjoy using, and teams enjoy building.',
+    text: 'I’m a Colombian designer based in London, with 10+ years across agencies, film/TV and digital learning. I do my best work with teams who care about the people on the other side of the screen, from first sketch to launch.',
     image: homePortrait,
     alt: 'Juan Posada standing in front of a wall covered in colourful street art and posters',
   },
@@ -40,54 +58,59 @@ export const home = {
 
 /* ---------------- Work ---------------- */
 export const work = {
-  intro: '[One line framing the work: products, learning experiences and brands, from first sketch to launch.]',
+  intro: 'UX/UI, product design and digital learning experiences, plus the brands that hold them together: a selection of work from first sketch to launch.',
 };
 
 /* ---------------- Photography ---------------- */
 export const photography = {
-  intro: '[One line: what you shoot and why. Personal work, for the love of it.]',
+  intro: 'Photography is my hobby and an ongoing learning journey: mostly travel and wildlife, exploring how light, patience and timing shape a picture.',
 };
 
 /* ---------------- About ---------------- */
 export const about = {
-  hook: '[A one-line human hook about how you see design.]',
+  hook: 'I design visual solutions that communicate clearly, strengthen brands and help people get things done.',
   intro:
-    'I’m a product-minded designer with 10+ years across digital learning, agencies, film/TV and corporate teams. [One more line on what drives you.]',
+    'I’m a product-minded designer with 10+ years across digital learning, agencies, film/TV and corporate teams. My strengths are conceptual thinking, fast execution and precision, and I love leading creative direction from first idea to launch.',
   portrait: aboutPortrait,
   portraitAlt: 'Juan Posada standing in front of a wall covered in colourful street art and posters',
 
   story: {
     title: 'From graphic design to products people use every day.',
     paragraphs: [
-      '[Where you started: graphic design, Colombia to the UK, the jump into product.]',
-      '[What you do now: leading concept, UX/UI and creative direction from first idea to launch, with product, animation, video and engineering teams.]',
-      '[How you work today: AI-assisted workflows to move faster without losing quality.]',
+      'I studied Graphic Design, Animation and Multimedia in Colombia and started out on BMW and Citroën campaigns, then designed packaging, events and campaigns in-house for Gyplac. In 2014 I co-founded SIETE17 Estudio Visual, leading brand and design work for more than 15 clients, before redesigning the brand of 11:11 Films & TV and creating key visuals for film and TV projects pitched to Netflix and Fox.',
+      'Since 2019 I’ve been at QA in the UK, where I’ve led concept, UI and creative direction for more than 20 digital learning products, including Cyber Explorers for the UK government, working alongside learning designers, developers, animators and video producers.',
+      'Today I combine UX/UI, visual design and motion with AI-assisted workflows, so I can move faster without losing quality. I’m certified in UX design by the UX Design Institute and as a ScrumMaster.',
     ],
   },
 
   principles: [
-    { title: 'Clarity first', text: '[Short principle.]' },
-    { title: 'Play with purpose', text: '[Short principle.]' },
-    { title: 'Whole team, one story', text: '[Short principle.]' },
+    { title: 'Clarity first', text: 'If people have to work out the interface, it’s in the way. I strip things back until the next step feels obvious.' },
+    { title: 'Play with purpose', text: 'Characters, motion and storytelling keep people engaged, as long as every playful touch helps them understand or remember.' },
+    { title: 'Whole team, one story', text: 'Good products come from clients, designers, developers and animators pulling in one direction. Design keeps everyone telling the same story.' },
   ],
 
   /** Newest first. */
   experience: [
-    { years: '[YYYY – Now]', role: '[Role]', company: '[Company]', sector: 'Digital learning' },
-    { years: '[YYYY – YYYY]', role: '[Role]', company: '[Company]', sector: 'Agency' },
-    { years: '[YYYY – YYYY]', role: '[Role]', company: '[Company]', sector: 'Film / TV' },
-    { years: '[YYYY – YYYY]', role: '[Role]', company: '[Company]', sector: 'Corporate' },
+    { years: '2019 – Now', role: 'Senior Graphic Designer', company: 'QA Ltd', sector: 'Digital learning' },
+    { years: '2015 – 2017', role: 'Brand & Marketing Designer', company: '11:11 Films & TV', sector: 'Film / TV' },
+    { years: '2014 – 2015', role: 'Co-Founder & Creative Director', company: 'SIETE17 Estudio Visual', sector: 'Studio' },
+    { years: '2012 – 2014', role: 'Marketing & Graphic Designer', company: 'Etex Group (Gyplac)', sector: 'Corporate' },
+    { years: '2010 – 2011', role: 'Graphic Designer', company: 'XPO', sector: 'Automotive marketing' },
   ],
 
   recognition: [
-    { title: 'Cyber Explorers (DCMS)', detail: '[Award, year]' },
+    { title: 'Cyber Explorers (UK government)', detail: '60,000+ students in 2,500 schools, GOV.UK, 2023' },
   ],
 
-  certifications: ['UX Design Institute', 'Certified ScrumMaster'],
+  certifications: [
+    'Professional Certificate in UX Design, UX Design Institute (2024)',
+    'Certified ScrumMaster, Scrum Alliance (2021)',
+    'Generative AI: Intermediate Prompting, QA (2024)',
+  ],
 
   offScreen: {
     title: 'Away from the screen',
-    text: '[Drums, photography, mountain biking, art and music: a couple of lines that make you memorable.]',
+    text: 'Away from the screen I play the drums, take photos and go mountain biking, usually with my dog trying to keep up. I’m also into art, music and anything with four-wheel drive.',
     image: offScreen,
     alt: 'Juan mountain biking in a red checked shirt along a forest track, his dog running alongside',
   },
@@ -105,4 +128,19 @@ export const contact = {
   highlight: 'clear and playful.',
   text: 'Tell me about your project, team or role.',
   topics: ['Product', 'Brand', 'Web', 'Other'],
+};
+
+/* ---------------- Calls to action (the dark block at the end of each page) ----------------
+   Each page ends with one that fits what the visitor just saw.
+   before + highlight (gradient) + after form the heading; "{reply}" becomes the reply time. */
+export const ctas = {
+  home: { before: 'Got a complex idea that needs to feel', highlight: 'simple?', after: '', text: 'Tell me where you’re stuck. I reply within {reply}.' },
+  work: { before: 'Want work like this for your', highlight: 'product?', after: '', text: 'Share a few lines about your project or role. I reply within {reply}.' },
+  learning: { before: 'Want learners to actually', highlight: 'enjoy it?', after: '', text: 'Tell me about your course or platform. I reply within {reply}.' },
+  brand: { before: 'Need a brand that works', highlight: 'everywhere?', after: '', text: 'Tell me about your brand and where it needs to show up. I reply within {reply}.' },
+  characters: { before: 'Need characters that', highlight: 'speak to everyone?', after: '', text: 'Tell me about your audience and your story. I reply within {reply}.' },
+  logos: { before: 'Need a mark that works', highlight: 'everywhere?', after: '', text: 'Tell me about your brand. I reply within {reply}.' },
+  graphicDesign: { before: 'Got a brand, pack or print piece to', highlight: 'bring to life?', after: '', text: 'Tell me what you’re making. I reply within {reply}.' },
+  photography: { before: 'Like the way I see things? Let’s make something', highlight: 'together.', after: '', text: 'Tell me a little about your project. I reply within {reply}.' },
+  about: { before: 'Sounds like a', highlight: 'good fit?', after: '', text: 'Tell me about your project, team or role. I reply within {reply}.' },
 };

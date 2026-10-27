@@ -8,6 +8,7 @@ import { getImage, Picture } from 'astro:assets';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Lightbox from '@/components/Lightbox.astro';
 import CtaBlock from '@/components/CtaBlock.astro';
+import { ctas } from '@/data/pages';
 import { getDesignProjects } from '@/lib/content';
 import { designImages, toRows } from '@/lib/design-images';
 
@@ -84,7 +85,7 @@ const total = sections.reduce((n, s) => n + s.images.length, 0);
 
   <p class="container total label muted">{total} images · {projects.length} projects</p>
 
-  <CtaBlock />
+  <CtaBlock {...ctas.graphicDesign} />
 </BaseLayout>
 
 <style>

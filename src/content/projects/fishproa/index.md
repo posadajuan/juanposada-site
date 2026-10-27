@@ -80,6 +80,9 @@ impact:
   stats: []
 
 reflection: >
-  [Your own words: what you learned from building a food brand from
-  scratch, and anything you'd do differently.]
+  Building a brand from scratch showed me how much a consistent system
+  matters for a growing business. A clear symbol, a recognisable pattern
+  and a few simple rules meant the brand could look fresh and premium on
+  a box, a business card or a social post, without starting again each
+  time.
 ---

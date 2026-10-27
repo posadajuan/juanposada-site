@@ -3,7 +3,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import PhotoGrid from '@/components/PhotoGrid.astro';
 import CtaBlock from '@/components/CtaBlock.astro';
 import { getPhotoSeries } from '@/lib/content';
-import { photography } from '@/data/pages';
+import { photography, ctas } from '@/data/pages';
 
 const series = await getPhotoSeries();
 const photoCount = (n: number) => `${n} ${n === 1 ? 'photo' : 'photos'}`;
@@ -43,7 +43,7 @@ const photoCount = (n: number) => `${n} ${n === 1 ? 'photo' : 'photos'}`;
     ))
   }
 
-  <CtaBlock />
+  <CtaBlock {...ctas.photography} />
 </BaseLayout>
 
 <style>

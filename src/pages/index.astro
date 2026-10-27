@@ -8,6 +8,7 @@ import StatGrid from '@/components/StatGrid.astro';
 import Frame from '@/components/Frame.astro';
 import WorkWall from '@/components/WorkWall.astro';
 import CtaBlock from '@/components/CtaBlock.astro';
+import StepIcon from '@/components/StepIcon.astro';
 import { getFeaturedProjects, getPublicProjects } from '@/lib/content';
 import { home } from '@/data/pages';
 
@@ -64,7 +65,10 @@ const eyebrow = `Selected work · ${String(featured.length).padStart(2, '0')}`;
       {
         home.howIWork.steps.map((step, i) => (
           <li class="step" data-reveal>
-            <span class="label tag">{String(i + 1).padStart(2, '0')}</span>
+            <div class="step__top">
+              <StepIcon name={step.icon} />
+              <span class="label tag">{String(i + 1).padStart(2, '0')}</span>
+            </div>
             <h3 class="step__title">{step.title}</h3>
             <p class="step__text">{step.text}</p>
           </li>
@@ -125,8 +129,8 @@ const eyebrow = `Selected work · ${String(featured.length).padStart(2, '0')}`;
 
   .steps {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 40px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 32px;
     margin: 0;
   }
 
@@ -136,6 +140,12 @@ const eyebrow = `Selected work · ${String(featured.length).padStart(2, '0')}`;
     gap: 14px;
     border-top: 1px solid var(--color-text);
     padding-top: 24px;
+  }
+
+  .step__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
   }
 
   .step__title {
@@ -180,6 +190,12 @@ const eyebrow = `Selected work · ${String(featured.length).padStart(2, '0')}`;
     min-height: 44px;
     display: inline-flex;
     align-items: center;
+  }
+
+  @media (max-width: 1100px) {
+    .steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 
   @media (max-width: 760px) {
