@@ -182,38 +182,12 @@ function initParallax() {
   });
 }
 
-/* ---------- Smart navigation ---------- */
+/* ---------- Navigation ----------
+   The menu bar stays on screen at all times, so visitors never have to
+   scroll back up to find it. */
 
 function initNav() {
   root.removeAttribute('data-nav-hidden');
-  if (!motionOn()) return;
-
-  let last = window.scrollY;
-  let frame = 0;
-  const update = () => {
-    frame = 0;
-    const y = window.scrollY;
-    const header = document.querySelector('.site-header');
-    const keepVisible =
-      y < 120 || document.querySelector('[data-menu][data-open]') !== null || (header?.contains(document.activeElement) ?? false);
-    if (keepVisible || y < last - 4) root.removeAttribute('data-nav-hidden');
-    else if (y > last + 4) root.setAttribute('data-nav-hidden', '');
-    last = y;
-  };
-  const onScroll = () => {
-    if (!frame) frame = requestAnimationFrame(update);
-  };
-  const onFocus = (e: FocusEvent) => {
-    if ((e.target as Element | null)?.closest?.('.site-header')) root.removeAttribute('data-nav-hidden');
-  };
-
-  window.addEventListener('scroll', onScroll, { passive: true });
-  document.addEventListener('focusin', onFocus);
-  cleanups.push(() => {
-    window.removeEventListener('scroll', onScroll);
-    document.removeEventListener('focusin', onFocus);
-    root.removeAttribute('data-nav-hidden');
-  });
 }
 
 /* ---------- Lifecycle ---------- */

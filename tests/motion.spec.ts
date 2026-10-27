@@ -51,14 +51,13 @@ test.describe('with motion', () => {
     await expect(firstStat).toHaveText(finalValue, { timeout: 6000 });
   });
 
-  test('navigation hides when scrolling down and returns when scrolling up', async ({ page, isMobile }) => {
-    test.skip(isMobile, 'Desktop scroll behaviour');
+  test('navigation stays visible while scrolling', async ({ page }) => {
     await page.goto('/');
-    const html = page.locator('html');
-    await page.mouse.wheel(0, 1200);
-    await expect(html).toHaveAttribute('data-nav-hidden', '');
-    await page.mouse.wheel(0, -300);
-    await expect(html).not.toHaveAttribute('data-nav-hidden', '');
+    await page.mouse.wheel(0, 1500);
+    await page.waitForTimeout(600);
+    const top = await page.locator('.site-header').evaluate((el) => el.getBoundingClientRect().top);
+    expect(top).toBe(0);
+    await expect(page.locator('.site-header')).toBeInViewport();
   });
 
   test('big images get a parallax offset while scrolling', async ({ page }) => {

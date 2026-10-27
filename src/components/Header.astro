@@ -32,14 +32,9 @@ const isActive = (href: string) => path === href || path.startsWith(`${href}/`);
     </div>
 
     <div class="site-header__actions">
-      <button class="icon-btn" type="button" data-theme-toggle aria-label="Switch to light mode">
-        <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="4"></circle>
-          <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
-        </svg>
-        <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
-        </svg>
+      <button class="theme-switch" type="button" role="switch" aria-checked="true" data-theme-toggle>
+        <span class="theme-switch__label"><span class="theme-switch__long">Dark mode</span><span class="theme-switch__short" aria-hidden="true">Dark</span></span>
+        <span class="theme-switch__track" aria-hidden="true"><span class="theme-switch__thumb"></span></span>
       </button>
       <button
         class="menu-btn"
@@ -148,10 +143,77 @@ const isActive = (href: string) => path === href || path.startsWith(`${href}/`);
     border-color: var(--color-border-strong);
   }
 
-  /* Show the icon for the mode you'd switch TO */
-  .icon-moon { display: none; }
-  :global([data-theme='light']) .icon-sun { display: none; }
-  :global([data-theme='light']) .icon-moon { display: block; }
+  /* Dark mode switch: a labelled on/off toggle. Its look follows the
+     theme on <html>, so it is right before any script runs. */
+  .theme-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    padding: 0 6px 0 14px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--color-border);
+    background: transparent;
+    color: var(--color-text);
+    font: inherit;
+    font-size: var(--text-small);
+    cursor: pointer;
+    transition: border-color var(--dur-fast) ease;
+  }
+
+  .theme-switch:hover {
+    border-color: var(--color-border-strong);
+  }
+
+  .theme-switch__short {
+    display: none;
+  }
+
+  .theme-switch__track {
+    position: relative;
+    width: 44px;
+    height: 26px;
+    border-radius: var(--radius-pill);
+    background: var(--gradient-a);
+    transition: background var(--dur-fast) ease;
+  }
+
+  .theme-switch__thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #0a0a0a;
+    transform: translateX(18px);
+    transition: transform 250ms var(--ease);
+  }
+
+  :global([data-theme='light']) .theme-switch__track {
+    background: #d6d6d3;
+  }
+
+  :global([data-theme='light']) .theme-switch__thumb {
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 0.3);
+    transform: translateX(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .theme-switch__thumb {
+      transition: none;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .theme-switch__long {
+      display: none;
+    }
+    .theme-switch__short {
+      display: inline;
+    }
+  }
 
   .menu-btn {
     display: none;
@@ -243,7 +305,7 @@ const isActive = (href: string) => path === href || path.startsWith(`${href}/`);
     const btn = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
     if (!btn) return;
     const isLight = document.documentElement.dataset.theme === 'light';
-    btn.setAttribute('aria-label', isLight ? 'Switch to dark mode' : 'Switch to light mode');
+    btn.setAttribute('aria-checked', isLight ? 'false' : 'true');
   }
 
   function closeMenu() {
