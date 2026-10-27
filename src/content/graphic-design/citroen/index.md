@@ -3,7 +3,7 @@
 # (01-, 02-…). To add one, drop it in; add a line under "alts" to describe it.
 title: "Citroën brochure"
 summary: "Corporate brochure for Parra Arango y Cía, Citroën in Colombia."
-order: 12
+order: 2
 alts:
   01-cover: "Closed brochure with a close-up of the chrome chevrons on the cover"
   02-embossed-cover: "Dark grey cover with the chevrons and company name embossed in silver"
