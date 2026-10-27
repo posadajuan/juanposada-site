@@ -41,7 +41,9 @@ async function handleContact(request: Request, env: Env): Promise<Response> {
   if (length > LIMITS.body) return json(413, { ok: false, error: 'too_large' });
 
   if (!env.SEND_EMAIL || !env.CONTACT_TO || !env.CONTACT_FROM || !env.TURNSTILE_SECRET) {
-    console.error('Contact form is not configured: check SEND_EMAIL, CONTACT_TO, CONTACT_FROM, TURNSTILE_SECRET');
+    const missing = (['SEND_EMAIL', 'CONTACT_TO', 'CONTACT_FROM', 'TURNSTILE_SECRET'] as const).filter((key) => !env[key]);
+    // Names only, never values. Shows up in Cloudflare → Workers → juanposada-site → Logs.
+    console.error(`Contact form is not configured. Missing: ${missing.join(', ')}`);
     return json(503, { ok: false, error: 'not_configured' });
   }
 
