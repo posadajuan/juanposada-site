@@ -9,7 +9,7 @@ src/content/
 │   └── cyber-explorers/
 ├── galleries/         logo collection and graphic pieces (Templates B and C)
 │   ├── logos/
-│   └── graphic-pieces/
+├── graphic-design/    one folder per small project (title + images)
 └── photography/       one folder per photo series
     └── series-one/
 ```
@@ -37,7 +37,11 @@ Pages build themselves from these: a new project folder appears on Work, gets it
 3. Open `index.md` and fill in every field. The comments next to each field explain it.
 4. Keep `draft: true` while you're writing; switch it to `false` to publish.
 
-## Add a logo, graphic piece or photo
+## Add a graphic design project
+
+Create a folder in `src/content/graphic-design/` (e.g. `new-brand`), drop the images in and name them `01-…`, `02-…` in the order you want. Copy an `index.md` from another project and change the title, the one-line summary and the image descriptions.
+
+## Add a logo or photo
 
 Drop the image in the right folder and add one block under `items:` (galleries) or `photos:` (photography), copying the block above it.
 
@@ -48,7 +52,7 @@ Drop the image in the right folder and add one block under `items:` (galleries) 
 | Project cover | 16:11 on cards, 16:10 at the top of the case study: keep the subject centred |
 | Key screens, showcase, problem image, details | Their own shape (never cropped) |
 | Logos | Square (about 1200 × 1200), logo on its own background colour; fills the tile |
-| Graphic pieces | 4:5 tiles; the viewer shows the full piece |
+| Graphic design | Their own shape, in rows per project (never cropped) |
 | Photos | 3:2 tiles, one featured large; the viewer shows the full photo |
 | Portraits | 4:5 |
 | Home animation, final screen (`src/assets/home/sketch-final.jpg`) | 1440 × 911 screenshot |

@@ -4,15 +4,18 @@ import SectionHeader from '@/components/SectionHeader.astro';
 import ProjectCard from '@/components/ProjectCard.astro';
 import GalleryCard from '@/components/GalleryCard.astro';
 import CtaBlock from '@/components/CtaBlock.astro';
-import { getProjects, getGalleries } from '@/lib/content';
+import { getProjects, getGalleries, getDesignProjects } from '@/lib/content';
+import designCover from '@/assets/work/graphic-design-cover.jpg';
 import { work } from '@/data/pages';
 
 const projects = await getProjects();
 const galleries = await getGalleries();
+const designProjects = await getDesignProjects();
 const count = (n: number) => String(n).padStart(2, '0');
 
 const eyebrowParts = [`${count(projects.length)} case ${projects.length === 1 ? 'study' : 'studies'}`];
-if (galleries.length) eyebrowParts.push(`${galleries.length} ${galleries.length === 1 ? 'collection' : 'collections'}`);
+const collections = galleries.length + (designProjects.length ? 1 : 0);
+if (collections) eyebrowParts.push(`${collections} ${collections === 1 ? 'collection' : 'collections'}`);
 ---
 
 <BaseLayout title="Work" description="Selected case studies, brand identities and graphic work by Juan Posada.">
@@ -33,7 +36,7 @@ if (galleries.length) eyebrowParts.push(`${galleries.length} ${galleries.length 
   </section>
 
   {
-    galleries.length > 0 && (
+    collections > 0 && (
       <section class="container section block" aria-labelledby="more-work">
         <div class="block__head">
           <SectionHeader id="more-work" title="More work" size="m" />
@@ -43,6 +46,15 @@ if (galleries.length) eyebrowParts.push(`${galleries.length} ${galleries.length 
           {galleries.map((gallery) => (
             <GalleryCard gallery={gallery} />
           ))}
+          {designProjects.length > 0 && (
+            <GalleryCard
+              href="/work/graphic-design"
+              title="Graphic design"
+              summary={`${designProjects.length} identity, packaging and print projects`}
+              cover={designCover}
+              coverAlt="A grid of graphic design work: Bison business cards, Wild Corozo cans, the 11:11 van livery and Camilo Velásquez apparel"
+            />
+          )}
         </div>
       </section>
     )

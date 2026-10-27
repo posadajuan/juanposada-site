@@ -1,22 +1,33 @@
 ---
-/** Compact card for the "More work" row: logo collection, graphic pieces. */
+/** Compact card for the "More work" row: logo collection, graphic design. */
+import type { ImageMetadata } from 'astro';
 import Frame from '@/components/Frame.astro';
 import type { Gallery } from '@/lib/content';
 
-interface Props {
-  gallery: Gallery;
-}
+type Props =
+  | { gallery: Gallery }
+  | { href: string; title: string; summary: string; cover: ImageMetadata; coverAlt: string; action?: string };
 
-const { gallery } = Astro.props;
-const { data } = gallery;
-const action = data.kind === 'logos' ? 'View collection' : 'View gallery';
+const p = Astro.props;
+const card =
+  'gallery' in p
+    ? {
+        href: `/work/${p.gallery.id}`,
+        title: p.gallery.data.title,
+        summary: p.gallery.data.summary,
+        cover: p.gallery.data.cover,
+        coverAlt: p.gallery.data.coverAlt,
+        action: p.gallery.data.kind === 'logos' ? 'View collection' : 'View gallery',
+      }
+    : { action: 'View projects', ...p };
+const { action } = card;
 ---
 
-<a class="gcard" href={`/work/${gallery.id}`} data-reveal>
-  <Frame src={data.cover} alt={data.coverAlt} ratio="4 / 3" sizes="168px" radius="m" class="gcard__media" />
+<a class="gcard" href={card.href} data-reveal>
+  <Frame src={card.cover} alt={card.coverAlt} ratio="4 / 3" sizes="168px" radius="m" class="gcard__media" />
   <div class="gcard__text">
-    <h3 class="gcard__title">{data.title}</h3>
-    <p class="gcard__summary">{data.summary}</p>
+    <h3 class="gcard__title">{card.title}</h3>
+    <p class="gcard__summary">{card.summary}</p>
     <span class="gcard__action">{action} <span class="gcard__arrow" aria-hidden="true">→</span></span>
   </div>
 </a>

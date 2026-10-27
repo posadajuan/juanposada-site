@@ -3,6 +3,7 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 export type Project = CollectionEntry<'projects'>;
 export type Gallery = CollectionEntry<'galleries'>;
 export type PhotoSeries = CollectionEntry<'photography'>;
+export type DesignProject = CollectionEntry<'graphicDesign'>;
 
 /** Drafts show while developing locally, never on the live site. */
 const isVisible = ({ data }: { data: { draft: boolean } }) => import.meta.env.DEV || !data.draft;
@@ -29,6 +30,10 @@ export async function getGalleries(kind?: Gallery['data']['kind']): Promise<Gall
 
 export async function getPhotoSeries(): Promise<PhotoSeries[]> {
   return (await getCollection('photography', isVisible)).sort(byOrder);
+}
+
+export async function getDesignProjects(): Promise<DesignProject[]> {
+  return (await getCollection('graphicDesign', isVisible)).sort(byOrder);
 }
 
 /** The next public case study, wrapping round to the first. */
