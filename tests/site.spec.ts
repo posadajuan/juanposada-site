@@ -66,9 +66,11 @@ test('theme toggle switches mode and remembers it', async ({ page, isMobile }) =
   const html = page.locator('html');
   await expect(html).toHaveAttribute('data-theme', 'dark');
 
-  const toggle = page.getByRole('button', { name: /Switch to light mode/ });
+  const toggle = page.getByRole('switch', { name: /Dark/ });
+  await expect(toggle).toHaveAttribute('aria-checked', 'true');
   await toggle.click();
   await expect(html).toHaveAttribute('data-theme', 'light');
+  await expect(toggle).toHaveAttribute('aria-checked', 'false');
 
   await page.reload();
   await expect(html).toHaveAttribute('data-theme', 'light');

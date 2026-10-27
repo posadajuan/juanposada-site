@@ -103,6 +103,8 @@ export const about = {
   ],
 
   certifications: [
+    'Designing AI-Powered Products (2026)',
+    'Certificate in Business Service Design (2026)',
     'Professional Certificate in UX Design, UX Design Institute (2024)',
     'Certified ScrumMaster, Scrum Alliance (2021)',
     'Generative AI: Intermediate Prompting, QA (2024)',
@@ -111,6 +113,8 @@ export const about = {
   offScreen: {
     title: 'Away from the screen',
     text: 'Away from the screen I play the drums, take photos and go mountain biking, usually with my dog trying to keep up. I’m also into art, music and anything with four-wheel drive.',
+    /** Leave empty to hide the link. */
+    youtube: 'https://www.youtube.com/@onerider8285',
     image: offScreen,
     alt: 'Juan mountain biking in a red checked shirt along a forest track, his dog running alongside',
   },
