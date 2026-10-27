@@ -41,7 +41,7 @@ test('work lists case studies and collections', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Case studies' })).toBeVisible();
   await expect(page.locator('a.card[href="/work/cyber-explorers"]')).toBeVisible();
   await expect(page.locator('a.gcard[href="/work/logos"]')).toBeVisible();
-  await expect(page.locator('a.gcard[href="/work/graphic-pieces"]')).toBeVisible();
+  await expect(page.locator('a.gcard[href="/work/graphic-design"]')).toBeVisible();
 });
 
 test('case study shows snapshot, all five sections and a way onwards', async ({ page }) => {
@@ -62,7 +62,7 @@ test('gallery pages show their items and open the viewer', async ({ page }) => {
   await expect(page.locator('dialog[open]')).toBeVisible();
   await page.keyboard.press('Escape');
 
-  await page.goto('/work/graphic-pieces');
+  await page.goto('/work/graphic-design');
   expect(await page.locator('a[data-lightbox]').count()).toBeGreaterThan(0);
 });
 

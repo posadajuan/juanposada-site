@@ -1,0 +1,199 @@
+---
+/**
+ * Graphic design: one page, one short section per project folder in
+ * src/content/graphic-design. Each project's images sit together in rows
+ * that share a height, so nothing is cropped.
+ */
+import { getImage, Picture } from 'astro:assets';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Lightbox from '@/components/Lightbox.astro';
+import CtaBlock from '@/components/CtaBlock.astro';
+import { getDesignProjects } from '@/lib/content';
+import { designImages, toRows } from '@/lib/design-images';
+
+const projects = await getDesignProjects();
+
+const sections = await Promise.all(
+  projects.map(async (p) => {
+    const images = designImages(p.id).map((img, i) => ({
+      ...img,
+      index: i,
+      alt: p.data.alts[img.name] ?? `${p.data.title}, image ${i + 1}`,
+    }));
+    const large = await Promise.all(
+      images.map((img) => getImage({ src: img.src, width: Math.min(2400, img.src.width), format: 'webp' })),
+    );
+    return { project: p, images, rows: toRows(images), large };
+  }),
+);
+const total = sections.reduce((n, s) => n + s.images.length, 0);
+---
+
+<BaseLayout title="Graphic design" description="Brand identities, packaging, print and illustration by Juan Posada.">
+  <section class="container page-intro" data-reveal="stagger">
+    <a href="/work" class="link back-link">← All work</a>
+    <p class="label tag">Graphic design · {projects.length} projects</p>
+    <h1 class="page-title">Graphic <span class="gradient-text">design</span></h1>
+    <p class="lead">Brand identities, packaging, print and illustration: a selection of projects from my years as a graphic designer and art director.</p>
+    <nav class="chips" aria-label="Projects">
+      {projects.map((p) => <a class="chip" href={`#${p.id}`}>{p.data.title}</a>)}
+    </nav>
+  </section>
+
+  {
+    sections.map(({ project, rows, large }, n) => (
+      <section id={project.id} class="container gd" aria-labelledby={`h-${project.id}`}>
+        <header class="gd__head" data-reveal>
+          <span class="label muted">{String(n + 1).padStart(2, '0')}</span>
+          <h2 id={`h-${project.id}`} class="gd__title">{project.data.title}</h2>
+          {project.data.summary && <p class="gd__summary">{project.data.summary}</p>}
+        </header>
+        <div class="gd__images" data-reveal>
+          {rows.map((row) => (
+            <div class="gd__row" style={`grid-template-columns: ${row.map((i) => `${(i.src.width / i.src.height).toFixed(4)}fr`).join(' ')}`}>
+              {row.map((img) => (
+                <a
+                  class="gd__item"
+                  href={large[img.index]?.src}
+                  data-lightbox={`gd-${project.id}`}
+                  data-astro-prefetch="false"
+                  data-index={img.index}
+                  data-alt={img.alt}
+                  data-title={project.data.title}
+                  data-caption=""
+                  style={`aspect-ratio: ${img.src.width} / ${img.src.height}`}
+                >
+                  <Picture
+                    src={img.src}
+                    alt={img.alt}
+                    widths={[480, 900, 1400].filter((w) => w <= img.src.width)}
+                    sizes={`(min-width: 1240px) ${Math.round(1144 / row.length)}px, (min-width: 761px) ${Math.round(100 / row.length)}vw, 100vw`}
+                    formats={['webp']}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </a>
+              ))}
+            </div>
+          ))}
+        </div>
+        <Lightbox group={`gd-${project.id}`} label={project.data.title} />
+      </section>
+    ))
+  }
+
+  <p class="container total label muted">{total} images · {projects.length} projects</p>
+
+  <CtaBlock />
+</BaseLayout>
+
+<style>
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-top: 8px;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 18px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: var(--text-small);
+    transition: border-color var(--dur-fast) ease;
+  }
+
+  .chip:hover {
+    border-color: var(--color-border-strong);
+  }
+
+  .gd {
+    padding-block: clamp(48px, 3rem + 2vw, 88px);
+    border-top: 1px solid var(--color-border);
+    scroll-margin-top: var(--nav-height);
+  }
+
+  .gd__head {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 0.9fr) minmax(0, 1.4fr);
+    align-items: baseline;
+    gap: 8px 24px;
+    margin-bottom: 28px;
+  }
+
+  .gd__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tracking-heading);
+    line-height: var(--leading-heading);
+  }
+
+  .gd__summary {
+    margin: 0;
+    color: var(--color-body);
+    max-width: 60ch;
+  }
+
+  .gd__images {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .gd__row {
+    display: grid;
+    gap: 14px;
+    align-items: start;
+  }
+
+  .gd__item {
+    display: block;
+    overflow: hidden;
+    border-radius: var(--radius-m);
+    border: 1px solid var(--color-border);
+    background: var(--color-media);
+  }
+
+  .gd__item :global(picture),
+  .gd__item :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .gd__item :global(img) {
+    object-fit: cover;
+    transition: transform 600ms var(--ease);
+  }
+
+  .gd__item:hover :global(img) {
+    transform: scale(1.03);
+  }
+
+  .total {
+    padding-block: 8px 0;
+  }
+
+  @media (max-width: 760px) {
+    .gd__head {
+      grid-template-columns: 40px minmax(0, 1fr);
+    }
+    .gd__summary {
+      grid-column: 1 / -1;
+    }
+    .gd__images,
+    .gd__row {
+      gap: 10px;
+    }
+    .gd__row {
+      grid-template-columns: minmax(0, 1fr) !important;
+    }
+  }
+</style>

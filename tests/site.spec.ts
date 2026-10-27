@@ -12,7 +12,7 @@ const pages = [
   '/work',
   '/work/cyber-explorers',
   '/work/logos',
-  '/work/graphic-pieces',
+  '/work/graphic-design',
   '/photography',
   '/about',
   '/contact',

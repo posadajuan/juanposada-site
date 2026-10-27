@@ -177,4 +177,20 @@ const photography = defineCollection({
     }),
 });
 
-export const collections = { projects, galleries, photography };
+/* ---------- Graphic design: small projects, title + visuals ---------- */
+// One folder per project with an index.md (title, one line, image
+// descriptions). The images themselves are picked up from the folder.
+
+const graphicDesign = defineCollection({
+  loader: glob({ pattern: entryFiles, base: './src/content/graphic-design' }),
+  schema: z.object({
+    title: z.string(),
+    summary: z.string().optional(),
+    order: z.number().default(100),
+    draft: z.boolean().default(false),
+    /** Image descriptions, keyed by file name without extension. */
+    alts: z.record(z.string()).default({}),
+  }),
+});
+
+export const collections = { projects, galleries, photography, graphicDesign };
