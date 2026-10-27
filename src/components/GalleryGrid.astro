@@ -1,8 +1,8 @@
 ---
 /**
  * Grid of logos or graphic pieces. Each tile opens the lightbox.
- * Logos sit centred on a neutral square tile; graphic pieces fill
- * a portrait tile.
+ * Logos fill a square tile; graphic pieces flow in columns, each in
+ * its own shape (never cropped).
  */
 import { getImage, Picture } from 'astro:assets';
 import Lightbox from '@/components/Lightbox.astro';
@@ -66,8 +66,16 @@ const large = await Promise.all(
     margin: 0;
   }
 
+  /* Graphic pieces: a masonry of columns, each piece in its own shape. */
   .ggrid--graphics {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    display: block;
+    columns: 3;
+    column-gap: 20px;
+  }
+
+  .ggrid--graphics > li {
+    break-inside: avoid;
+    margin-bottom: 28px;
   }
 
   .ggrid__item {
@@ -91,7 +99,11 @@ const large = await Promise.all(
   }
 
   .ggrid--graphics .ggrid__tile {
-    aspect-ratio: 4 / 5;
+    aspect-ratio: auto;
+  }
+
+  .ggrid--graphics .ggrid__tile :global(img) {
+    height: auto;
   }
 
   .ggrid__tile :global(picture),
@@ -129,10 +141,13 @@ const large = await Promise.all(
   }
 
   @media (max-width: 760px) {
-    .ggrid,
-    .ggrid--graphics {
+    .ggrid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 12px;
+    }
+    .ggrid--graphics {
+      columns: 2;
+      column-gap: 12px;
     }
   }
 </style>
