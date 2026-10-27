@@ -11,9 +11,9 @@ coverAlt: Laptop on a British Council purple background, showing a classroom of 
 
 snapshot:
   role: Character and animation style designer, working directly with the client
-  team: "[Who you worked with]"
+  team: The client and a team of graphic designers
   timeline: "[Dates]"
-  tools: ["[Tools]"]
+  tools: [Illustrator, Photoshop]
   impact: Characters children anywhere could understand
 
 problem:
@@ -84,6 +84,8 @@ impact:
   stats: []
 
 reflection: >
-  [Your own words: what you learned from designing characters for 3–6
-  year olds across cultures, and anything you'd do differently.]
+  This project taught me to adapt: finding a creative answer to a
+  problem that had to be universal. It took several rounds of ideas and
+  iterations to get there. The result looks simple, and that simplicity
+  is exactly what lets any child, anywhere, connect with the characters.
 ---

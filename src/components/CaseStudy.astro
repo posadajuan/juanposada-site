@@ -22,6 +22,17 @@ const problem = data.problem!;
 const research = data.research!;
 const solution = data.solution!;
 const impact = data.impact!;
+
+// Snapshot facts still holding a [placeholder] are left off the page until filled in.
+const filled = (v: string) => v.trim() !== '' && !v.trim().startsWith('[');
+const tools = snapshot.tools.filter(filled);
+const facts = [
+  { label: 'Role', value: snapshot.role },
+  { label: 'Team', value: snapshot.team },
+  { label: 'Timeline', value: snapshot.timeline },
+  { label: 'Tools', value: tools.join(', ') },
+  { label: 'Impact', value: snapshot.impact },
+].filter((f) => filled(f.value));
 const reflection = data.reflection!;
 
 const sections = [
@@ -55,11 +66,12 @@ const body = '(min-width: 1240px) 900px, 100vw';
 
   <section class="container" aria-label="Project snapshot">
     <dl class="snapshot" data-reveal>
-      <div><dt class="label muted">Role</dt><dd>{snapshot.role}</dd></div>
-      <div><dt class="label muted">Team</dt><dd>{snapshot.team}</dd></div>
-      <div><dt class="label muted">Timeline</dt><dd>{snapshot.timeline}</dd></div>
-      {snapshot.tools.length > 0 && <div><dt class="label muted">Tools</dt><dd>{snapshot.tools.join(', ')}</dd></div>}
-      <div><dt class="label muted">Impact</dt><dd class="snapshot__impact">{snapshot.impact}</dd></div>
+      {facts.map((f) => (
+        <div>
+          <dt class="label muted">{f.label}</dt>
+          <dd class:list={{ snapshot__impact: f.label === 'Impact' }}>{f.value}</dd>
+        </div>
+      ))}
     </dl>
   </section>
 

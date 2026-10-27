@@ -5,7 +5,7 @@ import ProjectCard from '@/components/ProjectCard.astro';
 import GalleryCard from '@/components/GalleryCard.astro';
 import CtaBlock from '@/components/CtaBlock.astro';
 import { getProjects, getGalleries, getDesignProjects } from '@/lib/content';
-import { work } from '@/data/pages';
+import { work, ctas } from '@/data/pages';
 
 const projects = await getProjects();
 const galleries = await getGalleries();
@@ -58,7 +58,7 @@ if (collections) eyebrowParts.push(`${collections} ${collections === 1 ? 'collec
     )
   }
 
-  <CtaBlock />
+  <CtaBlock {...ctas.work} />
 </BaseLayout>
 
 <style>

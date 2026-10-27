@@ -11,9 +11,9 @@ coverAlt: Laptop showing an "Understanding Virtualization" video screen in the C
 
 snapshot:
   role: Digital designer; I came up with and created the whole style guide
-  team: "[Who you worked with]"
+  team: Graphic designers, production team managers and project managers
   timeline: "[Dates]"
-  tools: ["[Illustrator]", "[After Effects]"]
+  tools: [Illustrator, Photoshop]
   impact: One design system for all Cloud Academy content
 
 problem:
@@ -84,6 +84,8 @@ impact:
   stats: []
 
 reflection: >
-  [Your own words: what you learned from creating a design system for a
-  whole team during a merger, and anything you'd do differently.]
+  Merging two brands can be hard on the people living through it. Design
+  gave everyone something concrete to work from: a shared visual
+  language that helped two companies take the next step together, and
+  let the team keep creating with confidence through the transition.
 ---

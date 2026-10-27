@@ -11,10 +11,10 @@ coverAlt: Laptop showing the course title screen "Shipping activity sectors and 
 
 snapshot:
   role: Digital designer, responsible for the visual design, UI, graphics and animation style
-  team: "[Who you worked with]"
-  timeline: "[Dates]"
-  tools: [Evolve, "[Photoshop]", "[Illustrator]"]
-  impact: A modern, immersive course built in Evolve
+  team: Learning designers, animators and a project manager
+  timeline: "2025"
+  tools: [Photoshop, Illustrator, Evolve]
+  impact: A dense, technical subject turned into an immersive, visual course
 
 problem:
   headline: Making a vast, technical industry easy to explore.
@@ -30,7 +30,7 @@ problem:
   imageAlt: Course menu with six topic cards, each with an aerial photo of ports, marinas or ships and a View button, one locked until the previous topic is complete
 
 research:
-  headline: Designing around the content and the publishing tool.
+  headline: Technical content, a fixed toolset and a need to feel immersive.
   text: >
     I worked from the course content, a wide range of topics with a lot
     of technical information, and from what Evolve could do as a
@@ -43,7 +43,7 @@ research:
     - Six topics and an assessment needed one consistent style.
 
 solution:
-  headline: Backgrounds, UI and graphics designed to work together as one immersive experience.
+  headline: Aerial imagery, clear UI and diagrams that bring the maritime world close.
   decisions:
     - title: Backgrounds relevant to every topic
       text: >
@@ -77,11 +77,12 @@ solution:
   showcaseAlt: Challenges and opportunities page with seven teal icons, covering topics such as climate, people, security and energy, arranged around an aerial photo of a tanker
 
 impact:
-  headline: A complete course covering six topics and a final assessment, published in Evolve.
+  headline: A heavy, technical subject turned into an immersive course that met the client’s expectations and learning objectives.
   stats: []
 
 reflection: >
-  [Your own words: what you learned from creating a visual language for
-  a technical subject, working within Evolve, and anything you'd do
-  differently.]
+  Every tool has limits. Working within Evolve showed me that creativity
+  and flexibility can push a tool further than expected, finding
+  solutions that feel fresh and immersive without being impossible to
+  build.
 ---

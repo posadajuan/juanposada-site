@@ -81,6 +81,7 @@ impact:
   stats: []
 
 reflection: >
-  [Your own words: what you learned from designing within a client's
-  brand guidelines, and anything you'd do differently.]
+  Working inside another company’s brand guidelines taught me to find
+  creativity in the details: how layout, imagery and interaction can
+  make learning engaging while staying unmistakably on brand.
 ---
