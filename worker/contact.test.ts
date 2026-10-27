@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { buildEmail, isSameOrigin, oneLine, readSubmission, validate, verifyTurnstile, type Submission } from './contact';
+import { buildEmail, checkTurnstile, isSameOrigin, oneLine, readSubmission, validate, verifyTurnstile, type Submission } from './contact';
 
 const form = (fields: Record<string, string | string[]>) => {
   const f = new FormData();
@@ -69,6 +69,12 @@ describe('Turnstile', () => {
     expect(await verifyTurnstile('tok', 'secret', null, no)).toBe(false);
     const down = vi.fn().mockRejectedValue(new Error('offline'));
     expect(await verifyTurnstile('tok', 'secret', null, down)).toBe(false);
+  });
+
+  it("passes on Cloudflare's reason when the check fails", async () => {
+    expect(await checkTurnstile('', 'secret', null)).toEqual({ success: false, codes: ['missing-input-response'] });
+    const bad = vi.fn().mockResolvedValue(new Response(JSON.stringify({ success: false, 'error-codes': ['invalid-input-secret'] })));
+    expect(await checkTurnstile('tok', 'secret', null, bad)).toEqual({ success: false, codes: ['invalid-input-secret'] });
   });
 });
 
