@@ -2,11 +2,21 @@
 /** Compact card for the "More work" row: logo collection, graphic design. */
 import type { ImageMetadata } from 'astro';
 import Frame from '@/components/Frame.astro';
+import WorkIcon from '@/components/WorkIcon.astro';
 import type { Gallery } from '@/lib/content';
 
 type Props =
-  | { gallery: Gallery }
-  | { href: string; title: string; summary: string; cover: ImageMetadata; coverAlt: string; action?: string };
+  | { gallery: Gallery; icon?: 'logos' | 'design' }
+  | {
+      href: string;
+      title: string;
+      summary: string;
+      cover?: ImageMetadata;
+      coverAlt?: string;
+      action?: string;
+      /** Show a minimal line icon instead of a cover image. */
+      icon?: 'logos' | 'design';
+    };
 
 const p = Astro.props;
 const card =
@@ -18,13 +28,20 @@ const card =
         cover: p.gallery.data.cover,
         coverAlt: p.gallery.data.coverAlt,
         action: p.gallery.data.kind === 'logos' ? 'View collection' : 'View gallery',
+        icon: p.icon,
       }
     : { action: 'View projects', ...p };
 const { action } = card;
 ---
 
 <a class="gcard" href={card.href} data-reveal>
-  <Frame src={card.cover} alt={card.coverAlt} ratio="4 / 3" sizes="168px" radius="m" class="gcard__media" />
+  {
+    card.icon ? (
+      <WorkIcon name={card.icon} class="gcard__media" />
+    ) : (
+      card.cover && <Frame src={card.cover} alt={card.coverAlt ?? ''} ratio="4 / 3" sizes="168px" radius="m" class="gcard__media" />
+    )
+  }
   <div class="gcard__text">
     <h3 class="gcard__title">{card.title}</h3>
     <p class="gcard__summary">{card.summary}</p>

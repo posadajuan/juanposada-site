@@ -9,6 +9,8 @@ test('every main page loads with a single h1 and the right nav item active', asy
     ['/', null],
     ['/work', 'Work'],
     ['/work/cyber-explorers', 'Work'],
+    ['/work/fishproa', 'Work'],
+    ['/work/baz', 'Work'],
     ['/work/british-council', 'Work'],
     ['/work/fujitsu-natwest', 'Work'],
     ['/work/cloud-academy', 'Work'],
