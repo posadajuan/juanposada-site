@@ -3,7 +3,7 @@
 # (01-, 02-…). To add one, drop it in; add a line under "alts" to describe it.
 title: "Solo Travel Life"
 summary: "Identity and website for a travel blog."
-order: 10
+order: 8
 alts:
   01-business-cards: "Turquoise and black business cards between two vintage cameras"
   02-logo-turquoise: "Solo Travel Life logo on turquoise"

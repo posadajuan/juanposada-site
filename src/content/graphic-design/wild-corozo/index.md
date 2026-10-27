@@ -3,7 +3,7 @@
 # (01-, 02-…). To add one, drop it in; add a line under "alts" to describe it.
 title: "Wild Corozo"
 summary: "Packaging for a range of frozen rum cocktails, with hand-painted watercolour labels for each flavour."
-order: 2
+order: 6
 alts:
   01-cans: "Three cans in burgundy, orange and green: Wild Corozo, Guarito Sunrise and Yerbatero"
   02-label-wild-corozo: "Wild Corozo label: brushed burgundy watercolour with hand-lettered name"

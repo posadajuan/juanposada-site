@@ -3,7 +3,7 @@
 # (01-, 02-…). To add one, drop it in; add a line under "alts" to describe it.
 title: "Edisson Cortés"
 summary: "Identity for an architect: an EC monogram built like a floor plan, with pattern, stationery and signage."
-order: 8
+order: 12
 alts:
   01-logo: "Edisson Cortés Arquitecto logo over a faded architectural drawing"
   02-wall: "EC monogram on a navy feature wall in a bright office"

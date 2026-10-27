@@ -3,7 +3,7 @@
 # (01-, 02-…). To add one, drop it in; add a line under "alts" to describe it.
 title: "Javier Mauricio Heredia"
 summary: "Monogram and stationery for a foreign exchange specialist."
-order: 9
+order: 7
 alts:
   01-logo: "JMH monogram and name in white on deep navy"
   02-business-cards: "Navy business cards with the JMH monogram"
