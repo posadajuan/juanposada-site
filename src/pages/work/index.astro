@@ -5,7 +5,6 @@ import ProjectCard from '@/components/ProjectCard.astro';
 import GalleryCard from '@/components/GalleryCard.astro';
 import CtaBlock from '@/components/CtaBlock.astro';
 import { getProjects, getGalleries, getDesignProjects } from '@/lib/content';
-import designCover from '@/assets/work/graphic-design-cover.jpg';
 import { work } from '@/data/pages';
 
 const projects = await getProjects();
@@ -44,15 +43,14 @@ if (collections) eyebrowParts.push(`${collections} ${collections === 1 ? 'collec
         </div>
         <div class="galleries">
           {galleries.map((gallery) => (
-            <GalleryCard gallery={gallery} />
+            <GalleryCard gallery={gallery} icon={gallery.data.kind === 'logos' ? 'logos' : undefined} />
           ))}
           {designProjects.length > 0 && (
             <GalleryCard
               href="/work/graphic-design"
               title="Graphic design"
               summary={`${designProjects.length} identity, packaging and print projects`}
-              cover={designCover}
-              coverAlt="A grid of graphic design work: Bison business cards, Wild Corozo cans, the 11:11 van livery and Camilo Velásquez apparel"
+              icon="design"
             />
           )}
         </div>

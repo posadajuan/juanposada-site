@@ -1,0 +1,103 @@
+---
+/**
+ * Minimal line icons for the "More work" cards.
+ * - logos: a symbol: a diamond breaking out of a circle.
+ * - design: the golden ratio: golden rectangle, its squares and the spiral.
+ * Dark mode: a subtle slice of the neon gradient. Light mode: black.
+ */
+interface Props {
+  name: 'logos' | 'design';
+  class?: string;
+}
+const { name, class: className } = Astro.props;
+const id = `wi-${name}`;
+// A partial section of each brand gradient, not the full spectrum.
+const stops = name === 'logos' ? ['#00ffff', '#6f9bff'] : ['#00ffff', '#7dffb0'];
+
+// Golden ratio construction (φ ≈ 1.618) inside a 100 × 61.8 rectangle.
+const phi = (1 + Math.sqrt(5)) / 2;
+const W = 100;
+const H = W / phi;
+---
+
+<div class:list={['wicon', className]} aria-hidden="true">
+  <svg viewBox="0 0 160 120" width="100%" height="100%" fill="none">
+    <defs>
+      <linearGradient id={id} gradientUnits="userSpaceOnUse" x1="20" y1="10" x2="140" y2="110">
+        <stop offset="0" stop-color={stops[0]} />
+        <stop offset="1" stop-color={stops[1]} />
+      </linearGradient>
+    </defs>
+    {
+      name === 'logos' ? (
+        <g class="wicon__stroke" style={`--g: url(#${id})`} stroke-width="2.5" stroke-linejoin="miter">
+          <circle cx="80" cy="60" r="30" />
+          <path d="M80 18 L114 60 L80 102 L46 60 Z" />
+          <path d="M80 18 L80 102" stroke-width="1.5" opacity="0.6" />
+          <path d="M98 40 L122 16" />
+          <rect x="119" y="13" width="6" height="6" class="wicon__fill" />
+        </g>
+      ) : (
+        <g class="wicon__stroke" style={`--g: url(#${id})`} stroke-width="1.6" transform={`translate(${80 - W / 2} ${60 - H / 2})`}>
+          <rect x="0" y="0" width={W} height={H} />
+          <path d={`M${H} 0 V${H}`} opacity="0.55" />
+          <path d={`M${H} ${W - H} H${W}`} opacity="0.55" />
+          <path d={`M${W - (2 * H - W)} ${W - H} V${H}`} opacity="0.55" />
+          <path
+            stroke-width="2.6"
+            d={`M0 ${H} A${H} ${H} 0 0 1 ${H} 0 A${W - H} ${W - H} 0 0 1 ${W} ${W - H} A${2 * H - W} ${2 * H - W} 0 0 1 ${W - (2 * H - W)} ${H} A${2 * W - 3 * H} ${2 * W - 3 * H} 0 0 1 ${H} ${H - (2 * W - 3 * H)}`}
+          />
+        </g>
+      )
+    }
+  </svg>
+</div>
+
+<style>
+  .wicon {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-m);
+    border: 1px solid var(--color-border);
+    background:
+      radial-gradient(120% 90% at 70% 20%, color-mix(in srgb, var(--neon-cyan) 9%, transparent), transparent 60%),
+      var(--color-media);
+    overflow: hidden;
+  }
+
+  .wicon svg {
+    width: 78%;
+    height: auto;
+  }
+
+  .wicon__stroke {
+    stroke: var(--g);
+  }
+
+  .wicon__fill {
+    fill: var(--g);
+    stroke: none;
+  }
+
+  :global(html[data-theme='light']) .wicon {
+    background: var(--color-media);
+  }
+
+  :global(html[data-theme='light']) .wicon__stroke {
+    stroke: #0a0a0a;
+  }
+
+  :global(html[data-theme='light']) .wicon__fill {
+    fill: #0a0a0a;
+  }
+
+  .gcard:hover .wicon svg,
+  :global(a:hover) > .wicon svg {
+    transform: rotate(-4deg) scale(1.03);
+  }
+
+  .wicon svg {
+    transition: transform 600ms var(--ease);
+  }
+</style>
