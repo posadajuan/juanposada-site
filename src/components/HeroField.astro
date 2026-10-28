@@ -1,17 +1,20 @@
 ---
 /**
- * The quiet, interactive background behind the Home headline.
+ * The quiet, interactive background behind the Home headline. It lives
+ * only in the empty top-right of the hero and fades out towards the text.
  *
- * A field of fine dots that is strongest in the empty top-right of the hero
- * and fades out towards the headline. A soft neon light follows the cursor:
- * dots near it brighten, take the cyan → magenta gradient, swell and ripple
- * away. Moving faster stirs the field more; when the cursor rests (or on
- * touch screens) the light drifts slowly on its own.
+ * - A field of fine dots that sways slowly, like particles in still water.
+ * - A soft, slightly warm light follows the cursor. Its strength depends on
+ *   where it is: full in the top-right, dimming gradually as the cursor
+ *   moves away, so it never cuts off.
+ * - Moving through the dots stirs them like plankton: they drift with the
+ *   motion, light up in cyan and blue with a soft halo, then settle and
+ *   fade back over a second or two. Resting the cursor stirs nothing.
  *
- * Kept light: the canvas only covers the right of the hero, dots are drawn
- * in a few batches, the glow is pre-rendered once, the idle drift runs at
- * a third of the frame rate, and everything pauses off screen or in a background tab.
- * Visitors who prefer less motion get a still field.
+ * Kept light: the canvas only covers the right of the hero, resting dots
+ * are drawn in a few batches, the light is pre-rendered once, the idle
+ * drift runs at a third of the frame rate, and it pauses off screen or in
+ * a background tab. Visitors who prefer less motion get a still field.
  */
 ---
 
@@ -20,31 +23,35 @@
 </div>
 
 <script>
-  type Dot = { x: number; y: number; w: number; phase: number };
-
   const TAU = Math.PI * 2;
-  const CYAN = [0, 255, 255];
-  const MAGENTA = [255, 0, 255];
-  const INK_DARK = [245, 245, 243];
-  const INK_LIGHT = [10, 10, 10];
-  const BUCKETS = 12; // resting dots are grouped into this many brightness steps
+  const INK_DARK = [238, 234, 226]; // resting dots: a soft, warm off-white
+  const INK_LIGHT = [24, 24, 24];
+  // Bioluminescence: from cyan-green through cyan to electric blue.
+  const GLOW_A = [40, 255, 210];
+  const GLOW_B = [0, 220, 255];
+  const GLOW_C = [70, 130, 255];
+  const GLOW_A_LIGHT = [0, 150, 140];
+  const GLOW_C_LIGHT = [30, 90, 210];
+  const BUCKETS = 12;
   const MAX_ALPHA = 0.9;
-  const GLOW_PEAK = 0.13; // strongest centre opacity of the glow
+  const LIGHT_PEAK = 0.1;
 
   const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
   const mix = (a: number[], b: number[], t: number) => a.map((v, i) => Math.round(v + (b[i]! - v) * t));
+  const smooth = (t: number) => t * t * (3 - 2 * t);
 
-  /** The soft light, drawn once and reused every frame. */
-  function makeGlow() {
+  /** The warm light, drawn once and reused every frame. */
+  function makeLight() {
     const size = 512;
     const c = document.createElement('canvas');
     c.width = c.height = size;
     const g = c.getContext('2d')!;
     const r = size / 2;
     const grad = g.createRadialGradient(r, r, 0, r, r, r);
-    grad.addColorStop(0, `rgba(0, 255, 255, ${GLOW_PEAK})`);
-    grad.addColorStop(0.45, `rgba(150, 80, 255, ${GLOW_PEAK * 0.45})`);
-    grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    grad.addColorStop(0, `rgba(255, 244, 228, ${LIGHT_PEAK})`);
+    grad.addColorStop(0.35, `rgba(255, 238, 215, ${LIGHT_PEAK * 0.45})`);
+    grad.addColorStop(0.7, `rgba(255, 232, 205, ${LIGHT_PEAK * 0.12})`);
+    grad.addColorStop(1, 'rgba(255, 230, 200, 0)');
     g.fillStyle = grad;
     g.fillRect(0, 0, size, size);
     return c;
@@ -62,24 +69,44 @@
     const html = document.documentElement;
     const still = !html.hasAttribute('data-motion');
     const finePointer = window.matchMedia('(pointer: fine)').matches;
-    const glow = makeGlow();
+    const lightImg = makeLight();
 
     let W = 0;
     let H = 0;
     let narrow = false;
-    let dots: Dot[] = [];
     let light = html.dataset.theme === 'light';
     let raf = 0;
     let running = false;
     let onScreen = true;
     let frameNo = 0;
-    const start = performance.now();
+    let last = performance.now();
+    const start = last;
 
-    // The light: where it is drawn (x, y), where it is heading (tx, ty),
-    // and how stirred up the field is (energy, from cursor speed).
-    const p = { x: 0, y: 0, tx: 0, ty: 0, energy: 0, lastMove: -1e9, placed: false };
+    // Dot state, in flat arrays: home position, presence (how visible the
+    // dot is at rest), wave phase, drift offset and velocity, glow level,
+    // and a per-dot colour tint so the glow feels organic.
+    let n = 0;
+    let bx = new Float32Array(0);
+    let by = new Float32Array(0);
+    let pres = new Float32Array(0);
+    let phase = new Float32Array(0);
+    let ox = new Float32Array(0);
+    let oy = new Float32Array(0);
+    let vx = new Float32Array(0);
+    let vy = new Float32Array(0);
+    let glow = new Float32Array(0);
+    let tint = new Float32Array(0);
+    let sens = new Float32Array(0);
+    // Each dot's glow colours, worked out once per layout and theme.
+    let halo: string[] = [];
+    let core: string[] = [];
 
-    // Where the field is strongest, as fractions of the canvas.
+    // The cursor light: drawn position, target, how strongly it shows
+    // (fades with distance from the top-right), and whether a real mouse
+    // is over the hero.
+    const p = { x: 0, y: 0, tx: 0, ty: 0, level: 0, lastMove: -1e9, inside: false, placed: false };
+
+    // Where the field lives, as fractions of the canvas.
     // Wide screens: the canvas covers the right two-thirds of the hero.
     // Phones: the whole hero, tucked into the top-right corner above the text.
     const shape = () =>
@@ -106,14 +133,38 @@
       const gap = narrow ? 24 : 22;
       const cols = Math.ceil(W / gap) + 1;
       const rows = Math.ceil(H / gap) + 1;
-      dots = [];
+      const xs: number[] = [];
+      const ys: number[] = [];
+      const ws: number[] = [];
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
           const x = c * gap + (r % 2 ? gap / 2 : 0);
           const y = r * gap;
-          dots.push({ x, y, w: focus(x, y), phase: (x * 0.011 + y * 0.017) % TAU });
+          const w = focus(x, y);
+          if (w <= 0.001) continue; // never visible: skip it entirely
+          xs.push(x);
+          ys.push(y);
+          ws.push(w);
         }
       }
+      n = xs.length;
+      bx = Float32Array.from(xs);
+      by = Float32Array.from(ys);
+      pres = Float32Array.from(ws);
+      phase = Float32Array.from(xs.map((x, i) => (x * 0.011 + ys[i]! * 0.017) % TAU));
+      tint = Float32Array.from(xs.map((x, i) => (Math.sin(x * 12.9898 + ys[i]! * 78.233) * 43758.5453) % 1).map(Math.abs));
+      // Some plankton are much more sensitive than others, so the glow scatters.
+      sens = Float32Array.from(tint, (v, i) => {
+        const r = Math.abs((Math.sin(i * 3.7 + v * 91.3) * 12345.678) % 1);
+        return 0.15 + 0.85 * r * r;
+      });
+      paint();
+      ox = new Float32Array(n);
+      oy = new Float32Array(n);
+      vx = new Float32Array(n);
+      vy = new Float32Array(n);
+      glow = new Float32Array(n);
+
       if (!p.placed) {
         const s = shape();
         p.x = p.tx = W * s.wx;
@@ -121,71 +172,105 @@
       }
     }
 
+    function paint() {
+      halo = new Array(n);
+      core = new Array(n);
+      for (let i = 0; i < n; i++) {
+        const tt = tint[i]!;
+        const col = light
+          ? mix(GLOW_A_LIGHT, GLOW_C_LIGHT, tt)
+          : tt < 0.5
+            ? mix(GLOW_A, GLOW_B, tt * 2)
+            : mix(GLOW_B, GLOW_C, (tt - 0.5) * 2);
+        halo[i] = `rgb(${col.join(',')})`;
+        core[i] = light ? halo[i]! : `rgb(${mix(col, [235, 255, 255], 0.3).join(',')})`;
+      }
+    }
+
     function draw(now: number) {
       const t = still ? 0 : (now - start) / 1000;
+      // Frame length relative to 60fps, so the idle (slower) frames behave the same.
+      const dt = still ? 1 : clamp((now - last) / 16.7, 0.5, 4);
+      last = now;
 
-      // Resting or no mouse: the light wanders slowly on its own.
-      if (!finePointer || now - p.lastMove > 2600) {
+      // Resting, gone or no mouse: the light wanders slowly in the top-right.
+      const wandering = !finePointer || !p.inside || now - p.lastMove > 2600;
+      if (wandering) {
         const s = shape();
         p.tx = W * (s.wx + s.ax * Math.sin(t * 0.21));
         p.ty = H * (s.wy + s.ay * Math.sin(t * 0.29 + 1.3));
       }
       const px0 = p.x;
       const py0 = p.y;
-      p.x += (p.tx - p.x) * 0.1;
-      p.y += (p.ty - p.y) * 0.1;
-      const speed = Math.hypot(p.x - px0, p.y - py0);
-      p.energy = clamp(p.energy * 0.93 + speed * 0.011);
-      const e = p.energy;
+      const ease = 1 - Math.pow(1 - 0.1, dt);
+      p.x += (p.tx - p.x) * ease;
+      p.y += (p.ty - p.y) * ease;
+      const mvx = (p.x - px0) / dt;
+      const mvy = (p.y - py0) / dt;
+      const speed = Math.hypot(mvx, mvy);
+
+      // How strongly the light shows here: full in the top-right, dimming
+      // smoothly towards the headline. A wandering light stays gentle.
+      const here = smooth(clamp(focus(p.x, p.y) * 1.8));
+      const targetLevel = (wandering ? 0.55 : 1) * here;
+      p.level += (targetLevel - p.level) * (1 - Math.pow(1 - 0.06, dt));
 
       ctx!.clearRect(0, 0, W, H);
 
-      // Soft light under the cursor (dark mode only; light mode stays monochrome).
-      if (!light) {
-        const R = 240 + e * 140;
-        ctx!.globalAlpha = (0.08 + e * 0.05) / GLOW_PEAK;
-        ctx!.drawImage(glow, p.x - R, p.y - R, R * 2, R * 2);
+      // The warm light (dark mode). Light mode keeps a clean white page.
+      if (!light && p.level > 0.01) {
+        const R = 260;
+        ctx!.globalAlpha = p.level;
+        ctx!.drawImage(lightImg, p.x - R, p.y - R, R * 2, R * 2);
       }
 
-      const reach = 150 + e * 90;
+      const reach = 130;
+      const stir = clamp(speed / 14) * p.level; // only movement stirs the water
+      const springK = 0.012 * dt;
+      const damp = Math.pow(0.9, dt);
+      const fade = Math.pow(0.968, dt);
       const ink = light ? INK_LIGHT : INK_DARK;
       const resting: Path2D[] = Array.from({ length: BUCKETS }, () => new Path2D());
-      const lit: { x: number; y: number; r: number; a: number; c: string }[] = [];
+      const glowing: number[] = [];
 
-      for (const d of dots) {
-        // A slow wave travelling through the field.
-        const wave = Math.sin(t * 0.8 + d.phase);
-        let x = d.x;
-        let y = d.y + wave * 2;
+      for (let i = 0; i < n; i++) {
+        const w = pres[i]!;
+        const wave = Math.sin(t * 0.8 + phase[i]!);
+        const hx = bx[i]!;
+        const hy = by[i]! + wave * 2;
 
-        const dx = x - p.x;
-        const dy = y - p.y;
+        // Stirred by the cursor: dragged along with its movement, nudged
+        // outwards, and lit up.
+        const dx = hx + ox[i]! - p.x;
+        const dy = hy + oy[i]! - p.y;
         const dist = Math.hypot(dx, dy) || 1;
-        let k = 0;
-        if (dist < reach) {
-          k = (1 - dist / reach) ** 2;
-          // Push away from the light, with a ripple running outwards.
-          const push = (5 + e * 12) * k + Math.sin(dist * 0.06 - t * 5) * 1.8 * k;
-          x += (dx / dist) * push;
-          y += (dy / dist) * push;
+        if (stir > 0.002 && dist < reach) {
+          const k = (1 - dist / reach) ** 2 * stir;
+          vx[i]! += (mvx * 0.08 + (dx / dist) * 0.45) * k * dt;
+          vy[i]! += (mvy * 0.08 + (dy / dist) * 0.45) * k * dt;
+          glow[i] = Math.min(1, glow[i]! + k * 0.7 * sens[i]! * dt);
         }
+        // Water: drifts, slows down, and settles back home.
+        vx[i] = (vx[i]! - ox[i]! * springK) * damp;
+        vy[i] = (vy[i]! - oy[i]! * springK) * damp;
+        ox[i]! += vx[i]! * dt;
+        oy[i]! += vy[i]! * dt;
+        glow[i]! *= fade;
 
-        // Clearly there in the top-right, fading to nothing by the headline.
-        let alpha = d.w * (0.2 + 0.14 * (wave + 1) * 0.5) + k * (0.22 + d.w * 0.6) * (0.65 + e * 0.35);
+        const x = hx + ox[i]!;
+        const y = hy + oy[i]!;
+        let alpha = w * (0.2 + 0.14 * (wave + 1) * 0.5);
         if (light) alpha *= 0.8;
+        if (glow[i]! > 0.04) {
+          glowing.push(i, x, y);
+          continue;
+        }
         if (alpha < 0.012) continue;
         alpha = Math.min(alpha, MAX_ALPHA);
-        const r = 0.85 + d.w * 0.45 + k * 1.5;
-
-        if (k > 0.02 && !light) {
-          // Cyan at the centre of the light, magenta towards its edge.
-          const neon = mix(CYAN, MAGENTA, clamp(dist / reach / 0.85));
-          lit.push({ x, y, r, a: alpha, c: `rgb(${mix(ink, neon, clamp(0.25 + k * 2.2)).join(',')})` });
-        } else {
-          const b = Math.min(BUCKETS - 1, Math.floor((alpha / MAX_ALPHA) * BUCKETS));
-          resting[b]!.moveTo(x + r, y);
-          resting[b]!.arc(x, y, r, 0, TAU);
-        }
+        const r = 0.85 + w * 0.45;
+        const b = Math.min(BUCKETS - 1, Math.floor((alpha / MAX_ALPHA) * BUCKETS));
+        resting[b]!.moveTo(x + r, y);
+        resting[b]!.arc(x, y, r, 0, TAU);
       }
 
       // Resting dots: one fill per brightness step instead of one per dot.
@@ -195,28 +280,48 @@
         ctx!.fill(path);
       });
 
-      // The few dots in the light get their own colour.
-      for (const dot of lit) {
-        ctx!.globalAlpha = dot.a;
-        ctx!.fillStyle = dot.c;
-        ctx!.beginPath();
-        ctx!.arc(dot.x, dot.y, dot.r, 0, TAU);
-        ctx!.fill();
+      // Glowing plankton: a soft halo plus a brighter core, added as light.
+      if (glowing.length) {
+        if (!light) ctx!.globalCompositeOperation = 'lighter';
+        for (let j = 0; j < glowing.length; j += 3) {
+          const i = glowing[j]!;
+          const x = glowing[j + 1]!;
+          const y = glowing[j + 2]!;
+          // A faint twinkle while glowing.
+          const g = glow[i]! * (0.85 + 0.15 * Math.sin(t * 7 + phase[i]! * 5));
+          const w = Math.max(0.35, pres[i]!);
+          const r = 0.9 + w * 0.45 + g * 1.4;
+          // halo
+          ctx!.globalAlpha = g * w * (light ? 0.1 : 0.18);
+          ctx!.fillStyle = halo[i]!;
+          ctx!.beginPath();
+          ctx!.arc(x, y, r * 3, 0, TAU);
+          ctx!.fill();
+          // core: a little whiter than the halo (dark mode)
+          ctx!.globalAlpha = Math.min(MAX_ALPHA, 0.25 + g * w * 0.75);
+          ctx!.fillStyle = core[i]!;
+          ctx!.beginPath();
+          ctx!.arc(x, y, r, 0, TAU);
+          ctx!.fill();
+        }
+        ctx!.globalCompositeOperation = 'source-over';
       }
       ctx!.globalAlpha = 1;
     }
 
     function loop(now: number) {
       raf = requestAnimationFrame(loop);
-      // The slow idle drift (and touch screens) only needs a third of the frame rate.
-      const idle = !finePointer || now - p.lastMove > 2600;
-      if (idle && frameNo++ % 3) return;
+      // The slow idle drift (and touch screens) only needs a third of the frame rate,
+      // unless dots are still glowing and settling.
+      const idle = !finePointer || !p.inside || now - p.lastMove > 2600;
+      if (idle && now - p.lastMove > 4000 && frameNo++ % 3) return;
       draw(now);
     }
 
     function play() {
       if (still || running || !onScreen || document.hidden) return;
       running = true;
+      last = performance.now();
       raf = requestAnimationFrame(loop);
     }
 
@@ -230,14 +335,17 @@
       const rect = root!.getBoundingClientRect();
       const x = event.clientX - rect.left;
       const y = event.clientY - rect.top;
-      // Only follow while the cursor is over (or near) the hero.
-      if (y < -120 || y > rect.height + 120) return;
+      p.inside = y > -40 && y < rect.height + 40 && x > -rect.width;
+      if (!p.inside) return;
+      // The light keeps following anywhere over the hero; its strength
+      // (in draw) fades it out as it leaves the top-right.
       p.tx = x;
       p.ty = y;
       p.lastMove = performance.now();
       p.placed = true;
     }
 
+    const onLeave = () => (p.inside = false);
     const onVisibility = () => (document.hidden ? pause() : play());
     const resize = new ResizeObserver(() => {
       layout();
@@ -249,6 +357,7 @@
     });
     const themeWatch = new MutationObserver(() => {
       light = html.dataset.theme === 'light';
+      paint();
       if (still) draw(performance.now());
     });
 
@@ -258,6 +367,7 @@
     io.observe(root);
     themeWatch.observe(html, { attributes: true, attributeFilter: ['data-theme'] });
     document.addEventListener('visibilitychange', onVisibility);
+    document.documentElement.addEventListener('mouseleave', onLeave);
     if (!still) window.addEventListener('pointermove', onPointerMove, { passive: true });
     play();
 
@@ -267,6 +377,7 @@
       io.disconnect();
       themeWatch.disconnect();
       document.removeEventListener('visibilitychange', onVisibility);
+      document.documentElement.removeEventListener('mouseleave', onLeave);
       window.removeEventListener('pointermove', onPointerMove);
       teardown = null;
     };

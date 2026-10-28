@@ -95,7 +95,6 @@ test.describe('ambient background', () => {
   test('the hero dot field is decorative and never blocks clicks', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('[data-field]')).toHaveAttribute('aria-hidden', 'true');
-    // The grain sits over everything but lets clicks through
     await page.getByRole('link', { name: /See my work/ }).click();
     await expect(page).toHaveURL(/\/work\/?$/);
   });
