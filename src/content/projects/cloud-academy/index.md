@@ -80,7 +80,7 @@ solution:
       imageAlt: Iconography page with a grid of white line icons for cloud, servers, security and devices on dark teal
 
 impact:
-  headline: One style guide the team used to create Cloud Academy content in a cohesive way, as part of bringing QA and Cloud Academy together.
+  headline: One style guide the team used to keep Cloud Academy content consistent as the two companies came together.
   stats: []
 
 reflection: >

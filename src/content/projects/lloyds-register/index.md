@@ -1,6 +1,6 @@
 ---
 title: Exploring the Maritime World
-outcome: An immersive e-learning course for Lloyd's Register, introducing the fundamentals of the maritime industry.
+outcome: An e-learning course for Lloyd's Register that introduces the basics of the maritime industry.
 tags: [Visual design, UI design, Digital learning]
 year: 2025
 order: 2
@@ -14,7 +14,7 @@ snapshot:
   team: Learning designers, animators and a project manager
   timeline: "2025"
   tools: [Photoshop, Illustrator, Evolve]
-  impact: A dense, technical subject turned into an immersive, visual course
+  impact: A dense, technical subject made visual and easy to follow
 
 problem:
   headline: Making a vast, technical industry easy to explore.
@@ -77,7 +77,7 @@ solution:
   showcaseAlt: Challenges and opportunities page with seven teal icons, covering topics such as climate, people, security and energy, arranged around an aerial photo of a tanker
 
 impact:
-  headline: A heavy, technical subject turned into an immersive course that met the client’s expectations and learning objectives.
+  headline: A technical subject turned into a visual course that met the client’s expectations and learning objectives.
   stats: []
 
 reflection: >

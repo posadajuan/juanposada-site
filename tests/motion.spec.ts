@@ -6,7 +6,7 @@ test.describe('with motion', () => {
     await expect(page.locator('html')).toHaveAttribute('data-motion', '');
     const h1 = page.getByRole('heading', { level: 1 });
     await expect(h1).toHaveText(
-      'Juan Posada — I design brands, products and experiences that people understand, use and remember.',
+      'I design brands, products and experiences that people understand, use and remember.',
     );
     expect(await h1.locator('.rise-word').count()).toBeGreaterThan(5);
   });

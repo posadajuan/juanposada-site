@@ -4,7 +4,7 @@ outcome: Characters and an animation style for bite-size animations for 3–6 ye
 tags: [Character design, Animation, Illustration]
 year: 2021
 order: 5
-featured: false
+featured: true
 
 cover: ./cover.jpg
 coverAlt: Laptop on a British Council purple background, showing a classroom of colourful shape characters sitting at desks
@@ -80,7 +80,7 @@ solution:
       imageAlt: Character sheet with front views of each character shape, blank versions without faces, and the teacher character in six poses
 
 impact:
-  headline: A universal set of characters and an animation style for bite-size animations used in different regions of the world.
+  headline: A set of characters and an animation style used in bite-size animations for children in different parts of the world.
   stats: []
 
 reflection: >
