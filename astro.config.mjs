@@ -8,6 +8,8 @@ export default defineConfig({
   trailingSlash: 'ignore',
   prefetch: {
     prefetchAll: true,
-    defaultStrategy: 'hover',
+    // Fetch pages for links as soon as they're on screen, so clicks (and taps,
+    // where there's no hover) open straight away.
+    defaultStrategy: 'viewport',
   },
 });
