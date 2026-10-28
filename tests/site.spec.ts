@@ -51,7 +51,7 @@ for (const path of pages) {
 
 test('home shows the hero line and main actions', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('clear, playful');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('brands, products and experiences');
   await expect(page.getByRole('link', { name: /See my work/ })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Get in touch' })).toBeVisible();
 });
