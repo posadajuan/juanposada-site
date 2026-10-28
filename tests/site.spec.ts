@@ -205,3 +205,10 @@ test('pages share well and describe themselves to search engines', async ({ page
   await page.goto('/');
   expect(await og('og:image')).toBe('https://juanposada.co.uk/og-default.png');
 });
+
+test('home shows the brands Juan has worked with, readable by screen readers', async ({ page }) => {
+  await page.goto('/');
+  const marquee = page.getByRole('region', { name: "Brands I've worked with" });
+  await expect(marquee.getByRole('img', { name: 'HSBC' })).toBeVisible();
+  await expect(marquee.getByRole('img', { name: 'British Council' })).toHaveCount(1);
+});

@@ -72,3 +72,10 @@ Send images as large as you have; they're automatically resized and compressed f
 The site checks every file when it builds. If a field is missing or misspelt, the build stops and the error names the file and field, e.g. `projects → museum-app → snapshot.role: Required`. Fix it and push again; the live site stays on the last good version in the meantime.
 
 If a deploy gets stuck or skipped in Cloudflare, merging any small change (or pressing Retry build on the latest build) starts a fresh one.
+
+## Client logos (Home)
+
+The moving line of logos under the Home headline comes from `src/data/clients.ts`.
+Each logo is a one-colour SVG in `public/clients/`; the site colours it for dark and light mode.
+To add one: save the SVG there (dark logo, transparent or white background), then add a line with its name, file and ratio (viewBox width ÷ height).
+Official logos came from Wikimedia Commons and were converted to one colour; FISHproa, Cloud Academy and BAZ were traced from Juan's own project files.
