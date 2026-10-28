@@ -4,7 +4,7 @@ outcome: Characters and an animation style for bite-size animations for 3–6 ye
 tags: [Character design, Animation, Illustration]
 year: 2021
 order: 5
-featured: true
+featured: false
 
 cover: ./cover.jpg
 coverAlt: Laptop on a British Council purple background, showing a classroom of colourful shape characters sitting at desks

@@ -4,7 +4,7 @@ outcome: The look and feel for a Fujitsu learning solution, from NatWest account
 tags: [UI & UX, Visual design, Digital learning]
 year: 2023
 order: 3
-featured: false
+featured: true
 
 cover: ./cover.jpg
 coverAlt: Two tablets on a light grey and Fujitsu red background, one showing the course menu with red illustrated icons, the other the "Module 1 Introduction" screen with the Fujitsu and NatWest logos

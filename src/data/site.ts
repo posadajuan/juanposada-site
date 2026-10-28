@@ -48,8 +48,8 @@ export const site = {
 };
 
 export const nav = [
+  { label: 'Home', href: '/' },
   { label: 'Work', href: '/work' },
-  { label: 'Photography', href: '/photography' },
   { label: 'About', href: '/about' },
   { label: 'Contact', href: '/contact' },
 ];
