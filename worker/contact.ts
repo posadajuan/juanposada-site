@@ -61,24 +61,41 @@ export function isSameOrigin(request: Request): boolean {
   }
 }
 
-export async function verifyTurnstile(
+/**
+ * Asks Cloudflare whether the Turnstile token is genuine. `codes` are
+ * Cloudflare's reasons on failure (e.g. invalid-input-secret,
+ * invalid-input-response, timeout-or-duplicate). They contain no secrets.
+ */
+export async function checkTurnstile(
   token: string,
   secret: string,
   ip: string | null,
   fetcher: typeof fetch = fetch,
-): Promise<boolean> {
-  if (!token) return false;
+): Promise<{ success: boolean; codes: string[] }> {
+  if (!token) return { success: false, codes: ['missing-input-response'] };
   const body = new FormData();
   body.append('secret', secret);
   body.append('response', token);
   if (ip) body.append('remoteip', ip);
   try {
     const res = await fetcher('https://challenges.cloudflare.com/turnstile/v0/siteverify', { method: 'POST', body });
-    const data = (await res.json()) as { success?: boolean };
-    return data.success === true;
+    const data = (await res.json()) as { success?: boolean; 'error-codes'?: unknown };
+    const codes = Array.isArray(data['error-codes'])
+      ? data['error-codes'].filter((c): c is string => typeof c === 'string').slice(0, 5)
+      : [];
+    return { success: data.success === true, codes };
   } catch {
-    return false;
+    return { success: false, codes: ['unreachable'] };
   }
+}
+
+export async function verifyTurnstile(
+  token: string,
+  secret: string,
+  ip: string | null,
+  fetcher: typeof fetch = fetch,
+): Promise<boolean> {
+  return (await checkTurnstile(token, secret, ip, fetcher)).success;
 }
 
 /* ---------- Email ---------- */

@@ -17,7 +17,7 @@ import {
   json,
   readSubmission,
   validate,
-  verifyTurnstile,
+  checkTurnstile,
 } from './contact';
 
 interface Env {
@@ -68,8 +68,11 @@ async function handleContact(request: Request, env: Env): Promise<Response> {
     if (!success) return json(429, { ok: false, error: 'rate_limited' });
   }
 
-  const human = await verifyTurnstile(submission.token, env.TURNSTILE_SECRET, ip);
-  if (!human) return json(403, { ok: false, error: 'turnstile' });
+  const human = await checkTurnstile(submission.token, env.TURNSTILE_SECRET, ip);
+  if (!human.success) {
+    console.error(`Turnstile check failed: ${human.codes.join(', ') || 'no reason given'}`);
+    return json(403, { ok: false, error: 'turnstile', codes: human.codes });
+  }
 
   const { raw } = buildEmail(submission, {
     from: env.CONTACT_FROM,
