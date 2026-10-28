@@ -50,6 +50,15 @@ while (s < screens.length || l < logos.length) {
   if (l < logos.length) mixed.push(logos[l++]!);
 }
 
+// Tiles are as tall as a row, so their width follows their shape.
+// Rows are about 16.5vw tall on desktop (max ~210px) and 31vw on phones.
+const tileSizes = (tile: Tile) => {
+  const r = tile.src.width / tile.src.height;
+  const px = (n: number) => `${Math.round(n * r)}px`;
+  const vw = (n: number) => `${Math.round(n * r * 10) / 10}vw`;
+  return `(min-width: 1348px) ${px(210)}, (min-width: 761px) ${vw(16.5)}, ${vw(31)}`;
+};
+
 const rows: Tile[][] = Array.from({ length: ROWS }, () => []);
 mixed.forEach((tile, i) => rows[i % ROWS]!.push(tile));
 ---
@@ -71,8 +80,8 @@ mixed.forEach((tile, i) => rows[i % ROWS]!.push(tile));
                   <Picture
                     src={tile.src}
                     alt=""
-                    widths={[320, 560].filter((w) => w <= tile.src.width)}
-                    sizes="(min-width: 761px) 320px, 200px"
+                    widths={[200, 360, 600].filter((w) => w <= tile.src.width)}
+                    sizes={tileSizes(tile)}
                     formats={['webp']}
                     loading={r < 2 && copy === 0 ? 'eager' : 'lazy'}
                     decoding="async"
