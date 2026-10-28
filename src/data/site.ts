@@ -6,7 +6,7 @@ export const site = {
   name: 'Juan Posada',
   url: 'https://juanposada.co.uk',
   description:
-    'Juan Posada turns complex ideas into clear, playful digital experiences, from first sketch to launch.',
+    'Juan Posada is a London-based designer working across product, UX/UI, branding and print, creating work people understand, use and remember.',
   location: 'London, UK',
 
   /**

@@ -85,7 +85,7 @@ export const about = {
 
   principles: [
     { title: 'Clarity first', text: 'If people have to work out the interface, it’s in the way. I strip things back until the next step feels obvious.' },
-    { title: 'Play with purpose', text: 'Characters, motion and storytelling keep people engaged, as long as every playful touch helps them understand or remember.' },
+    { title: 'Engagement with purpose', text: 'Characters, motion and storytelling keep people engaged, as long as every detail helps them understand or remember.' },
     { title: 'Whole team, one story', text: 'Good products come from clients, designers, developers and animators pulling in one direction. Design keeps everyone telling the same story.' },
   ],
 
@@ -129,7 +129,7 @@ export const about = {
 /* ---------------- Contact ---------------- */
 export const contact = {
   title: 'Let’s make something',
-  highlight: 'clear and playful.',
+  highlight: 'people remember.',
   text: 'Tell me about your project, team or role.',
   topics: ['Product', 'Brand', 'Web', 'Other'],
 };
