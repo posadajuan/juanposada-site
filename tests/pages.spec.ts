@@ -6,7 +6,7 @@ test.beforeEach(async ({ page }) => {
 
 test('every main page loads with a single h1 and the right nav item active', async ({ page, isMobile }) => {
   const routes: [string, string | null][] = [
-    ['/', null],
+    ['/', 'Home'],
     ['/work', 'Work'],
     ['/work/cyber-explorers', 'Work'],
     ['/work/fishproa', 'Work'],
@@ -15,7 +15,7 @@ test('every main page loads with a single h1 and the right nav item active', asy
     ['/work/fujitsu-natwest', 'Work'],
     ['/work/cloud-academy', 'Work'],
     ['/work/lloyds-register', 'Work'],
-    ['/photography', 'Photography'],
+    ['/photography', null], // not in the menu; linked from About
     ['/about', 'About'],
     ['/contact', 'Contact'],
   ];
