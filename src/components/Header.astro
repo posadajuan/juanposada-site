@@ -330,14 +330,23 @@ const isActive = (href: string) => path === href || path.startsWith(`${href}/`);
     btn.setAttribute('aria-checked', isLight ? 'false' : 'true');
   }
 
-  function closeMenu() {
+  /* While the mobile menu is open, the page behind it can't be reached with
+     Tab or a screen reader (inert), so keyboard focus stays in the header. */
+  function setPageInert(on: boolean) {
+    document.querySelectorAll<HTMLElement>('main, footer, .skip-link').forEach((el) => (el.inert = on));
+  }
+
+  function closeMenu({ refocus = false } = {}) {
     const menu = document.querySelector<HTMLElement>('[data-menu]');
     const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+    const wasOpen = menu?.hasAttribute('data-open');
     menu?.removeAttribute('data-open');
     document.documentElement.style.overflow = '';
+    setPageInert(false);
     if (toggle) {
       toggle.setAttribute('aria-expanded', 'false');
       toggle.textContent = 'Menu';
+      if (wasOpen && refocus) toggle.focus();
     }
   }
 
@@ -367,17 +376,22 @@ const isActive = (href: string) => path === href || path.startsWith(`${href}/`);
       menu?.toggleAttribute('data-open', open);
       // Stop the page underneath from scrolling while the menu is open.
       document.documentElement.style.overflow = open ? 'hidden' : '';
-      if (open) document.documentElement.removeAttribute('data-nav-hidden');
+      setPageInert(open);
+      if (open) {
+        document.documentElement.removeAttribute('data-nav-hidden');
+        // Move focus to the first link so keyboard users land in the menu.
+        menu?.querySelector<HTMLElement>('a')?.focus();
+      }
       return;
     }
 
     if (target.closest('[data-menu] a')) closeMenu();
   });
 
-  document.addEventListener('astro:before-swap', closeMenu);
+  document.addEventListener('astro:before-swap', () => closeMenu());
 
   document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') closeMenu();
+    if (event.key === 'Escape') closeMenu({ refocus: true });
   });
 
   document.addEventListener('astro:page-load', syncToggleLabel);

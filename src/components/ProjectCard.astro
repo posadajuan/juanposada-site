@@ -18,6 +18,8 @@ const { project, level = 3, priority = false, showYear = false } = Astro.props;
 const { data } = project;
 const Heading = `h${level}` as 'h2' | 'h3';
 const href = `/work/${project.id}`;
+// Screen readers hear the title first, then the outcome and tags (not the image description).
+const ids = { title: `card-${project.id}-title`, text: `card-${project.id}-text`, tags: `card-${project.id}-tags` };
 const sizes = '(min-width: 1240px) 572px, (min-width: 761px) 50vw, 100vw';
 ---
 
@@ -46,10 +48,10 @@ const sizes = '(min-width: 1240px) 572px, (min-width: 761px) 50vw, 100vw';
       </p>
     </article>
   ) : (
-    <a class="card" href={href} data-reveal>
+    <a class="card" href={href} data-reveal aria-labelledby={ids.title} aria-describedby={`${ids.text} ${ids.tags}`}>
       <Frame src={data.cover} alt={data.coverAlt} ratio="16 / 11" sizes={sizes} radius="m" priority={priority} />
       <div class="card__meta">
-        <span class="label tag">{data.tags.join(' · ')}</span>
+        <span class="label tag" id={ids.tags}>{data.tags.join(' · ')}</span>
         {showYear ? (
           <span class="label muted">{data.year}</span>
         ) : (
@@ -58,8 +60,8 @@ const sizes = '(min-width: 1240px) 572px, (min-width: 761px) 50vw, 100vw';
           </span>
         )}
       </div>
-      <Heading class="card__title">{data.title}</Heading>
-      <p class="card__text">{data.outcome}</p>
+      <Heading class="card__title" id={ids.title}>{data.title}</Heading>
+      <p class="card__text" id={ids.text}>{data.outcome}</p>
     </a>
   )
 }

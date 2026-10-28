@@ -212,3 +212,24 @@ test('home shows the brands Juan has worked with, readable by screen readers', a
   await expect(marquee.getByRole('img', { name: 'HSBC' })).toBeVisible();
   await expect(marquee.getByRole('img', { name: 'British Council' })).toHaveCount(1);
 });
+
+test('mobile menu works with a keyboard: focus moves in, stays in, and returns on Escape', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 800 });
+  await page.goto('/');
+  const toggle = page.locator('[data-menu-toggle]');
+  await toggle.focus();
+  await page.keyboard.press('Enter');
+  await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+  await expect(page.locator('[data-menu] a').first()).toBeFocused();
+  // The page behind the menu can't be reached
+  expect(await page.evaluate(() => (document.querySelector('main') as HTMLElement).inert)).toBe(true);
+  await page.keyboard.press('Escape');
+  await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+  await expect(toggle).toBeFocused();
+  expect(await page.evaluate(() => (document.querySelector('main') as HTMLElement).inert)).toBe(false);
+});
+
+test('project cards are announced by their title', async ({ page }) => {
+  await page.goto('/work');
+  await expect(page.getByRole('link', { name: 'Cyber Explorers', exact: true })).toHaveCount(1);
+});
