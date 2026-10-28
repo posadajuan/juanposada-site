@@ -18,6 +18,9 @@ const { project, level = 3, priority = false, showYear = false } = Astro.props;
 const { data } = project;
 const Heading = `h${level}` as 'h2' | 'h3';
 const href = `/work/${project.id}`;
+// Screen readers hear the title first, then tags and outcome: the title comes
+// first in the code and CSS puts the tags back above it. The image is decorative
+// here (it's described on the case study itself).
 const sizes = '(min-width: 1240px) 572px, (min-width: 761px) 50vw, 100vw';
 ---
 
@@ -47,7 +50,8 @@ const sizes = '(min-width: 1240px) 572px, (min-width: 761px) 50vw, 100vw';
     </article>
   ) : (
     <a class="card" href={href} data-reveal>
-      <Frame src={data.cover} alt={data.coverAlt} ratio="16 / 11" sizes={sizes} radius="m" priority={priority} />
+      <Frame src={data.cover} alt="" ratio="16 / 11" sizes={sizes} radius="m" priority={priority} />
+      <Heading class="card__title">{data.title}</Heading>
       <div class="card__meta">
         <span class="label tag">{data.tags.join(' · ')}</span>
         {showYear ? (
@@ -58,7 +62,6 @@ const sizes = '(min-width: 1240px) 572px, (min-width: 761px) 50vw, 100vw';
           </span>
         )}
       </div>
-      <Heading class="card__title">{data.title}</Heading>
       <p class="card__text">{data.outcome}</p>
     </a>
   )
@@ -71,6 +74,17 @@ const sizes = '(min-width: 1240px) 572px, (min-width: 761px) 50vw, 100vw';
     gap: 18px;
     text-decoration: none;
     color: inherit;
+  }
+
+  /* Visual order: image, tags, title, text (the title comes first in the code) */
+  .card__meta {
+    order: 1;
+  }
+  .card__title {
+    order: 2;
+  }
+  .card__text {
+    order: 3;
   }
 
   .card__meta {
