@@ -39,7 +39,9 @@ const {
   zoom = false,
 } = Astro.props;
 
-const fitting = [640, 1024, 1600, 2200].filter((w) => w <= src.width);
+// Steps chosen to fit common sizes: cards on phones and laptops (800),
+// full-width on laptops (1200), and sharp screens (1600, 2200).
+const fitting = [800, 1200, 1600, 2200].filter((w) => w <= src.width);
 const widths = fitting.length ? fitting : [src.width];
 ---
 
