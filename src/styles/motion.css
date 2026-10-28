@@ -40,6 +40,12 @@
   animation-delay: calc(150ms + var(--i, 0) * 75ms);
 }
 
+/* The gradient phrase stays inline so it can wrap onto a second line on
+   phones (an inline-block can't break). It fades in rather than rising. */
+[data-motion] .rise-word.gradient-text {
+  display: inline;
+}
+
 @keyframes fade-only {
   from {
     opacity: 0;

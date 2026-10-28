@@ -6,8 +6,8 @@ year: 2018
 order: 6
 featured: false
 
-cover: ./cover.jpg
-coverAlt: FISHproa seafood breading mix pouch on a deep blue background with white wave patterns
+cover: ./wordmark.jpg
+coverAlt: The FISH proa wordmark in bold black letters with a salmon, lobster, herbs, star anise and tomato arranged through it
 
 snapshot:
   role: Brand designer, responsible for concept, identity, packaging and brand guidelines
@@ -39,7 +39,7 @@ research:
     - The brand had to be easy to apply consistently by others.
 
 solution:
-  headline: A clean, coastal identity with a vibrant, ingredient-led visual language.
+  headline: A clean, coastal identity, with fresh ingredients at the heart of the visuals.
   decisions:
     - title: A symbol from the sea
       text: >
@@ -69,8 +69,8 @@ solution:
         keeping the fresh, high-quality look.
       image: ./social.jpg
       imageAlt: Square social post with the FISH wordmark surrounded by fresh fish, lobster, herbs and spices
-  showcase: ./wordmark.jpg
-  showcaseAlt: The FISH proa wordmark in bold black letters with a salmon, lobster, herbs, star anise and tomato arranged through it
+  showcase: ./pouch.jpg
+  showcaseAlt: FISHproa seafood breading mix pouch on a deep blue background with white wave patterns
   details:
     - image: ./stamp.jpg
       imageAlt: Rubber stamp beside a stamped FISHproa logo on paper

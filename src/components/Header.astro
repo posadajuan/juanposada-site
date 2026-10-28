@@ -148,15 +148,16 @@ const isActive = (href: string) => path === href || path.startsWith(`${href}/`);
   .theme-switch {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    min-height: 44px;
-    padding: 0 6px 0 14px;
+    /* 20% smaller than the nav buttons, so it sits quietly beside them */
+    gap: 8px;
+    min-height: 35px;
+    padding: 0 5px 0 11px;
     border-radius: var(--radius-pill);
     border: 1px solid var(--color-border);
     background: transparent;
     color: var(--color-text);
     font: inherit;
-    font-size: var(--text-small);
+    font-size: calc(var(--text-small) * 0.85);
     cursor: pointer;
     transition: border-color var(--dur-fast) ease;
   }
@@ -171,8 +172,8 @@ const isActive = (href: string) => path === href || path.startsWith(`${href}/`);
 
   .theme-switch__track {
     position: relative;
-    width: 44px;
-    height: 26px;
+    width: 35px;
+    height: 21px;
     border-radius: var(--radius-pill);
     background: var(--gradient-a);
     transition: background var(--dur-fast) ease;
@@ -180,13 +181,13 @@ const isActive = (href: string) => path === href || path.startsWith(`${href}/`);
 
   .theme-switch__thumb {
     position: absolute;
-    top: 3px;
-    left: 3px;
-    width: 20px;
-    height: 20px;
+    top: 2.5px;
+    left: 2.5px;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
     background: #0a0a0a;
-    transform: translateX(18px);
+    transform: translateX(14px);
     transition: transform 250ms var(--ease);
   }
 

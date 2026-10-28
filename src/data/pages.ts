@@ -22,35 +22,35 @@ export const home = {
   ],
 
   howIWork: {
-    title: 'From first idea to launch, side by side with product, animation and engineering.',
+    title: 'I think it through, test it early and design it with care.',
     /** icon: understand · concept · design · launch (see src/components/StepIcon.astro) */
     steps: [
       {
         icon: 'understand' as const,
         title: 'Understand',
-        text: 'I start with the people and the goal: who it’s for, what they need to learn or do, and what success looks like for the business.',
+        text: 'I start with the people and the goal: who it’s for, what they need, and what success looks like.',
       },
       {
         icon: 'concept' as const,
         title: 'Concept',
-        text: 'I turn that into an idea worth building, with sketches, site maps and early concepts the whole team can react to before anything is built.',
+        text: 'I sketch a few ideas, share them early and test the strongest ones before anything gets built.',
       },
       {
         icon: 'design' as const,
         title: 'Design',
-        text: 'UX flows, UI and visual systems, prototyped and refined with learning designers, developers and stakeholders until it feels obvious.',
+        text: 'I design the flows, screens and visuals, then test and refine them with the team until they feel obvious.',
       },
       {
         icon: 'launch' as const,
-        title: 'Launch & scale',
-        text: 'I stay through build and launch, directing animation and assets, and leave a system the team can keep producing with.',
+        title: 'Launch',
+        text: 'I stay with the project through launch, and leave clear guidelines so the team can keep going.',
       },
     ],
   },
 
   hello: {
-    title: 'I design things people enjoy using, and teams enjoy building.',
-    text: 'I’m a Colombian designer based in London, with 10+ years across agencies, film/TV and digital learning. I do my best work with teams who care about the people on the other side of the screen, from first sketch to launch.',
+    title: 'Hi, I’m Juan. I like making complex things simple.',
+    text: 'I’m a Colombian designer based in London, with 10+ years across agencies, film/TV and digital learning. I do my best work with teams who care about the people they’re designing for.',
     image: homePortrait,
     alt: 'Juan Posada standing in front of a wall covered in colourful street art and posters',
   },
@@ -58,7 +58,7 @@ export const home = {
 
 /* ---------------- Work ---------------- */
 export const work = {
-  intro: 'UX/UI, product design and digital learning experiences, plus the brands that hold them together: a selection of work from first sketch to launch.',
+  intro: 'A selection of my work across UX/UI, digital learning, branding and print.',
 };
 
 /* ---------------- Photography ---------------- */
