@@ -103,8 +103,8 @@ export const about = {
   ],
 
   certifications: [
-    'Designing AI-Powered Products (2026)',
-    'Certificate in Business Service Design (2026)',
+    'Designing AI-Powered Products, QA (2026)',
+    'Certificate in Business Service Design, A4Q (2026)',
     'Professional Certificate in UX Design, UX Design Institute (2024)',
     'Certified ScrumMaster, Scrum Alliance (2021)',
     'Generative AI: Intermediate Prompting, QA (2024)',

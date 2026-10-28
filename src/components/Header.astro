@@ -78,6 +78,18 @@ const isActive = (href: string) => path === href || path.startsWith(`${href}/`);
     font-weight: var(--weight-semibold);
     letter-spacing: -0.02em;
     text-decoration: none;
+    white-space: nowrap;
+  }
+
+  /* Small phones: keep the name on one line beside the switch and menu */
+  @media (max-width: 420px) {
+    .site-header__inner {
+      gap: 12px;
+    }
+    .site-header__name {
+      gap: 8px;
+      font-size: 1rem;
+    }
   }
 
   .site-header__logo {

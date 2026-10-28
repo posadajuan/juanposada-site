@@ -13,7 +13,10 @@ const socials = site.socials.filter((s) => s.href);
 const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000AA';
 ---
 
-<BaseLayout title="Contact" description="Tell Juan about your project, team or role.">
+<BaseLayout
+  title="Contact"
+  description={`Get in touch with Juan Posada, a designer in London, about a project, team or role. Replies within ${site.replyTime}.`}
+>
   <div class="container contact">
     <section class="contact__intro" aria-labelledby="contact-title" data-reveal="stagger">
       <Availability />

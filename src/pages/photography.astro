@@ -6,10 +6,17 @@ import { getPhotoSeries } from '@/lib/content';
 import { photography, ctas } from '@/data/pages';
 
 const series = await getPhotoSeries();
+const lead = series[0];
+const leadPhoto = lead ? lead.data.photos[lead.data.featured - 1] ?? lead.data.photos[0] : undefined;
 const photoCount = (n: number) => `${n} ${n === 1 ? 'photo' : 'photos'}`;
 ---
 
-<BaseLayout title="Photography" description="Personal photography by Juan Posada.">
+<BaseLayout
+  title="Photography"
+  description="Personal photography by Juan Posada: travel and wildlife series, exploring how light, patience and timing shape a picture."
+  image={leadPhoto?.image}
+  imageAlt={leadPhoto?.alt}
+>
   <section class="container page-intro" data-reveal="stagger">
     <p class="label muted">Personal work · {series.length} series</p>
     <h1 class="page-title"><span class="gradient-text">Photo</span>graphy</h1>

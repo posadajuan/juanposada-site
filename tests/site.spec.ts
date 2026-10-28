@@ -174,3 +174,34 @@ test('mobile menu is a solid full-screen panel that hides the page behind it', a
     expect(await page.evaluate(() => document.documentElement.style.overflow)).toBe('');
   }
 });
+
+test('search engines and AI assistants can find everything', async ({ request }) => {
+  const robots = await (await request.get('/robots.txt')).text();
+  expect(robots).toContain('Allow: /');
+  expect(robots).toContain('Sitemap: https://juanposada.co.uk/sitemap.xml');
+
+  const sitemap = await (await request.get('/sitemap.xml')).text();
+  for (const path of ['/', '/work/', '/work/cyber-explorers/', '/work/graphic-design/', '/about/', '/contact/']) {
+    expect(sitemap).toContain(`<loc>https://juanposada.co.uk${path}</loc>`);
+  }
+  expect(sitemap).not.toContain('styleguide');
+
+  const llms = await (await request.get('/llms.txt')).text();
+  expect(llms).toMatch(/^# Juan Posada/);
+  expect(llms).toContain('/work/cyber-explorers/');
+});
+
+test('pages share well and describe themselves to search engines', async ({ page }) => {
+  await page.goto('/work/cyber-explorers');
+  const og = (p: string) => page.locator(`meta[property="${p}"]`).getAttribute('content');
+  expect(await og('og:image')).toMatch(/^https:\/\/juanposada\.co\.uk\/.+\.jpg$/);
+  expect(await og('og:type')).toBe('article');
+  expect(await page.locator('link[rel="canonical"]').getAttribute('href')).toBe('https://juanposada.co.uk/work/cyber-explorers/');
+
+  const data = JSON.parse((await page.locator('script[type="application/ld+json"]').textContent()) ?? '{}');
+  const types = data['@graph'].map((node: { '@type': string }) => node['@type']);
+  expect(types).toEqual(expect.arrayContaining(['WebSite', 'Person', 'CreativeWork', 'BreadcrumbList']));
+
+  await page.goto('/');
+  expect(await og('og:image')).toBe('https://juanposada.co.uk/og-default.png');
+});
