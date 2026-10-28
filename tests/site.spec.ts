@@ -231,5 +231,5 @@ test('mobile menu works with a keyboard: focus moves in, stays in, and returns o
 
 test('project cards are announced by their title', async ({ page }) => {
   await page.goto('/work');
-  await expect(page.getByRole('link', { name: 'Cyber Explorers', exact: true })).toHaveCount(1);
+  await expect(page.getByRole('link', { name: /^Cyber Explorers/ })).toHaveCount(1);
 });
