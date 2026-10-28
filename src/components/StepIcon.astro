@@ -9,25 +9,43 @@ interface Props {
 }
 const { name } = Astro.props;
 
+// Juan's icons (24px grid, rounded 2px strokes).
 const icons = {
-  understand: { stops: ['#ffe900', '#00ffe8'], paths: ['M38 14a22 22 0 1 1 0 44a22 22 0 1 1 0-44Z', 'M54 54L72 72'] },
-  concept: { stops: ['#00ffe8', '#00a8ff'], paths: ['M42 10a22 22 0 0 0-13 39.7V60h26V49.7A22 22 0 0 0 42 10Z', 'M32 72h20'] },
-  design: { stops: ['#00fdff', '#7500ff'], paths: ['M16 12h30a6 6 0 0 1 6 6v24a6 6 0 0 1-6 6H16a6 6 0 0 1-6-6V18a6 6 0 0 1 6-6Z', 'M38 36h30a6 6 0 0 1 6 6v24a6 6 0 0 1-6 6H38a6 6 0 0 1-6-6V54'] },
-  launch: { stops: ['#7500ff', '#ff00ff'], paths: ['M34 14H18a6 6 0 0 0-6 6v46a6 6 0 0 0 6 6h46a6 6 0 0 0 6-6V50', 'M42 42L72 12', 'M52 12h20v20'] },
+  understand: {
+    stops: ['#ffe900', '#00ffe8'],
+    paths: ['M3 20l9 -7', 'M12 3v10l9 7', 'M17 12v.015', 'M17 4.015v.015', 'M21 8.015v.015', 'M12 19.015v.015', 'M3 12.015v.015', 'M7 8.015v.015', 'M3 4.015v.015'],
+  },
+  concept: {
+    stops: ['#00ffe8', '#00a8ff'],
+    paths: ['M6.045 9.777a6 6 0 1 0 5.951 .023', 'M11.997 20.196a6 6 0 1 0 -2.948 -5.97', 'M17.95 9.785q .05 -.386 .05 -.785a6 6 0 1 0 -3.056 5.23'],
+  },
+  design: {
+    stops: ['#00fdff', '#7500ff'],
+    paths: [
+      'M5 4h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1',
+      'M5 16h4a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-2a1 1 0 0 1 1 -1',
+      'M15 12h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1',
+      'M15 4h4a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-2a1 1 0 0 1 1 -1',
+    ],
+  },
+  launch: {
+    stops: ['#7500ff', '#ff00ff'],
+    paths: ['M8 9h-1a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-8a2 2 0 0 0 -2 -2h-1', 'M12 14v-11', 'M9 6l3 -3l3 3'],
+  },
 } as const;
 const icon = icons[name];
 const id = `si-${name}`;
 ---
 
 <span class="sicon" aria-hidden="true">
-  <svg viewBox="0 0 84 84" fill="none">
+  <svg viewBox="0 0 24 24" fill="none">
     <defs>
-      <linearGradient id={id} gradientUnits="userSpaceOnUse" x1="8" y1="8" x2="76" y2="76">
+      <linearGradient id={id} gradientUnits="userSpaceOnUse" x1="3" y1="3" x2="21" y2="21">
         <stop offset="0" stop-color={icon.stops[0]} />
         <stop offset="1" stop-color={icon.stops[1]} />
       </linearGradient>
     </defs>
-    <g class="sicon__stroke" style={`--g: url(#${id})`} stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <g class="sicon__stroke" style={`--g: url(#${id})`} stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       {icon.paths.map((d) => <path d={d} />)}
     </g>
   </svg>
