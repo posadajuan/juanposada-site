@@ -1,0 +1,312 @@
+---
+/**
+ * The quiet, interactive background behind the Home headline.
+ *
+ * A field of fine dots that is strongest in the empty top-right of the hero
+ * and fades out towards the headline. A soft neon light follows the cursor:
+ * dots near it brighten, take the cyan → magenta gradient, swell and ripple
+ * away. Moving faster stirs the field more; when the cursor rests (or on
+ * touch screens) the light drifts slowly on its own.
+ *
+ * Kept light: the canvas only covers the right of the hero, dots are drawn
+ * in a few batches, the glow is pre-rendered once, the idle drift runs at
+ * a third of the frame rate, and everything pauses off screen or in a background tab.
+ * Visitors who prefer less motion get a still field.
+ */
+---
+
+<div class="field" data-field aria-hidden="true">
+  <canvas class="field__canvas"></canvas>
+</div>
+
+<script>
+  type Dot = { x: number; y: number; w: number; phase: number };
+
+  const TAU = Math.PI * 2;
+  const CYAN = [0, 255, 255];
+  const MAGENTA = [255, 0, 255];
+  const INK_DARK = [245, 245, 243];
+  const INK_LIGHT = [10, 10, 10];
+  const BUCKETS = 12; // resting dots are grouped into this many brightness steps
+  const MAX_ALPHA = 0.9;
+  const GLOW_PEAK = 0.13; // strongest centre opacity of the glow
+
+  const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+  const mix = (a: number[], b: number[], t: number) => a.map((v, i) => Math.round(v + (b[i]! - v) * t));
+
+  /** The soft light, drawn once and reused every frame. */
+  function makeGlow() {
+    const size = 512;
+    const c = document.createElement('canvas');
+    c.width = c.height = size;
+    const g = c.getContext('2d')!;
+    const r = size / 2;
+    const grad = g.createRadialGradient(r, r, 0, r, r, r);
+    grad.addColorStop(0, `rgba(0, 255, 255, ${GLOW_PEAK})`);
+    grad.addColorStop(0.45, `rgba(150, 80, 255, ${GLOW_PEAK * 0.45})`);
+    grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    g.fillStyle = grad;
+    g.fillRect(0, 0, size, size);
+    return c;
+  }
+
+  let teardown: (() => void) | null = null;
+
+  function initField() {
+    teardown?.();
+    const root = document.querySelector<HTMLElement>('[data-field]');
+    const canvas = root?.querySelector('canvas');
+    const ctx = canvas?.getContext('2d');
+    if (!root || !canvas || !ctx) return;
+
+    const html = document.documentElement;
+    const still = !html.hasAttribute('data-motion');
+    const finePointer = window.matchMedia('(pointer: fine)').matches;
+    const glow = makeGlow();
+
+    let W = 0;
+    let H = 0;
+    let narrow = false;
+    let dots: Dot[] = [];
+    let light = html.dataset.theme === 'light';
+    let raf = 0;
+    let running = false;
+    let onScreen = true;
+    let frameNo = 0;
+    const start = performance.now();
+
+    // The light: where it is drawn (x, y), where it is heading (tx, ty),
+    // and how stirred up the field is (energy, from cursor speed).
+    const p = { x: 0, y: 0, tx: 0, ty: 0, energy: 0, lastMove: -1e9, placed: false };
+
+    // Where the field is strongest, as fractions of the canvas.
+    // Wide screens: the canvas covers the right two-thirds of the hero.
+    // Phones: the whole hero, tucked into the top-right corner above the text.
+    const shape = () =>
+      narrow
+        ? { fx: 0.94, fy: 0.02, rx: 0.62, ry: 0.3, wx: 0.82, wy: 0.06, ax: 0.1, ay: 0.04 }
+        : { fx: 0.7, fy: 0.3, rx: 0.68, ry: 0.75, wx: 0.64, wy: 0.3, ax: 0.18, ay: 0.16 };
+
+    function focus(x: number, y: number) {
+      const s = shape();
+      const d = Math.hypot((x - W * s.fx) / (W * s.rx), (y - H * s.fy) / (H * s.ry));
+      return clamp(1 - d) ** 1.35;
+    }
+
+    function layout() {
+      const rect = root!.getBoundingClientRect();
+      W = rect.width;
+      H = rect.height;
+      narrow = window.innerWidth < 760;
+      const dpr = Math.min(1.5, window.devicePixelRatio || 1);
+      canvas!.width = Math.round(W * dpr);
+      canvas!.height = Math.round(H * dpr);
+      ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      const gap = narrow ? 24 : 22;
+      const cols = Math.ceil(W / gap) + 1;
+      const rows = Math.ceil(H / gap) + 1;
+      dots = [];
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const x = c * gap + (r % 2 ? gap / 2 : 0);
+          const y = r * gap;
+          dots.push({ x, y, w: focus(x, y), phase: (x * 0.011 + y * 0.017) % TAU });
+        }
+      }
+      if (!p.placed) {
+        const s = shape();
+        p.x = p.tx = W * s.wx;
+        p.y = p.ty = H * s.wy;
+      }
+    }
+
+    function draw(now: number) {
+      const t = still ? 0 : (now - start) / 1000;
+
+      // Resting or no mouse: the light wanders slowly on its own.
+      if (!finePointer || now - p.lastMove > 2600) {
+        const s = shape();
+        p.tx = W * (s.wx + s.ax * Math.sin(t * 0.21));
+        p.ty = H * (s.wy + s.ay * Math.sin(t * 0.29 + 1.3));
+      }
+      const px0 = p.x;
+      const py0 = p.y;
+      p.x += (p.tx - p.x) * 0.1;
+      p.y += (p.ty - p.y) * 0.1;
+      const speed = Math.hypot(p.x - px0, p.y - py0);
+      p.energy = clamp(p.energy * 0.93 + speed * 0.011);
+      const e = p.energy;
+
+      ctx!.clearRect(0, 0, W, H);
+
+      // Soft light under the cursor (dark mode only; light mode stays monochrome).
+      if (!light) {
+        const R = 240 + e * 140;
+        ctx!.globalAlpha = (0.08 + e * 0.05) / GLOW_PEAK;
+        ctx!.drawImage(glow, p.x - R, p.y - R, R * 2, R * 2);
+      }
+
+      const reach = 150 + e * 90;
+      const ink = light ? INK_LIGHT : INK_DARK;
+      const resting: Path2D[] = Array.from({ length: BUCKETS }, () => new Path2D());
+      const lit: { x: number; y: number; r: number; a: number; c: string }[] = [];
+
+      for (const d of dots) {
+        // A slow wave travelling through the field.
+        const wave = Math.sin(t * 0.8 + d.phase);
+        let x = d.x;
+        let y = d.y + wave * 2;
+
+        const dx = x - p.x;
+        const dy = y - p.y;
+        const dist = Math.hypot(dx, dy) || 1;
+        let k = 0;
+        if (dist < reach) {
+          k = (1 - dist / reach) ** 2;
+          // Push away from the light, with a ripple running outwards.
+          const push = (5 + e * 12) * k + Math.sin(dist * 0.06 - t * 5) * 1.8 * k;
+          x += (dx / dist) * push;
+          y += (dy / dist) * push;
+        }
+
+        // Clearly there in the top-right, fading to nothing by the headline.
+        let alpha = d.w * (0.2 + 0.14 * (wave + 1) * 0.5) + k * (0.22 + d.w * 0.6) * (0.65 + e * 0.35);
+        if (light) alpha *= 0.8;
+        if (alpha < 0.012) continue;
+        alpha = Math.min(alpha, MAX_ALPHA);
+        const r = 0.85 + d.w * 0.45 + k * 1.5;
+
+        if (k > 0.02 && !light) {
+          // Cyan at the centre of the light, magenta towards its edge.
+          const neon = mix(CYAN, MAGENTA, clamp(dist / reach / 0.85));
+          lit.push({ x, y, r, a: alpha, c: `rgb(${mix(ink, neon, clamp(0.25 + k * 2.2)).join(',')})` });
+        } else {
+          const b = Math.min(BUCKETS - 1, Math.floor((alpha / MAX_ALPHA) * BUCKETS));
+          resting[b]!.moveTo(x + r, y);
+          resting[b]!.arc(x, y, r, 0, TAU);
+        }
+      }
+
+      // Resting dots: one fill per brightness step instead of one per dot.
+      ctx!.fillStyle = `rgb(${ink.join(',')})`;
+      resting.forEach((path, b) => {
+        ctx!.globalAlpha = ((b + 0.5) / BUCKETS) * MAX_ALPHA;
+        ctx!.fill(path);
+      });
+
+      // The few dots in the light get their own colour.
+      for (const dot of lit) {
+        ctx!.globalAlpha = dot.a;
+        ctx!.fillStyle = dot.c;
+        ctx!.beginPath();
+        ctx!.arc(dot.x, dot.y, dot.r, 0, TAU);
+        ctx!.fill();
+      }
+      ctx!.globalAlpha = 1;
+    }
+
+    function loop(now: number) {
+      raf = requestAnimationFrame(loop);
+      // The slow idle drift (and touch screens) only needs a third of the frame rate.
+      const idle = !finePointer || now - p.lastMove > 2600;
+      if (idle && frameNo++ % 3) return;
+      draw(now);
+    }
+
+    function play() {
+      if (still || running || !onScreen || document.hidden) return;
+      running = true;
+      raf = requestAnimationFrame(loop);
+    }
+
+    function pause() {
+      running = false;
+      cancelAnimationFrame(raf);
+    }
+
+    function onPointerMove(event: PointerEvent) {
+      if (event.pointerType !== 'mouse' && event.pointerType !== 'pen') return;
+      const rect = root!.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      // Only follow while the cursor is over (or near) the hero.
+      if (y < -120 || y > rect.height + 120) return;
+      p.tx = x;
+      p.ty = y;
+      p.lastMove = performance.now();
+      p.placed = true;
+    }
+
+    const onVisibility = () => (document.hidden ? pause() : play());
+    const resize = new ResizeObserver(() => {
+      layout();
+      if (still) draw(performance.now());
+    });
+    const io = new IntersectionObserver(([entry]) => {
+      onScreen = !!entry?.isIntersecting;
+      onScreen ? play() : pause();
+    });
+    const themeWatch = new MutationObserver(() => {
+      light = html.dataset.theme === 'light';
+      if (still) draw(performance.now());
+    });
+
+    layout();
+    draw(performance.now());
+    resize.observe(root);
+    io.observe(root);
+    themeWatch.observe(html, { attributes: true, attributeFilter: ['data-theme'] });
+    document.addEventListener('visibilitychange', onVisibility);
+    if (!still) window.addEventListener('pointermove', onPointerMove, { passive: true });
+    play();
+
+    teardown = () => {
+      pause();
+      resize.disconnect();
+      io.disconnect();
+      themeWatch.disconnect();
+      document.removeEventListener('visibilitychange', onVisibility);
+      window.removeEventListener('pointermove', onPointerMove);
+      teardown = null;
+    };
+  }
+
+  document.addEventListener('astro:page-load', initField);
+  document.addEventListener('astro:before-swap', () => teardown?.());
+</script>
+
+<style>
+  .field {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 66%;
+    z-index: 0;
+    pointer-events: none;
+    /* Soft edges: fades in from the left and out at the bottom */
+    -webkit-mask-image:
+      linear-gradient(to right, transparent, #000 22%),
+      linear-gradient(to bottom, #000 70%, transparent);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(to right, transparent, #000 22%),
+      linear-gradient(to bottom, #000 70%, transparent);
+    mask-composite: intersect;
+  }
+
+  .field__canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 759px) {
+    .field {
+      width: 100%;
+      -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent);
+      mask-image: linear-gradient(to bottom, #000 70%, transparent);
+    }
+  }
+</style>

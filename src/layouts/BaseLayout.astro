@@ -3,6 +3,7 @@ import '@fontsource-variable/roboto';
 import '@fontsource-variable/roboto-flex';
 import '@/styles/global.css';
 import '@/styles/motion.css';
+import '@/styles/ambient.css';
 import { ClientRouter } from 'astro:transitions';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
@@ -117,11 +118,13 @@ const jsonLd = noindex
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
+    <div class="ambient-light" aria-hidden="true" data-ambient-light transition:persist="ambient-light"></div>
     <Header />
     <main id="main">
       <slot />
     </main>
     <Footer />
+    <div class="grain" aria-hidden="true" transition:persist="grain"></div>
     <script>
       import '@/scripts/motion';
     </script>

@@ -218,3 +218,41 @@ document.addEventListener('astro:after-swap', () => {
   window.clearTimeout(loadingTimer);
   document.documentElement.removeAttribute('data-loading');
 });
+
+/* ---------- Ambient light that follows the mouse ----------
+   Moved with transform (no repaint), eased so it trails slightly,
+   and only animated while it's catching up. Dark mode + motion only. */
+(() => {
+  if (!window.matchMedia('(pointer: fine)').matches) return;
+  const pos = { x: window.innerWidth * 0.7, y: window.innerHeight * 0.25, tx: 0, ty: 0 };
+  pos.tx = pos.x;
+  pos.ty = pos.y;
+  let raf = 0;
+  let idle: number | undefined;
+
+  const step = () => {
+    const el = document.querySelector<HTMLElement>('[data-ambient-light]');
+    pos.x += (pos.tx - pos.x) * 0.08;
+    pos.y += (pos.ty - pos.y) * 0.08;
+    if (el) el.style.transform = `translate3d(${pos.x.toFixed(1)}px, ${pos.y.toFixed(1)}px, 0)`;
+    raf = Math.abs(pos.tx - pos.x) + Math.abs(pos.ty - pos.y) > 0.5 ? requestAnimationFrame(step) : 0;
+  };
+
+  window.addEventListener(
+    'pointermove',
+    (event) => {
+      if (event.pointerType !== 'mouse') return;
+      const html = document.documentElement;
+      if (!html.hasAttribute('data-motion') || html.dataset.theme === 'light') return;
+      pos.tx = event.clientX;
+      pos.ty = event.clientY;
+      if (!html.hasAttribute('data-cursor')) html.setAttribute('data-cursor', '');
+      window.clearTimeout(idle);
+      // Fade out after a while without movement, so it never sits on top of reading.
+      idle = window.setTimeout(() => html.removeAttribute('data-cursor'), 4000);
+      if (!raf) raf = requestAnimationFrame(step);
+    },
+    { passive: true },
+  );
+  document.documentElement.addEventListener('mouseleave', () => document.documentElement.removeAttribute('data-cursor'));
+})();

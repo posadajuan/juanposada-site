@@ -79,3 +79,9 @@ The moving line of logos under the Home headline comes from `src/data/clients.ts
 Each logo is a one-colour SVG in `public/clients/`; the site colours it for dark and light mode.
 To add one: save the SVG there (dark logo, transparent or white background), then add a line with its name, file and ratio (viewBox width ÷ height).
 Official logos came from Wikimedia Commons and were converted to one colour; FISHproa, Cloud Academy and BAZ were traced from Juan's own project files.
+
+## Background effects
+
+- **Dot field on Home** (`src/components/HeroField.astro`): the moving dots and light behind the headline. Brightness of the resting dots: the `0.2 + 0.14` line; size of the light: `reach = 150`; where it's strongest: `shape()`. Remove `<HeroField />` from `src/pages/index.astro` to switch it off.
+- **Grain and cursor glow on every page** (`src/styles/ambient.css`): change `.grain` `opacity` (0.06 dark, 0.05 light) for more or less texture; the glow's strength is in `.ambient-light`'s colours.
+- Visitors who ask their device for less motion get a still dot field and no glow.
