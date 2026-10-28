@@ -205,3 +205,16 @@ document.addEventListener('astro:page-load', () => {
 });
 
 document.addEventListener('astro:before-swap', teardown);
+
+/* ---------- Instant feedback on navigation ----------
+   If the next page takes a moment, a thin bar appears at the top
+   (after 120ms, so fast navigations don't flash it). */
+let loadingTimer: number | undefined;
+document.addEventListener('astro:before-preparation', () => {
+  window.clearTimeout(loadingTimer);
+  loadingTimer = window.setTimeout(() => document.documentElement.setAttribute('data-loading', ''), 120);
+});
+document.addEventListener('astro:after-swap', () => {
+  window.clearTimeout(loadingTimer);
+  document.documentElement.removeAttribute('data-loading');
+});
