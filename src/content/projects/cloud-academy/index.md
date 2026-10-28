@@ -3,7 +3,7 @@ title: Cloud Academy
 outcome: A digital content style guide that aligned Cloud Academy with QA after the acquisition, so the whole team could create cohesive, on-brand content.
 tags: [Design systems, Branding, Illustration]
 year: 2020
-order: 3
+order: 2
 featured: true
 
 cover: ./cover.jpg

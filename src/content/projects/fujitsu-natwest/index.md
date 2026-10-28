@@ -3,7 +3,7 @@ title: Fujitsu & NatWest
 outcome: The look and feel for a Fujitsu learning solution, from NatWest account compliance to Azure sales training, built on the client's brand guidelines.
 tags: [UI & UX, Visual design, Digital learning]
 year: 2023
-order: 4
+order: 3
 featured: false
 
 cover: ./cover.jpg
