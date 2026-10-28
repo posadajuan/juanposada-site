@@ -8,6 +8,8 @@ featured: false
 
 cover: ./cover.jpg
 coverAlt: Two tablets on a light grey and Fujitsu red background, one showing the course menu with red illustrated icons, the other the "Module 1 Introduction" screen with the Fujitsu and NatWest logos
+thumb: ./thumb.jpg
+thumbAlt: A red illustrated magnifying glass over a person icon, with a web page and a message notification, on white
 
 snapshot:
   role: Digital designer, responsible for the look and feel, UI and UX

@@ -41,6 +41,9 @@ const projects = defineCollection({
 
         cover: image(),
         coverAlt: z.string(),
+        /** Optional simpler image for the project card (Home, Work, Next project). Uses the cover if left out. */
+        thumb: image().optional(),
+        thumbAlt: z.string().optional(),
 
         // The case study itself. Required unless the project is private.
         snapshot: z

@@ -8,6 +8,8 @@ featured: true
 
 cover: ./cover.jpg
 coverAlt: Laptop showing an "Understanding Virtualization" video screen in the Cloud Academy style, with yellow and red screen types floating beside it on a dark teal background
+thumb: ./thumb.jpg
+thumbAlt: Flat illustration of a person in an orange chair beside a password field, a server, a globe and a cloud linked by dashed lines
 
 snapshot:
   role: Digital designer; I came up with and created the whole style guide

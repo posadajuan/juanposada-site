@@ -8,6 +8,8 @@ featured: true
 
 cover: ./cover.jpg
 coverAlt: Laptop on a British Council purple background, showing a classroom of colourful shape characters sitting at desks
+thumb: ./thumb.jpg
+thumbAlt: Line-up of colourful shape characters with stick arms and legs, from small round children to a tall green adult with glasses, on white
 
 snapshot:
   role: Character and animation style designer, working directly with the client

@@ -50,6 +50,7 @@ Drop the image in the right folder and add one block under `items:` (galleries) 
 | Image | Shape on the site |
 |---|---|
 | Project cover | 16:11 on cards, 16:10 at the top of the case study: keep the subject centred |
+| Project card image (optional `thumb`) | 16:11. One clean image (a symbol, a character, a single illustration) so the card invites a click. If left out, the card uses the cover |
 | Key screens, showcase, problem image, details | Their own shape (never cropped) |
 | Logos | Square (about 1200 × 1200), logo on its own background colour; fills the tile |
 | Graphic design | Their own shape, in rows per project (never cropped) |

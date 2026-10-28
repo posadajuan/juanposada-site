@@ -168,7 +168,7 @@ const body = '(min-width: 1240px) 900px, 100vw';
             </span>
             <span class="muted">{next.data.outcome}</span>
           </span>
-          <Frame src={next.data.cover} alt="" ratio="16 / 9" sizes={half} class="next__img" />
+          <Frame src={next.data.thumb ?? next.data.cover} alt="" ratio="16 / 9" sizes={half} class="next__img" />
         </a>
       ) : (
         <a class="next__link next__link--simple" href="/work" data-reveal>

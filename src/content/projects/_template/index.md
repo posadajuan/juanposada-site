@@ -23,6 +23,8 @@ private: false                   # true = NDA: locked card, no case study page
 
 cover: ./cover.jpg               # card + top of the case study (landscape)
 coverAlt: Describe the cover image for people who can't see it
+# thumb: ./thumb.jpg             # optional: a simpler image just for the card (16:11). Leave out to use the cover
+# thumbAlt: Describe the card image
 
 snapshot:                        # the recruiter-friendly summary card
   role: Lead product designer

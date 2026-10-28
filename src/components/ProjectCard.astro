@@ -19,13 +19,16 @@ const { data } = project;
 const Heading = `h${level}` as 'h2' | 'h3';
 const href = `/work/${project.id}`;
 const sizes = '(min-width: 1240px) 572px, (min-width: 761px) 50vw, 100vw';
+// Cards can use a simpler image than the case study hero.
+const cardImage = data.thumb ?? data.cover;
+const cardAlt = data.thumb ? (data.thumbAlt ?? data.coverAlt) : data.coverAlt;
 ---
 
 {
   data.private ? (
     <article class="card card--private" data-reveal>
       <div class="card__media card__media--private">
-        <Frame src={data.cover} alt="" ratio="16 / 11" sizes={sizes} radius="m" class="card__blur" />
+        <Frame src={cardImage} alt="" ratio="16 / 11" sizes={sizes} radius="m" class="card__blur" />
         <span class="card__lock" aria-hidden="true">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
             <rect x="5" y="11" width="14" height="10" rx="2" />
@@ -47,7 +50,7 @@ const sizes = '(min-width: 1240px) 572px, (min-width: 761px) 50vw, 100vw';
     </article>
   ) : (
     <a class="card" href={href} data-reveal>
-      <Frame src={data.cover} alt={data.coverAlt} ratio="16 / 11" sizes={sizes} radius="m" priority={priority} />
+      <Frame src={cardImage} alt={cardAlt} ratio="16 / 11" sizes={sizes} radius="m" priority={priority} />
       <div class="card__meta">
         <span class="label tag">{data.tags.join(' · ')}</span>
         {showYear ? (
