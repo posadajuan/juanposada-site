@@ -8,6 +8,7 @@ import GalleryCard from '@/components/GalleryCard.astro';
 import StatGrid from '@/components/StatGrid.astro';
 import Frame from '@/components/Frame.astro';
 import LogoMarquee from '@/components/LogoMarquee.astro';
+import HeroField from '@/components/HeroField.astro';
 import CtaBlock from '@/components/CtaBlock.astro';
 import StepIcon from '@/components/StepIcon.astro';
 import { getFeaturedProjects, getPublicProjects, getGalleries, getDesignProjects } from '@/lib/content';
@@ -21,20 +22,23 @@ const eyebrow = `Selected work · ${String(featured.length).padStart(2, '0')}`;
 ---
 
 <BaseLayout>
-  <section class="container hero">
-    <Availability />
-    <HeroTitle
-      segments={[
-        { text: 'I design' },
-        { text: 'brands, products and experiences', gradient: true },
-        { text: 'that people understand, use and remember.' },
-      ]}
-    />
-    <div class="hero__actions">
-      <a href="/work" class="btn btn--primary">See my work <span class="arrow" aria-hidden="true">→</span></a>
-      <a href="/contact" class="btn btn--secondary">Get in touch</a>
-    </div>
-  </section>
+  <div class="hero-wrap">
+    <HeroField />
+    <section class="container hero">
+      <Availability />
+      <HeroTitle
+        segments={[
+          { text: 'I design' },
+          { text: 'brands, products and experiences', gradient: true },
+          { text: 'that people understand, use and remember.' },
+        ]}
+      />
+      <div class="hero__actions">
+        <a href="/work" class="btn btn--primary">See my work <span class="arrow" aria-hidden="true">→</span></a>
+        <a href="/contact" class="btn btn--secondary">Get in touch</a>
+      </div>
+    </section>
+  </div>
 
   <div class="container section">
     <LogoMarquee />
@@ -109,7 +113,15 @@ const eyebrow = `Selected work · ${String(featured.length).padStart(2, '0')}`;
 </BaseLayout>
 
 <style>
+  /* Full-width so the dot field can reach the right edge of the screen */
+  .hero-wrap {
+    position: relative;
+    overflow: hidden;
+  }
+
   .hero {
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     gap: 36px;

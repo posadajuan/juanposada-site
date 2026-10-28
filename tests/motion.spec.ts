@@ -90,3 +90,34 @@ test.describe('with reduced motion', () => {
     await expect(page.locator('html')).not.toHaveAttribute('data-nav-hidden', '');
   });
 });
+
+test.describe('ambient background', () => {
+  test('the hero dot field is decorative and never blocks clicks', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('[data-field]')).toHaveAttribute('aria-hidden', 'true');
+    // The grain sits over everything but lets clicks through
+    await page.getByRole('link', { name: /See my work/ }).click();
+    await expect(page).toHaveURL(/\/work\/?$/);
+  });
+
+  test('with reduced motion the field is drawn once and stays still', async ({ browser }) => {
+    const context = await browser.newContext({ reducedMotion: 'reduce' });
+    const page = await context.newPage();
+    await page.goto('/');
+    const redraws = await page.evaluate(
+      () =>
+        new Promise<number>((resolve) => {
+          const ctx = document.querySelector<HTMLCanvasElement>('[data-field] canvas')!.getContext('2d')!;
+          let n = 0;
+          const clear = ctx.clearRect.bind(ctx);
+          ctx.clearRect = (...args) => {
+            n++;
+            return clear(...args);
+          };
+          setTimeout(() => resolve(n), 800);
+        }),
+    );
+    expect(redraws).toBe(0);
+    await context.close();
+  });
+});
