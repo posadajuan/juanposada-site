@@ -35,7 +35,7 @@ export const site = {
   socials: [
     { label: 'LinkedIn', href: 'https://www.linkedin.com/in/posadajuan/' },
     { label: 'Behance', href: 'https://www.behance.net/posadajuan' },
-    { label: 'Instagram', href: '' },
+    { label: 'Instagram', href: 'https://www.instagram.com/juan_studiodesign/' },
   ],
 
   /**

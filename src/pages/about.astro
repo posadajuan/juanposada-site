@@ -3,11 +3,19 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import Frame from '@/components/Frame.astro';
 import CtaBlock from '@/components/CtaBlock.astro';
 import { about, ctas } from '@/data/pages';
+import { PERSON_ID } from '@/lib/seo';
 
 const half = '(min-width: 761px) 50vw, 100vw';
 ---
 
-<BaseLayout title="About" description={about.intro}>
+<BaseLayout
+  title="About"
+  description={about.intro}
+  image={about.portrait}
+  imageAlt={about.portraitAlt}
+  type="profile"
+  schema={[{ '@type': 'ProfilePage', name: 'About Juan Posada', mainEntity: { '@id': PERSON_ID } }]}
+>
   <section class="container intro">
     <div class="intro__text" data-reveal="stagger">
       <p class="label muted">About</p>

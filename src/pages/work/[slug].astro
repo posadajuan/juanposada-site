@@ -10,6 +10,7 @@ import CaseStudy from '@/components/CaseStudy.astro';
 import GalleryPage from '@/components/GalleryPage.astro';
 import CtaBlock from '@/components/CtaBlock.astro';
 import { ctas } from '@/data/pages';
+import { PERSON_ID } from '@/lib/seo';
 import { getGalleries, getPublicProjects, nextProject, type Gallery, type Project } from '@/lib/content';
 
 export const getStaticPaths = (async () => {
@@ -51,8 +52,50 @@ const props = Astro.props as Props;
 
 const meta =
   props.kind === 'project'
-    ? { title: props.project.data.title, description: props.project.data.outcome, image: props.project.data.cover.src }
-    : { title: props.gallery.data.title, description: props.gallery.data.summary, image: props.gallery.data.cover.src };
+    ? {
+        title: props.project.data.title,
+        description: props.project.data.outcome,
+        image: props.project.data.cover,
+        imageAlt: props.project.data.coverAlt,
+      }
+    : {
+        title: props.gallery.data.title,
+        description: props.gallery.data.summary,
+        image: props.gallery.data.cover,
+        imageAlt: props.gallery.data.coverAlt,
+      };
+
+// Structured data so search engines and AI assistants know what this work is and who made it.
+const pageUrl = new URL(`/work/${props.kind === 'project' ? props.project.id : props.gallery.id}/`, Astro.site).href;
+const schema: Record<string, unknown>[] = [
+  props.kind === 'project'
+    ? {
+        '@type': 'CreativeWork',
+        '@id': `${pageUrl}#work`,
+        name: props.project.data.title,
+        headline: props.project.data.title,
+        description: props.project.data.outcome,
+        url: pageUrl,
+        dateCreated: String(props.project.data.year),
+        keywords: props.project.data.tags.join(', '),
+        creator: { '@id': PERSON_ID },
+        inLanguage: 'en-GB',
+      }
+    : {
+        '@type': 'CollectionPage',
+        name: props.gallery.data.title,
+        description: props.gallery.data.summary,
+        url: pageUrl,
+        author: { '@id': PERSON_ID },
+      },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Work', item: new URL('/work/', Astro.site).href },
+      { '@type': 'ListItem', position: 2, name: meta.title, item: pageUrl },
+    ],
+  },
+];
 
 // End each page with a call to action that fits what the visitor just saw.
 const cta = (() => {
@@ -64,7 +107,14 @@ const cta = (() => {
 })();
 ---
 
-<BaseLayout title={meta.title} description={meta.description} image={meta.image}>
+<BaseLayout
+  title={meta.title}
+  description={meta.description}
+  image={meta.image}
+  imageAlt={meta.imageAlt}
+  type={props.kind === 'project' ? 'article' : 'website'}
+  schema={schema}
+>
   {
     props.kind === 'project' ? (
       <CaseStudy project={props.project} next={props.next} />

@@ -28,9 +28,15 @@ const sections = await Promise.all(
   }),
 );
 const total = sections.reduce((n, s) => n + s.images.length, 0);
+const shareImage = sections[0]?.images[0];
 ---
 
-<BaseLayout title="Graphic design" description="Brand identities, packaging, print and illustration by Juan Posada.">
+<BaseLayout
+  title="Graphic design"
+  description="Brand identities, packaging, print and illustration by Juan Posada, from BMW and Citroën brochures to restaurant and hostel identities."
+  image={shareImage?.src}
+  imageAlt={shareImage?.alt}
+>
   <section class="container page-intro" data-reveal="stagger">
     <a href="/work" class="link back-link">← All work</a>
     <p class="label tag">Graphic design · {projects.length} projects</p>
