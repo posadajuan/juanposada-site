@@ -6,7 +6,9 @@ export const site = {
   name: 'Juan Posada',
   url: 'https://juanposada.co.uk',
   description:
-    'Juan Posada is a London-based designer working across product, UX/UI, branding and print, creating work people understand, use and remember.',
+    'Juan Posada is a London-based product designer working across UX/UI, branding and print, creating work people understand, use and remember.',
+  /** What you do, in a few words: used in the Home page title and for search engines. */
+  role: 'Product Designer',
   location: 'London, UK',
 
   /**
@@ -40,11 +42,14 @@ export const site = {
 
   /**
    * Theme for first-time visitors.
-   * 'dark'   = always start in dark mode (the main look).
-   * 'system' = follow the visitor's device setting.
-   * A visitor's own choice from the toggle is always remembered.
+   * 'system' = follow the visitor's device setting, live (light if the device
+   *            doesn't say: light text-on-dark reads less well for most people
+   *            in normal lighting).
+   * 'dark' / 'light' = always start in that mode.
+   * Picking a mode with the toggle is remembered; picking the one the device
+   * already uses goes back to following the device.
    */
-  defaultTheme: 'dark' as 'dark' | 'system',
+  defaultTheme: 'system' as 'system' | 'dark' | 'light',
 };
 
 export const nav = [

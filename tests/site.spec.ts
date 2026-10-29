@@ -61,7 +61,32 @@ test('availability line shows a Monday date', async ({ page }) => {
   await expect(page.locator('[data-availability]').first()).toContainText(/Monday \d{1,2} \w+/);
 });
 
+test('theme follows the device: light by default, dark when the device is dark', async ({ browser }) => {
+  for (const scheme of ['light', 'dark'] as const) {
+    const ctx = await browser.newContext({ colorScheme: scheme });
+    const page = await ctx.newPage();
+    await page.goto('/');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', scheme);
+    await ctx.close();
+  }
+  const ctx = await browser.newContext({ colorScheme: 'no-preference' });
+  const page = await ctx.newPage();
+  await page.goto('/');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await ctx.close();
+});
+
+test('theme follows device changes live until the visitor picks a mode', async ({ page }) => {
+  await page.emulateMedia({ colorScheme: 'light' });
+  await page.goto('/');
+  const html = page.locator('html');
+  await expect(html).toHaveAttribute('data-theme', 'light');
+  await page.emulateMedia({ colorScheme: 'dark' });
+  await expect(html).toHaveAttribute('data-theme', 'dark');
+});
+
 test('theme toggle switches mode and remembers it', async ({ page, isMobile }) => {
+  await page.emulateMedia({ colorScheme: 'dark' });
   await page.goto('/');
   const html = page.locator('html');
   await expect(html).toHaveAttribute('data-theme', 'dark');
@@ -72,8 +97,13 @@ test('theme toggle switches mode and remembers it', async ({ page, isMobile }) =
   await expect(html).toHaveAttribute('data-theme', 'light');
   await expect(toggle).toHaveAttribute('aria-checked', 'false');
 
+  // The choice sticks, even though the device is still dark.
   await page.reload();
   await expect(html).toHaveAttribute('data-theme', 'light');
+
+  // Picking the device's own mode goes back to following the device.
+  await page.getByRole('switch', { name: /Dark/ }).click();
+  expect(await page.evaluate(() => localStorage.getItem('theme'))).toBeNull();
   test.info().annotations.push({ type: 'viewport', description: isMobile ? 'mobile' : 'desktop' });
 });
 

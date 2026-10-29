@@ -358,7 +358,11 @@ const isActive = (href: string) => path === href || path.startsWith(`${href}/`);
       const next = root.dataset.theme === 'light' ? 'dark' : 'light';
       root.dataset.theme = next;
       try {
-        localStorage.setItem('theme', next);
+        // Remember the choice, unless it's what the device already uses:
+        // then go back to following the device.
+        const device = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        if (next === device) localStorage.removeItem('theme');
+        else localStorage.setItem('theme', next);
       } catch {}
       document
         .querySelector('meta[name="theme-color"]')
@@ -395,4 +399,5 @@ const isActive = (href: string) => path === href || path.startsWith(`${href}/`);
   });
 
   document.addEventListener('astro:page-load', syncToggleLabel);
+  document.addEventListener('themechange', syncToggleLabel);
 </script>

@@ -37,3 +37,14 @@ Being found and quoted by ChatGPT, Claude, Perplexity, Gemini and Google's AI an
    - Leave "Managed robots.txt" off, so the site's own robots.txt is used.
 4. **Cloudflare Web Analytics** (free, no cookie banner needed): Cloudflare → Analytics & Logs → Web Analytics → Add a site → juanposada.co.uk → automatic setup.
 5. **Check link previews:** paste a page link into LinkedIn's Post Inspector (linkedin.com/post-inspector) to see the preview and refresh LinkedIn's copy.
+
+## Ranking for your name
+
+Google already knows other people called Juan Posada, so it needs clear signals that this site is the designer's:
+
+1. **Search Console** (most important): add `juanposada.co.uk` as a Domain property, verify through Cloudflare, submit `sitemap.xml`, then use URL inspection → Request indexing on `/` and `/about/`.
+2. **Cloudflare → Caching → Configuration → Crawler Hints: On.** It tells Bing and other IndexNow search engines automatically whenever the site changes.
+3. **Same name and line everywhere**: "Juan Posada, Product Designer in London" as the headline on LinkedIn, Behance and Instagram, each linking to juanposada.co.uk.
+4. **Links from trusted sites**: project credits, employer or partner pages, course alumni listings, awards.
+
+The site already describes you for search engines (Person data with job title, a "which Juan Posada" description, profiles and credentials; one CreativeWork per case study). The job title lives in `src/data/site.ts` → `role`.
