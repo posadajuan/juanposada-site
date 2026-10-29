@@ -1,5 +1,6 @@
 ---
 title: Exploring the Maritime World
+metaTitle: Lloyd's Register e-learning — Exploring the Maritime World
 outcome: An e-learning course for Lloyd's Register that introduces the basics of the maritime industry.
 tags: [Visual design, UI design, Digital learning]
 year: 2025

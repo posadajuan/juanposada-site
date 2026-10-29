@@ -11,6 +11,7 @@ import GalleryPage from '@/components/GalleryPage.astro';
 import CtaBlock from '@/components/CtaBlock.astro';
 import { ctas } from '@/data/pages';
 import { PERSON_ID } from '@/lib/seo';
+import { site } from '@/data/site';
 import { getGalleries, getPublicProjects, nextProject, type Gallery, type Project } from '@/lib/content';
 
 export const getStaticPaths = (async () => {
@@ -53,14 +54,15 @@ const props = Astro.props as Props;
 const meta =
   props.kind === 'project'
     ? {
-        title: props.project.data.title,
+        // e.g. "Cyber Explorers — UI & UX case study": says what the page is in search results.
+        title: props.project.data.metaTitle ?? `${props.project.data.title} — ${props.project.data.tags[0]} case study`,
         description: props.project.data.outcome,
         image: props.project.data.cover,
         imageAlt: props.project.data.coverAlt,
       }
     : {
         title: props.gallery.data.title,
-        description: props.gallery.data.summary,
+        description: `${props.gallery.data.summary}, by ${site.name}, ${site.role.toLowerCase()} in London.`,
         image: props.gallery.data.cover,
         imageAlt: props.gallery.data.coverAlt,
       };

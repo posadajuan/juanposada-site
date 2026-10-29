@@ -24,6 +24,8 @@ const projects = defineCollection({
     z
       .object({
         title: z.string(),
+        /** Optional title for search results and link previews, when the project title alone doesn't say who it was for. */
+        metaTitle: z.string().optional(),
         /** One line: what changed because of the work. Shown on cards and as the subtitle. */
         outcome: z.string().max(160, 'Keep the outcome to one short sentence (160 characters max).'),
         tags: z.array(z.string()).min(1).max(3),
