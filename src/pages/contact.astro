@@ -305,7 +305,7 @@ const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000
   }
 
   .turnstile {
-    min-height: 0;
+    min-height: 65px; /* room for the check, so the button doesn't jump */
   }
 
   .form__submit {
@@ -389,8 +389,18 @@ const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000
     widgetId = w.turnstile.render(box, {
       sitekey: box.dataset.sitekey,
       theme: document.documentElement.dataset.theme === 'light' ? 'light' : 'dark',
-      appearance: 'interaction-only', // invisible unless Cloudflare needs a click
+      // Always visible: in 'Managed' mode Cloudflare often asks for a click, and a
+      // hidden widget left visitors with no way to pass the check.
+      appearance: 'always',
+      size: 'flexible',
       action: 'contact',
+      callback: () => {
+        const status = document.querySelector<HTMLElement>('[data-contact-form] [data-status]');
+        if (status?.dataset.waiting) {
+          status.textContent = '';
+          delete status.dataset.waiting;
+        }
+      },
     });
   }
 
@@ -444,6 +454,15 @@ const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000
     const button = form.querySelector<HTMLButtonElement>('[data-submit]')!;
     status.textContent = '';
     if (!validate(form)) return;
+
+    // Don't send until the spam check has produced its token.
+    const token = new FormData(form).get('cf-turnstile-response');
+    if (widgetId && !token) {
+      status.dataset.waiting = '1';
+      status.textContent = 'One moment: please complete the quick security check above the button, then press Send again.';
+      document.querySelector<HTMLElement>('[data-turnstile]')?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      return;
+    }
 
     button.disabled = true;
     button.textContent = 'Sending…';
