@@ -128,6 +128,15 @@ const jsonLd = noindex
     </script>
 
     <ClientRouter fallback="swap" />
+
+    {import.meta.env.PROD && site.cfAnalyticsToken && (
+      <script
+        is:inline
+        defer
+        src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon={JSON.stringify({ token: site.cfAnalyticsToken, spa: true })}
+      ></script>
+    )}
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
