@@ -36,11 +36,16 @@ export async function personSchema() {
     '@type': 'Person',
     '@id': PERSON_ID,
     name: site.name,
+    givenName: 'Juan',
+    familyName: 'Posada',
     url: `${site.url}/`,
     image: new URL(portrait.src, site.url).href,
-    jobTitle: 'Designer',
+    jobTitle: site.role,
+    hasOccupation: { '@type': 'Occupation', name: site.role, occupationLocation: { '@type': 'City', name: 'London' } },
     description: site.description,
-    worksFor: { '@type': 'Organization', name: 'QA Ltd' },
+    // Tells search engines which Juan Posada this is.
+    disambiguatingDescription: `${site.role} in London leading concept, UX/UI and creative direction for digital learning products and brand identities.`,
+    worksFor: { '@type': 'Organization', name: 'QA Ltd', url: 'https://www.qa.com/' },
     address: { '@type': 'PostalAddress', addressLocality: 'London', addressCountry: 'GB' },
     knowsAbout: [
       'Product design',

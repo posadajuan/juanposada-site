@@ -33,7 +33,7 @@ const {
   schema = [],
   noindex = false,
 } = Astro.props;
-const pageTitle = title ? `${title} · ${site.name}` : `${site.name} — Designer in London`;
+const pageTitle = title ? `${title} · ${site.name}` : `${site.name} — ${site.role} in London`;
 const canonical = new URL(canonicalPath(Astro.url.pathname), Astro.site);
 const imagePath = typeof image === 'string' ? image : await socialImage(image);
 const ogImage = new URL(imagePath, Astro.site);
@@ -45,7 +45,7 @@ const jsonLd = noindex
 ---
 
 <!doctype html>
-<html lang="en-GB" data-theme="dark">
+<html lang="en-GB" data-theme="light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -77,23 +77,28 @@ const jsonLd = noindex
     <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <meta name="theme-color" content="#0a0a0a" />
+    <meta name="theme-color" content="#ffffff" />
 
     <!--
       Set the theme before the page paints, so there is never a flash
-      of the wrong colours. Order: visitor's saved choice → site default.
+      of the wrong colours. Order: visitor's saved choice → device setting
+      (when defaultTheme is 'system') → site default.
     -->
     <script is:inline define:vars={{ defaultTheme: site.defaultTheme }}>
       (function () {
-        function pick() {
+        var darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        function saved() {
           try {
-            var saved = localStorage.getItem('theme');
-            if (saved === 'light' || saved === 'dark') return saved;
+            var t = localStorage.getItem('theme');
+            if (t === 'light' || t === 'dark') return t;
           } catch (e) {}
-          if (defaultTheme === 'system') {
-            return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-          }
-          return 'dark';
+          return null;
+        }
+        function pick() {
+          var t = saved();
+          if (t) return t;
+          if (defaultTheme === 'system') return darkQuery.matches ? 'dark' : 'light';
+          return defaultTheme;
         }
         function apply(doc) {
           var theme = pick();
@@ -110,6 +115,15 @@ const jsonLd = noindex
         document.addEventListener('astro:before-swap', function (e) {
           apply(e.newDocument);
         });
+        // Follow the device live (e.g. automatic dark mode at sunset), unless
+        // the visitor has picked a mode themselves.
+        if (defaultTheme === 'system') {
+          darkQuery.addEventListener('change', function () {
+            if (saved()) return;
+            apply(document);
+            document.dispatchEvent(new Event('themechange'));
+          });
+        }
       })();
     </script>
 
