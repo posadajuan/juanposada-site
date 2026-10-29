@@ -50,6 +50,11 @@ export const site = {
    * already uses goes back to following the device.
    */
   defaultTheme: 'system' as 'system' | 'dark' | 'light',
+  /**
+   * Cloudflare Web Analytics (privacy-friendly visit counts, no cookies).
+   * The token is public: it appears in every page. Leave empty to turn it off.
+   */
+  cfAnalyticsToken: 'e327df8506be4621ac25bca9f5680f95',
 };
 
 export const nav = [
