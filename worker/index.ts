@@ -83,7 +83,8 @@ async function handleContact(request: Request, env: Env): Promise<Response> {
   try {
     await env.SEND_EMAIL.send(new EmailMessage(env.CONTACT_FROM, env.CONTACT_TO, raw));
   } catch (err) {
-    console.error('Sending the contact email failed', err);
+    // Spell out Cloudflare's reason, so it's readable in the Logs list without expanding the row.
+    console.error(`Sending the contact email failed: ${err instanceof Error ? err.message : String(err)}`);
     return json(502, { ok: false, error: 'send_failed' });
   }
 
