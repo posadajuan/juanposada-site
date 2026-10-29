@@ -12,7 +12,7 @@ Cloudflare moved Email Routing in 2026. It now lives under **Compute → Email S
 3. **Routing Rules** → **Create routing rule** → Email pattern `hello` → action **Send to an email** → your verified inbox → **Save**.
    This is the address the "Copy email" button gives out.
 
-## 2. Turnstile (the invisible "are you human?" check)
+## 2. Turnstile (the "are you human?" check above the Send button)
 
 1. Cloudflare dashboard → **Turnstile** → **Add widget** → choose **Add widget manually** (not "Set up with Spin").
 2. Name: `Portfolio contact form`.
