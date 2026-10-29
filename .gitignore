@@ -21,3 +21,7 @@ npm-debug.log*
 
 # Cloudflare
 .wrangler/
+
+# Playwright output
+test-results/
+playwright-report/
