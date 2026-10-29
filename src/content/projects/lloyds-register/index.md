@@ -52,20 +52,14 @@ solution:
         set the tone while leaving clear space for text and interactions.
       image: ./ship-scale.jpg
       imageAlt: Page over a deep blue sea background comparing the Empire State Building (381 metres) with the Ever Alot container ship (400 metres) in white line drawings, with an aerial photo of a tanker's bow
-    - title: UI and graphics that fit together
+    - title: UI, graphics and diagrams as one system
       text: >
         I designed the UI and graphics to sit on the backgrounds as one
-        system: buttons, cards, icons and cut-out ship images that learners
-        select to explore each type of vessel.
-      image: ./vessel-types.jpg
-      imageAlt: Interaction with four cut-out aerial photos of ships, labelled dry cargo, liquid cargo, specialised cargo and others, above a "What's next?" section
-    - title: Complex information made clear
-      text: >
-        Diagrams and infographics break down topics such as value chains
-        and how they depend on each other, using a consistent set of icons,
-        arrows and labels.
-      image: ./value-chains.jpg
-      imageAlt: Diagram of the interdependencies between the marine fuel, shipbuilding and maritime operational value chains, with icons, steps and dashed arrows
+        system: cut-out ship images that learners select to explore each
+        type of vessel, and diagrams that break down topics such as value
+        chains, using a consistent set of icons, arrows and labels.
+      image: ./ui-and-diagrams.jpg
+      imageAlt: Two course screens on deep navy, four cut-out aerial photos of ships labelled dry cargo, liquid cargo, specialised cargo and others, and a diagram of how the marine fuel, shipbuilding and maritime operational value chains depend on each other
     - title: Style and assets for the animation
       text: >
         I created and designed the assets and visual style for the course

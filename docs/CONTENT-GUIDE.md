@@ -51,6 +51,7 @@ Drop the image in the right folder and add one block under `items:` (galleries) 
 |---|---|
 | Project cover | 16:11 on cards, 16:10 at the top of the case study: keep the subject centred |
 | Key screens, showcase, problem image, details | Their own shape (never cropped) |
+| Wide key screens (about 2:1 or wider) | Shown full width with the text underneath, so they stay readable. Add `wide: true` to a decision to do the same for any image |
 | Logos | Square (about 1200 × 1200), logo on its own background colour; fills the tile |
 | Graphic design | Their own shape, in rows per project (never cropped) |
 | Photos | 3:2 tiles, one featured large; the viewer shows the full photo |

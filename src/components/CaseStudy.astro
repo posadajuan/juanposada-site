@@ -121,22 +121,26 @@ const body = '(min-width: 1240px) 900px, 100vw';
         <p class="label tag" data-reveal>03 · Solution</p>
         <h2 id="h-solution" class="cs__h2" data-reveal>{solution.headline}</h2>
         {
-          solution.decisions.map((d, i) => (
-            <div class:list={['decision', { 'decision--flip': i % 2 === 1 }]} data-reveal="stagger">
-              <Frame src={d.image} alt={d.imageAlt} sizes={half} radius="m" />
+          solution.decisions.map((d, i) => {
+            // Wide images get the full column so they stay readable; the text sits underneath.
+            const wide = d.wide ?? d.image.width / d.image.height >= 1.9;
+            return (
+            <div class:list={['decision', { 'decision--flip': !wide && i % 2 === 1, 'decision--wide': wide }]} data-reveal="stagger">
+              <Frame src={d.image} alt={d.imageAlt} sizes={wide ? body : half} radius="m" />
               <div class="decision__text">
                 <h3 class="decision__title">{d.title}</h3>
                 <p>{d.text}</p>
               </div>
             </div>
-          ))
+            );
+          })
         }
         {solution.showcase && <Frame src={solution.showcase} alt={solution.showcaseAlt ?? ''} sizes={body} reveal />}
         {
           solution.details.length > 0 && (
-            <div class="details" data-reveal>
+            <div class:list={['details', { 'details--single': solution.details.length === 1 }]} data-reveal>
               {solution.details.map((d) => (
-                <Frame src={d.image} alt={d.imageAlt} sizes={half} radius="m" />
+                <Frame src={d.image} alt={d.imageAlt} sizes={solution.details.length === 1 ? body : half} radius="m" />
               ))}
             </div>
           )
@@ -387,6 +391,15 @@ const body = '(min-width: 1240px) 900px, 100vw';
     order: 2;
   }
 
+  .decision--wide {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+
+  .decision--wide .decision__text {
+    max-width: 680px;
+  }
+
   .decision__text {
     display: flex;
     flex-direction: column;
@@ -407,6 +420,10 @@ const body = '(min-width: 1240px) 900px, 100vw';
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 24px;
     align-items: start;
+  }
+
+  .details--single {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .next {
