@@ -56,8 +56,9 @@ solution:
         devices, windows, connectors and brand shapes that can be edited
         and combined to explain any idea. They're easy to animate, and
         avoiding 3D means everything can be reused in future scenes.
-      image: ./illustration.jpg
-      imageAlt: Illustration style page with a person in an orange chair, a padlock, a password field, a server, a globe and clouds connected by dashed lines
+      image: ./illustration-kit.jpg
+      imageAlt: Four panels of reusable illustration parts, devices and servers on light blue, windows, charts and folders on light blue, white line icons on dark teal, and colourful graphic icons on white
+      wide: true
     - title: A character pack
       text: >
         Characters follow the same rules: simple, flat and configurable, so
@@ -76,8 +77,6 @@ solution:
   details:
     - image: ./typography.jpg
       imageAlt: Typography page showing Montserrat in Bold for headlines, SemiBold for subheaders and Regular for body copy
-    - image: ./icons.jpg
-      imageAlt: Iconography page with a grid of white line icons for cloud, servers, security and devices on dark teal
 
 impact:
   headline: One style guide the team used to keep Cloud Academy content consistent as the two companies came together.

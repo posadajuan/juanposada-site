@@ -82,6 +82,8 @@ const projects = defineCollection({
                   text: z.string(),
                   image: image(),
                   imageAlt: z.string(),
+                  /** Show the image full width with the text below. Wide images (about 2:1 or wider) do this automatically. */
+                  wide: z.boolean().optional(),
                 }),
               )
               .max(4)
@@ -89,7 +91,7 @@ const projects = defineCollection({
             /** Optional big full-width image. */
             showcase: image().optional(),
             showcaseAlt: z.string().optional(),
-            /** Optional pair of square detail images. */
+            /** Optional pair of detail images (a single one shows full width). */
             details: z
               .array(z.object({ image: image(), imageAlt: z.string() }))
               .max(2)

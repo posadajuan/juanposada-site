@@ -63,9 +63,10 @@ solution:
       text: Why you made it, in two lines.
       image: ./decision-2.jpg
       imageAlt: What this screen shows
+      wide: true                 # optional: image full width, text below (automatic for images about 2:1 or wider)
   showcase: ./showcase.jpg       # optional big full-width image
   showcaseAlt: What the showcase shows
-  details:                       # optional pair of square images
+  details:                       # optional pair of images (one on its own shows full width)
     - image: ./detail-1.jpg
       imageAlt: Detail one
     - image: ./detail-2.jpg

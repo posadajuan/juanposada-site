@@ -68,13 +68,8 @@ solution:
         content into decisions learners have to make.
       image: ./scenario.jpg
       imageAlt: Customer scenario activity with a progress bar, a photo of colleagues around a tablet, a timer showing 20 seconds remaining and two answer options with a Submit button
-  showcase: ./all-pages.jpg
-  showcaseAlt: Six full-length course pages side by side, including Azure Sales training, a managed services module, light and dark course menus and two versions of the NatWest module introduction
-  details:
-    - image: ./menu-light.jpg
-      imageAlt: Light version of the course menu with a photo of two colleagues meeting, the NatWest and Fujitsu logos and illustrated topic cards
-    - image: ./menu-dark.jpg
-      imageAlt: Dark version of the same course menu, with the topic cards on a charcoal background
+  showcase: ./pages.jpg
+  showcaseAlt: Four course pages side by side, the Azure Sales training menu with photo cards, the light course menu with red illustrated icons, the NatWest Module 1 introduction, and the dark course menu
 
 impact:
   headline: A look and feel, and an asset guide, used to build the learning solution in the client's brand.
