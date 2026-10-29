@@ -7,7 +7,7 @@ order: 1
 featured: true
 
 cover: ./cover.jpg
-coverAlt: The Cyber Explorers home page on a laptop, with the welcome message for 11–14 year olds over an illustrated city skyline
+coverAlt: The Cyber Explorers mission brief screen, "Your mission… if you choose to accept", floating above the illustrated Cyber City skyline at dusk
 
 snapshot:
   role: Digital graphics designer, responsible for the UI, UX and game concepts
@@ -72,8 +72,8 @@ solution:
         I created all the UI and produced the visual content, setting up the
         assets so production could scale across the team and stay consistent
         across every activity.
-      image: ./page-layouts.png
-      imageAlt: Four full-length Cyber Explorers activity pages side by side, built from the same set of panels, command prompts, characters and navigation
+      image: ./modules.jpg
+      imageAlt: Three activity pages from later missions, "Step up to success" and two "All systems are a go go!" screens, built from the same panels, audio players, characters and city illustrations
   showcase: ./on-a-roll.png
   showcaseAlt: "\"You're on a roll!\" screen: guide character Rehka encourages the learner to find the PowerShell script, beside the villain King Herbert, with a padlock to unlock the next stage"
 
