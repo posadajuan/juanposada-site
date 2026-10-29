@@ -91,54 +91,10 @@ async function handleContact(request: Request, env: Env): Promise<Response> {
   return json(200, { ok: true });
 }
 
-/**
- * TEMPORARY diagnostic, switches itself off after SELFTEST_UNTIL.
- * POST /api/contact-selftest (same site only, rate limited) sends one fixed test
- * email to CONTACT_TO and returns Cloudflare's exact reason if sending fails.
- * It can only ever email Juan's own inbox. Remove once the form works.
- */
-const SELFTEST_UNTIL = Date.parse('2026-11-05T00:00:00Z');
-
-async function handleSelfTest(request: Request, env: Env): Promise<Response> {
-  if (Date.now() > SELFTEST_UNTIL) return json(404, { ok: false, error: 'not_found' });
-  if (request.method !== 'POST' || !isSameOrigin(request)) return json(403, { ok: false, error: 'origin' });
-  if (env.CONTACT_LIMITER) {
-    const { success } = await env.CONTACT_LIMITER.limit({ key: `selftest:${request.headers.get('CF-Connecting-IP') ?? 'unknown'}` });
-    if (!success) return json(429, { ok: false, error: 'rate_limited' });
-  }
-  const checks = {
-    SEND_EMAIL: !!env.SEND_EMAIL,
-    CONTACT_TO: !!env.CONTACT_TO,
-    CONTACT_FROM: env.CONTACT_FROM ?? null,
-    TURNSTILE_SECRET: !!env.TURNSTILE_SECRET,
-    // Only the shape of the inbox address, never the address itself.
-    contactToLooksValid: !!env.CONTACT_TO && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(env.CONTACT_TO),
-    contactToDomain: env.CONTACT_TO?.includes('@') ? env.CONTACT_TO.split('@').pop() : null,
-    contactToLength: env.CONTACT_TO?.length ?? 0,
-    contactToHasSpaces: !!env.CONTACT_TO && env.CONTACT_TO !== env.CONTACT_TO.trim(),
-  };
-  if (!env.SEND_EMAIL || !env.CONTACT_TO || !env.CONTACT_FROM) return json(503, { ok: false, step: 'config', checks });
-  const { raw } = buildEmail(
-    { name: 'Website self-test', email: env.CONTACT_FROM, message: 'Test email from the contact form self-test. If you got this, sending works.', topics: [], token: '', trap: '' },
-    { from: env.CONTACT_FROM, to: env.CONTACT_TO, site: env.SITE_URL ?? new URL(request.url).origin },
-  );
-  try {
-    await env.SEND_EMAIL.send(new EmailMessage(env.CONTACT_FROM, env.CONTACT_TO, raw));
-    return json(200, { ok: true, step: 'sent', checks });
-  } catch (err) {
-    // Mask addresses and keys so nothing private is ever returned.
-    const reason = (err instanceof Error ? err.message : String(err))
-      .replace(/[^\s(<]+@([^\s)>]+)/g, '***@$1')
-      .replace(/0x[0-9A-Za-z_-]{6,}/g, '0x***');
-    return json(502, { ok: false, step: 'send', reason, checks });
-  }
-}
-
 export default {
   async fetch(request, env): Promise<Response> {
     const url = new URL(request.url);
     if (url.pathname === '/api/contact') return handleContact(request, env);
-    if (url.pathname === '/api/contact-selftest') return handleSelfTest(request, env);
     if (url.pathname.startsWith('/api/')) return json(404, { ok: false, error: 'not_found' });
     return env.ASSETS.fetch(request);
   },
