@@ -13,6 +13,7 @@
 # ─────────────────────────────────────────────────────────────
 
 title: Project name
+# metaTitle: Client name — Project name   # optional: title in Google and link previews when the project name alone does not say who it was for
 outcome: One sentence on what changed because of the work.   # max 160 characters
 tags: [Product, Branding]        # 1–3 short tags
 year: 2025
