@@ -202,6 +202,8 @@ const graphicDesign = defineCollection({
 // One folder per job application: src/content/for/<company-slug>/index.md
 // These pages are hidden: not in the menu, sitemap or search engines.
 // Only people with the link (the hiring team) will see them.
+// Layout: headline -> short intro tailored to the role and brand -> black card with
+// Juan's interest in the role and buttons into the rest of the website.
 
 const applications = defineCollection({
   loader: glob({ pattern: entryFiles, base: './src/content/for' }),
@@ -214,24 +216,12 @@ const applications = defineCollection({
     draft: z.boolean().default(false),
     /** Headline: text, then the gradient words, then text. */
     hero: z.object({ before: z.string(), highlight: z.string(), after: z.string().default('') }),
-    /** 2–3 sentences: why this company and this role. */
+    /** 2–4 sentences: a quick intro of Juan, tailored to the role and the brand. */
     intro: z.string().max(600, 'Keep the intro short (600 characters max).'),
-    /** What they need (from the job ad) and the proof that Juan can do it. 3 works best. */
-    fit: z
-      .array(z.object({ need: z.string(), proof: z.string() }))
-      .min(2)
-      .max(4),
-    /** Folder names of case studies to show (from src/content/projects). Up to 3. */
-    projects: z.array(z.string()).max(3).default([]),
-    /** Optional first-90-days plan. */
-    plan: z
-      .array(z.object({ when: z.string(), what: z.string() }))
-      .max(3)
-      .default([]),
-    /** Optional tailored CV in /public, e.g. /cv/juan-posada-cv-lego.pdf */
-    cv: z.string().optional(),
-    /** Optional closing line above the contact buttons. */
-    closing: z.string().optional(),
+    /** Black card headline. Leave out to use: "I'd love to talk about <role> at <company>." */
+    closing: z.object({ before: z.string(), highlight: z.string() }).optional(),
+    /** Up to 2 case studies (folder names in src/content/projects) suggested in the black card. */
+    recommended: z.array(z.string()).max(2).default([]),
   }),
 });
 

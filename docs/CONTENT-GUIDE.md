@@ -92,11 +92,14 @@ Visitors who ask their device for less motion get a still field.
 
 ## Job application pages (/for/…)
 
-Private landing pages made for one job application, e.g. `juanposada.co.uk/for/lego-digital-play`.
+Private landing pages made for one job application, e.g. `juanposada.co.uk/for/lego-senior-ux-designer`.
+They are only made when Juan asks for one for that job.
 
-1. Copy `src/content/for/_template` and rename the folder to the company (lowercase, hyphens).
-2. Fill in `index.md` (company, role, headline, intro, 3 "need → proof" rows, up to 3 case studies, optional 90-day plan).
-3. Put the tailored CV in `public/cv/` and link it with `cv: /cv/<file>.pdf`. Use the web copy of the CV (no phone number).
-4. Open a pull request: the preview link shows the page before it goes live.
+1. Copy `src/content/for/_template` and rename the folder (company + role, lowercase, hyphens).
+2. Fill in `index.md`: company, role, the headline (with the gradient words), a short intro tailored to the
+   role and brand, and optionally the black-card line (`closing`) and up to 2 `recommended` case studies.
+3. Open a pull request: the preview link shows the page before it goes live.
 
-These pages are never in the menu, the sitemap or search engines (`noindex` + `X-Robots-Tag`), so only people with the link see them. Delete the folder when the application is closed.
+The page is: headline → intro → a black card with Juan's interest in the role and buttons to Work, About and
+Contact. These pages are never in the menu, the sitemap or search engines (`noindex` + `X-Robots-Tag`), so
+only people with the link see them. Delete the folder when the application is closed.
