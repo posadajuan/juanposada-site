@@ -197,4 +197,42 @@ const graphicDesign = defineCollection({
   }),
 });
 
-export const collections = { projects, galleries, photography, graphicDesign };
+
+/* ---------- Application pages (/for/<company>) ---------- */
+// One folder per job application: src/content/for/<company-slug>/index.md
+// These pages are hidden: not in the menu, sitemap or search engines.
+// Only people with the link (the hiring team) will see them.
+
+const applications = defineCollection({
+  loader: glob({ pattern: entryFiles, base: './src/content/for' }),
+  schema: z.object({
+    company: z.string(),
+    role: z.string(),
+    /** Date the page was made, e.g. 2026-10-30. */
+    date: z.coerce.date(),
+    /** Hide the page while drafting. */
+    draft: z.boolean().default(false),
+    /** Headline: text, then the gradient words, then text. */
+    hero: z.object({ before: z.string(), highlight: z.string(), after: z.string().default('') }),
+    /** 2–3 sentences: why this company and this role. */
+    intro: z.string().max(600, 'Keep the intro short (600 characters max).'),
+    /** What they need (from the job ad) and the proof that Juan can do it. 3 works best. */
+    fit: z
+      .array(z.object({ need: z.string(), proof: z.string() }))
+      .min(2)
+      .max(4),
+    /** Folder names of case studies to show (from src/content/projects). Up to 3. */
+    projects: z.array(z.string()).max(3).default([]),
+    /** Optional first-90-days plan. */
+    plan: z
+      .array(z.object({ when: z.string(), what: z.string() }))
+      .max(3)
+      .default([]),
+    /** Optional tailored CV in /public, e.g. /cv/juan-posada-cv-lego.pdf */
+    cv: z.string().optional(),
+    /** Optional closing line above the contact buttons. */
+    closing: z.string().optional(),
+  }),
+});
+
+export const collections = { projects, galleries, photography, graphicDesign, applications };
