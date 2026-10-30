@@ -16,6 +16,7 @@ const pages = [
   '/photography',
   '/about',
   '/contact',
+  '/guide',
   '/styleguide',
 ];
 

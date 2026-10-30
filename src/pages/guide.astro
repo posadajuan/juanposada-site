@@ -1,0 +1,253 @@
+---
+/**
+ * /guide: the free "Build your portfolio website with Claude" PDF.
+ * Not in the main menu; linked from Instagram, LinkedIn and the bio.
+ * To update the guide, replace the PDF in public/guide/ (keep the name)
+ * and the size and page count below.
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Frame from '@/components/Frame.astro';
+import CtaBlock from '@/components/CtaBlock.astro';
+import { PERSON_ID } from '@/lib/seo';
+import { site } from '@/data/site';
+import cover from '@/assets/guide/cover.png';
+import accounts from '@/assets/guide/accounts.png';
+import steps from '@/assets/guide/steps.png';
+
+const pdf = {
+  href: '/guide/build-your-portfolio-with-claude.pdf',
+  size: '0.7 MB',
+  pages: 9,
+};
+
+const inside = [
+  { title: 'Accounts & software', text: 'Every tool I used, what it’s for, what it costs and where to sign up.' },
+  { title: 'The basics, in plain words', text: 'GitHub, pull requests, the code behind the site, site maps, wireframes and design systems. One quick tip each.' },
+  { title: 'A simple timeline', text: 'Four phases and ten steps, from the first brief to a live site.' },
+  { title: '10 copy-ready prompts', text: 'The prompts I used, improved, with blanks to fill in with your own details.' },
+];
+
+const half = '(min-width: 761px) 50vw, 100vw';
+const description =
+  'A free PDF guide by Juan Posada: how to design and build a portfolio website with Claude, with the accounts you need, a timeline and 10 copy-ready prompts.';
+---
+
+<BaseLayout
+  title="Free guide: build your portfolio website with Claude"
+  description={description}
+  image="/guide/og-guide.png"
+  imageAlt="Build your portfolio website with Claude: a free PDF guide by Juan Posada"
+  schema={[
+    {
+      '@type': 'DigitalDocument',
+      name: 'Build your portfolio website with Claude',
+      description,
+      url: `${site.url}/guide/`,
+      encodingFormat: 'application/pdf',
+      contentUrl: `${site.url}${pdf.href}`,
+      isAccessibleForFree: true,
+      inLanguage: 'en-GB',
+      author: { '@id': PERSON_ID },
+    },
+  ]}
+>
+  <section class="container intro">
+    <div class="intro__text" data-reveal="stagger">
+      <p class="label muted">Free guide</p>
+      <h1 class="page-title intro__title">Build your portfolio website with <span class="gradient-text">Claude.</span></h1>
+      <p class="lead">
+        I designed and built this site with Claude, from the first brief to launch. This is the whole workflow, written down so
+        you can follow it too. You don’t need to know how to code.
+      </p>
+      <div class="actions">
+        <a class="btn btn--primary" href={pdf.href} download data-astro-reload>
+          Download the free PDF <span class="arrow" aria-hidden="true">↓</span>
+        </a>
+        <p class="meta muted">PDF · {pdf.pages} pages · {pdf.size}</p>
+      </div>
+    </div>
+    <Frame src={cover} alt="Cover of the guide: Build your portfolio website with Claude, by Juan Posada." ratio="210 / 297" sizes={half} priority class="intro__img" />
+  </section>
+
+  <section class="container section" aria-labelledby="inside">
+    <div class="band">
+      <div class="stack" data-reveal="stagger">
+        <p class="label tag">What’s inside</p>
+        <h2 id="inside" class="h2">From first idea to a live site.</h2>
+      </div>
+      <ol class="inside" role="list">
+        {
+          inside.map((item, i) => (
+            <li class="inside__item" data-reveal>
+              <span class="label tag">{String(i + 1).padStart(2, '0')}</span>
+              <h3 class="inside__title">{item.title}</h3>
+              <p class="muted">{item.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="container section previews" aria-label="Pages from the guide">
+    <Frame src={accounts} alt="Page from the guide: a table of the accounts and software you need, with sign-up links." ratio="210 / 297" sizes={half} reveal />
+    <Frame src={steps} alt="Page from the guide: steps 1 and 2 of the process, each with a copy-ready prompt." ratio="210 / 297" sizes={half} reveal />
+  </section>
+
+  <section class="container again" data-reveal="stagger">
+    <p class="lead">Want to see the result first?</p>
+    <div class="again__links">
+      <a class="btn btn--secondary" href="/work">See my work <span class="arrow" aria-hidden="true">→</span></a>
+      <a class="link again__dl" href={pdf.href} download data-astro-reload>Download the guide (PDF, {pdf.size})</a>
+    </div>
+  </section>
+
+  <CtaBlock
+    before="Rather have a designer"
+    highlight="build it with you?"
+    text="Tell me about your project, team or role. I reply within {reply}."
+  />
+</BaseLayout>
+
+<style>
+  .intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: clamp(40px, 2rem + 3vw, 72px);
+    align-items: center;
+    padding-block: clamp(64px, 3rem + 4vw, 112px) var(--space-section);
+  }
+
+  .intro__text {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .intro__title {
+    font-size: clamp(2.75rem, 1.6rem + 4vw, 5rem);
+    text-wrap: balance;
+  }
+
+  .intro :global(.intro__img) {
+    max-width: 440px;
+    justify-self: end;
+    width: 100%;
+    border: 1px solid var(--color-border);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 24px;
+  }
+
+  .meta {
+    font-size: var(--text-small);
+  }
+
+  .stack {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 1.6rem + 1.6vw, 2.75rem);
+    font-weight: var(--weight-semibold);
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    text-wrap: balance;
+  }
+
+  .band {
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+    padding: clamp(48px, 2rem + 4vw, 80px) clamp(24px, 1rem + 4vw, 64px);
+    border-radius: var(--radius-xl);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+  }
+
+  .inside {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 40px;
+    margin: 0;
+  }
+
+  .inside__item {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    border-top: 1px solid var(--color-text);
+    padding-top: 24px;
+  }
+
+  .inside__title {
+    font-family: var(--font-display);
+    font-size: 1.375rem;
+    font-weight: var(--weight-semibold);
+    letter-spacing: -0.015em;
+    line-height: 1.2;
+  }
+
+  .previews {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(24px, 1rem + 2vw, 48px);
+    padding-top: 0;
+  }
+
+  .previews :global(img),
+  .previews :global(picture) {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-l);
+  }
+
+  .again {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    text-align: center;
+    padding-bottom: var(--space-section);
+  }
+
+  .again__links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 12px 28px;
+  }
+
+  .again__dl {
+    font-weight: var(--weight-medium);
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  @media (max-width: 1000px) {
+    .inside {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 760px) {
+    .intro,
+    .inside {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .intro :global(.intro__img) {
+      order: -1;
+      max-width: 300px;
+      justify-self: center;
+    }
+  }
+</style>

@@ -50,6 +50,7 @@ export const GET: APIRoute = async ({ site: base }) => {
     `- [About](${url('/about/')}): background, experience, principles and certifications.`,
     `- [Photography](${url('/photography/')}): ${photography.intro}`,
     `- [Contact](${url('/contact/')}): a form for projects, teams and roles. Replies within ${site.replyTime}.`,
+    `- [Free guide: build your portfolio website with Claude](${url('/guide/')}): Juan's step-by-step workflow as a free PDF, with the accounts needed, a timeline and 10 copy-ready prompts.`,
     ...sameAs().map((href) => `- Profile: ${href}`),
     '',
   ];
