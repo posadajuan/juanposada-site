@@ -18,6 +18,7 @@ test('every main page loads with a single h1 and the right nav item active', asy
     ['/photography', null], // not in the menu; linked from About
     ['/about', 'About'],
     ['/contact', 'Contact'],
+    ['/guide', null], // not in the menu; linked from social posts
   ];
   for (const [path, active] of routes) {
     const response = await page.goto(path);
@@ -168,4 +169,14 @@ test('contact form explains a failed spam check and rate limiting', async ({ pag
   status = 429;
   await page.getByRole('button', { name: 'Send message' }).click();
   await expect(page.getByRole('status').filter({ hasText: 'wait a minute' })).toBeVisible();
+});
+
+test('guide page offers the PDF as a download', async ({ page, request }) => {
+  await page.goto('/guide');
+  const link = page.getByRole('link', { name: /Download the free PDF/ });
+  await expect(link).toHaveAttribute('download', '');
+  const href = await link.getAttribute('href');
+  const response = await request.get(href!);
+  expect(response.status()).toBe(200);
+  expect(response.headers()['content-type']).toContain('application/pdf');
 });

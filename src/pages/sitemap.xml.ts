@@ -20,6 +20,7 @@ export const GET: APIRoute = async ({ site }) => {
     '/photography/',
     '/about/',
     '/contact/',
+    '/guide/',
   ];
 
   const urls = paths.map((path) => `  <url><loc>${new URL(path, site).href}</loc></url>`).join('\n');
