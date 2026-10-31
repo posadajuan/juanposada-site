@@ -4,17 +4,17 @@ role: Creative Production Lead
 date: 2026-10-31
 draft: false
 hero:
-  before: Hi Kindred, I'd love to keep the leisure portfolio
+  before: Hi Kindred, I can help your client keep every leisure brand
   highlight: unmistakably on brand
   after: ''
-intro: I'm Juan, a creative lead with 10+ years across creative agencies, film and TV, and in-house teams.
-  I've delivered campaign and in-store work for BMW and Citroën, redesigned and applied brand guidelines,
-  coordinated agencies and printers, and led creative direction for Cyber Explorers, an award-winning
-  DCMS learning product. At QA I built a production workflow and use AI-assisted workflows to work faster
-  without losing quality. I'd like to bring that order and brand care to every brand in the leisure portfolio.
+intro: 'Your client needs someone to run creative production across a multi-brand leisure portfolio, keeping
+  every brand in its own lane and putting AI to work. That''s how I already work: at QA I built a production
+  workflow that speeds up graphics and motion, and I use AI-assisted workflows to deliver faster without
+  losing quality. Before that I delivered 10+ campaigns for BMW and Citroën, ran a studio for 15+ clients
+  and coordinated agencies and printers.'
 closing:
   before: I'd love to bring this to
-  highlight: the leisure portfolio.
+  highlight: your client's brands.
 recommended:
 - cyber-explorers
 - cloud-academy
