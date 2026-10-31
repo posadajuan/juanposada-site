@@ -89,3 +89,17 @@ The dots and soft light behind the Home headline live in `src/components/HeroFie
 - The plankton glow: `GLOW_A/B/C` (colours), `fade` (how long it lasts), `reach` (how wide the cursor stirs).
 - To switch it off, remove `<HeroField />` from `src/pages/index.astro`.
 Visitors who ask their device for less motion get a still field.
+
+## Job application pages (/for/…)
+
+Private landing pages made for one job application, e.g. `juanposada.co.uk/for/lego-senior-ux-designer`.
+They are only made when Juan asks for one for that job.
+
+1. Copy `src/content/for/_template` and rename the folder (company + role, lowercase, hyphens).
+2. Fill in `index.md`: company, role, the headline (with the gradient words), a short intro tailored to the
+   role and brand, and optionally the black-card line (`closing`) and up to 2 `recommended` case studies.
+3. Open a pull request: the preview link shows the page before it goes live.
+
+The page is: headline → intro → a black card with Juan's interest in the role and buttons to Work, About and
+Contact. These pages are never in the menu, the sitemap or search engines (`noindex` + `X-Robots-Tag`), so
+only people with the link see them. Delete the folder when the application is closed.

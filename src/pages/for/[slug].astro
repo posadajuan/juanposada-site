@@ -1,0 +1,181 @@
+---
+/**
+ * /for/<company>: a short, private page made for one job application.
+ * Headline -> quick intro tailored to the role and brand -> black card with
+ * Juan's interest in the role and a way into the rest of the site.
+ * One folder in src/content/for creates one page. These pages are kept out of
+ * the menu, the sitemap and search engines (noindex).
+ */
+import type { GetStaticPaths } from 'astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Logo from '@/components/Logo.astro';
+import { getPublicProjects } from '@/lib/content';
+import { site } from '@/data/site';
+
+export const getStaticPaths = (async () => {
+  const pages = await getCollection('applications', ({ data }) => import.meta.env.DEV || !data.draft);
+  const projects = await getPublicProjects();
+  return pages.map((page) => {
+    const picks = page.data.recommended.map((id) => {
+      const found = projects.find((p) => p.id === id);
+      if (!found) throw new Error(`src/content/for/${page.id}: no public case study called "${id}".`);
+      return found;
+    });
+    return { params: { slug: page.id }, props: { page, picks } };
+  });
+}) satisfies GetStaticPaths;
+
+interface Props {
+  page: CollectionEntry<'applications'>;
+  picks: Awaited<ReturnType<typeof getPublicProjects>>;
+}
+
+const { page, picks } = Astro.props;
+const d = page.data;
+const closing = d.closing ?? { before: `I'd love to talk about ${d.role} at`, highlight: `${d.company}.` };
+---
+
+<BaseLayout title={`For ${d.company}`} description={`${site.name}, ${d.role} at ${d.company}`} noindex>
+  <section class="container for-hero" aria-labelledby="for-title">
+    <div class="for-hero__meta" data-reveal>
+      <span class="for-chip"><Logo size={16} /> × {d.company}</span>
+      <span class="label muted">{d.role}</span>
+    </div>
+    <h1 id="for-title" class="hero-title for-hero__title" data-reveal>
+      {d.hero.before} <span class="gradient-text">{d.hero.highlight}</span> {d.hero.after}
+    </h1>
+    <p class="lead for-hero__intro" data-reveal>{d.intro}</p>
+  </section>
+
+  <section class="container for-card-wrap" aria-labelledby="for-card-title">
+    <div class="for-card" data-theme="dark" data-reveal="stagger">
+      <h2 id="for-card-title" class="for-card__title">
+        {closing.before} <span class="gradient-text">{closing.highlight}</span>
+      </h2>
+      <p class="for-card__text">Have a look around and start wherever suits you.</p>
+      <nav class="for-card__nav" aria-label="Explore the site">
+        <a class="btn btn--primary" href="/work">See my work <span class="arrow" aria-hidden="true">→</span></a>
+        <a class="btn btn--secondary" href="/about">About me</a>
+        <a class="btn btn--secondary" href="/contact">Contact</a>
+      </nav>
+      {
+        picks.length > 0 && (
+          <div class="for-card__picks">
+            <p class="label">Most relevant to this role</p>
+            <ul>
+              {picks.map((project) => (
+                <li>
+                  <a class="link" href={`/work/${project.id}`}>
+                    {project.data.title}
+                  </a>
+                  <span class="for-card__outcome">{project.data.outcome}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .for-hero {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    padding-block: clamp(56px, 3rem + 4vw, 112px) clamp(40px, 1.5rem + 3vw, 72px);
+  }
+  .for-hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+  }
+  .for-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    font-size: var(--text-small);
+    font-weight: var(--weight-medium);
+  }
+  .for-hero__title {
+    max-width: 20ch;
+  }
+  .for-hero__intro {
+    max-width: 680px;
+    color: var(--color-body);
+  }
+
+  .for-card-wrap {
+    padding-block-end: var(--space-section);
+  }
+  .for-card {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    padding: clamp(48px, 3rem + 3vw, 96px) clamp(24px, 1rem + 4vw, 64px);
+    border-radius: var(--radius-xl);
+    background: var(--color-cta-bg);
+    color: var(--color-text);
+  }
+  /* Black in light mode too, like the CTA block on the rest of the site */
+  :global([data-theme='light']) .for-card {
+    background: #0a0a0a;
+  }
+  .for-card__title {
+    font-family: var(--font-display);
+    font-size: var(--text-h1);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-heading);
+    line-height: var(--leading-heading);
+    max-width: 22ch;
+    text-wrap: balance;
+  }
+  .for-card__text {
+    max-width: 560px;
+    color: var(--color-muted);
+  }
+  .for-card__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  .for-card__picks {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding-top: 28px;
+    border-top: 1px solid var(--color-border);
+  }
+  .for-card__picks .label {
+    color: var(--color-muted);
+  }
+  .for-card__picks ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px 40px;
+  }
+  .for-card__picks li {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .for-card__picks a {
+    width: fit-content;
+    font-size: var(--text-h3);
+    font-family: var(--font-display);
+    font-weight: var(--weight-semibold);
+  }
+  .for-card__outcome {
+    color: var(--color-muted);
+    font-size: var(--text-small);
+  }
+</style>
