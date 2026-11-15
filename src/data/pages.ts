@@ -50,7 +50,7 @@ export const home = {
 
   hello: {
     title: 'Hi, I’m Juan. I like making complex things simple.',
-    text: 'I design brands, products and experiences in London, with 10+ years across agencies, film/TV and digital learning. I do my best work with teams who care about the people they’re designing for.',
+    text: 'I’m a Colombian designer based in London, with 10+ years across agencies, film/TV and digital learning. I do my best work with teams who care about the people they’re designing for.',
     image: homePortrait,
     alt: 'Juan Posada standing in front of a wall covered in colourful street art and posters',
   },
