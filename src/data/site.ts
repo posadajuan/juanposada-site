@@ -49,7 +49,7 @@ export const site = {
    * Picking a mode with the toggle is remembered; picking the one the device
    * already uses goes back to following the device.
    */
-  defaultTheme: 'system' as 'system' | 'dark' | 'light',
+  defaultTheme: 'dark' as 'system' | 'dark' | 'light',
   /**
    * Cloudflare Web Analytics (privacy-friendly visit counts, no cookies).
    * The token is public: it appears in every page. Leave empty to turn it off.

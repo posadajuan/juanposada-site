@@ -62,32 +62,19 @@ test('availability line shows a Monday date', async ({ page }) => {
   await expect(page.locator('[data-availability]').first()).toContainText(/Monday \d{1,2} \w+/);
 });
 
-test('theme follows the device: light by default, dark when the device is dark', async ({ browser }) => {
-  for (const scheme of ['light', 'dark'] as const) {
+test('theme is dark by default, whatever the device setting', async ({ browser }) => {
+  for (const scheme of ['light', 'dark', 'no-preference'] as const) {
     const ctx = await browser.newContext({ colorScheme: scheme });
     const page = await ctx.newPage();
     await page.goto('/');
-    await expect(page.locator('html')).toHaveAttribute('data-theme', scheme);
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
     await ctx.close();
   }
-  const ctx = await browser.newContext({ colorScheme: 'no-preference' });
-  const page = await ctx.newPage();
-  await page.goto('/');
-  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
-  await ctx.close();
-});
-
-test('theme follows device changes live until the visitor picks a mode', async ({ page }) => {
-  await page.emulateMedia({ colorScheme: 'light' });
-  await page.goto('/');
-  const html = page.locator('html');
-  await expect(html).toHaveAttribute('data-theme', 'light');
-  await page.emulateMedia({ colorScheme: 'dark' });
-  await expect(html).toHaveAttribute('data-theme', 'dark');
 });
 
 test('theme toggle switches mode and remembers it', async ({ page, isMobile }) => {
-  await page.emulateMedia({ colorScheme: 'dark' });
+  // A light device must not change the dark-first default.
+  await page.emulateMedia({ colorScheme: 'light' });
   await page.goto('/');
   const html = page.locator('html');
   await expect(html).toHaveAttribute('data-theme', 'dark');
@@ -97,14 +84,18 @@ test('theme toggle switches mode and remembers it', async ({ page, isMobile }) =
   await toggle.click();
   await expect(html).toHaveAttribute('data-theme', 'light');
   await expect(toggle).toHaveAttribute('aria-checked', 'false');
+  expect(await page.evaluate(() => localStorage.getItem('theme'))).toBe('light');
 
-  // The choice sticks, even though the device is still dark.
+  // The choice sticks across reloads.
   await page.reload();
   await expect(html).toHaveAttribute('data-theme', 'light');
 
-  // Picking the device's own mode goes back to following the device.
+  // Going back to the site default clears the saved choice.
   await page.getByRole('switch', { name: /Dark/ }).click();
+  await expect(html).toHaveAttribute('data-theme', 'dark');
   expect(await page.evaluate(() => localStorage.getItem('theme'))).toBeNull();
+  await page.reload();
+  await expect(html).toHaveAttribute('data-theme', 'dark');
   test.info().annotations.push({ type: 'viewport', description: isMobile ? 'mobile' : 'desktop' });
 });
 
